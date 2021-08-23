@@ -1,4 +1,4 @@
-package leetcode.b59
+package leetcode.contest.b59
 
 import utils.Graph
 import utils.dijkstra

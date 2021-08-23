@@ -1,7 +1,6 @@
-package leetcode.c255
+package leetcode.contest.c255
 
 import utils.print
-import kotlin.math.abs
 
 fun main() {
     val s = Solution5853()

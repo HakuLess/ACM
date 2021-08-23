@@ -1,6 +1,4 @@
-package leetcode.c255
-
-import utils.gcd
+package leetcode.contest.c255
 
 
 class Solution5850 {

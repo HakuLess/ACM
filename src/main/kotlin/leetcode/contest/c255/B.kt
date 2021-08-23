@@ -1,4 +1,4 @@
-package leetcode.c255
+package leetcode.contest.c255
 
 import utils.print
 

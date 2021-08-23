@@ -1,4 +1,4 @@
-package leetcode.b59
+package leetcode.contest.b59
 
 class Solution5835 {
     fun maxMatrixSum(matrix: Array<IntArray>): Long {
