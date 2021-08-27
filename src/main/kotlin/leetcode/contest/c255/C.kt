@@ -21,30 +21,31 @@ class Solution5852 {
         for (i in mat.indices) {
             val nxtSet = TreeSet<Int>()
             for (j in mat[0].indices) {
+                var large = Int.MAX_VALUE / 2
                 if (i == 0) {
                     nxtSet.add(mat[i][j])
                 } else {
                     set.forEach { s ->
                         val nxt = s + mat[i][j]
-                        nxtSet.add(nxt)
+                        if (nxt > target) {
+                            if (nxt < large) {
+                                nxtSet.remove(large)
+                                nxtSet.add(nxt)
+                                large = nxt
+                            }
+                        } else {
+                            nxtSet.add(nxt)
+                        }
                     }
                 }
-            }
-            var high = nxtSet.ceiling(target)
-            while (high != null) {
-                high = nxtSet.ceiling(high + 1)
-                if (high != null)
-                    nxtSet.remove(high)
             }
             set = nxtSet
         }
 
-        set.print()
-        var ans = Int.MIN_VALUE / 2
-        ans = minOf(
+//        set.print()
+        return minOf(
             (set.ceiling(target) ?: Int.MAX_VALUE / 4) - target,
             target - (set.floor(target) ?: Int.MIN_VALUE / 4)
         )
-        return ans
     }
 }
