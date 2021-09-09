@@ -1,6 +1,26 @@
 package utils
 
 import java.util.*
+import kotlin.collections.ArrayList
+
+/**
+ * 树相关方法
+ *
+ * 普通二叉树 TreeNode
+ *
+ * 多叉树，且有parent信息
+ **/
+
+// Definition for a binary tree node.
+class TreeNode(var `val`: Int = 0) {
+    var left: TreeNode? = null
+    var right: TreeNode? = null
+}
+
+class NTreeNode(var `val`: Int = 0) {
+    var parent: NTreeNode? = null
+    var children: ArrayList<NTreeNode> = arrayListOf()
+}
 
 /**
  * 获取 TreeNode 的深度

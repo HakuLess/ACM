@@ -27,9 +27,12 @@ class Solution5847 {
             curJ--
             ans.add(intArrayOf(i, j, curI, curJ))
         }
+
         for (i in 0 until n) {
             for (j in 0 until m) {
-                if (land[i][j] == 1 && ans.all { i !in it[0]..it[2] || j !in it[1]..it[3] }) {
+                if (land[i][j] == 1) {
+                    if (i > 0 && land[i - 1][j] == 1) continue
+                    if (j > 0 && land[i][j - 1] == 1) continue
                     getEdge(i, j)
                 }
             }

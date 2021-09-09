@@ -214,12 +214,6 @@ fun Interval.print() {
     println("start: ${this.start}, end: ${this.end}")
 }
 
-// Definition for a binary tree node.
-class TreeNode(var `val`: Int = 0) {
-    var left: TreeNode? = null
-    var right: TreeNode? = null
-}
-
 /**
  * 倍增法，后缀数组
  * */

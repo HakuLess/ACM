@@ -1,65 +1,72 @@
 package leetcode.contest.b60
 
+import utils.NTreeNode
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+
 class LockingTree(parent: IntArray) {
 
     val n = parent.size
 
-    val lockUser = HashMap<Int, Int>()
-
-    val leftMap = HashMap<Int, ArrayList<Int>>()
-    val rightMap = HashMap<Int, ArrayList<Int>>()
+    val nodeList = Array<NTreeNode>(n) { i -> NTreeNode(i) }
 
     init {
         for (i in parent.indices) {
-            leftMap[parent[i]] = leftMap.getOrDefault(parent[i], arrayListOf())
-            leftMap[parent[i]]!!.add(i)
-
-            rightMap[i] = rightMap.getOrDefault(i, arrayListOf())
-            rightMap[i]!!.add(parent[i])
+            if (parent[i] != -1) {
+                nodeList[parent[i]].children.add(nodeList[i])
+                nodeList[i].parent = nodeList[parent[i]]
+            }
         }
     }
 
+    val lockedMap = HashMap<NTreeNode, Int>()
+
     fun lock(num: Int, user: Int): Boolean {
-        if (lockUser.getOrDefault(num, -1) == -1) {
-            lockUser[num] = user
+        if (lockedMap.getOrDefault(nodeList[num], -1) == -1) {
+            lockedMap[nodeList[num]] = user
             return true
         }
         return false
     }
 
     fun unlock(num: Int, user: Int): Boolean {
-        if (lockUser.getOrDefault(num, -1) == user) {
-            lockUser.remove(num)
+        if (lockedMap.getOrDefault(nodeList[num], -1) == user) {
+            lockedMap.remove(nodeList[num])
             return true
         }
         return false
     }
 
     fun upgrade(num: Int, user: Int): Boolean {
-        if (num in lockUser) return false
-        fun checkLeft(num: Int, over: Boolean = false): Boolean {
-            var ans = false
-            println(num)
-            for (next in leftMap.getOrDefault(num, arrayListOf())) {
-                if (next in lockUser) if (!over) return true else lockUser.remove(next)
-                else ans = ans or checkLeft(next)
-            }
-            return ans
+        val cur = nodeList[num]
+        if (cur in lockedMap) return false
+        var parent = cur.parent
+        while (parent != null) {
+            if (parent in lockedMap) return false
+            parent = parent.parent
         }
 
-        fun checkRight(num: Int): Boolean {
-            var ans = true
-            for (next in rightMap.getOrDefault(num, arrayListOf())) {
-                if (next in lockUser) return false
-                else ans = ans and checkRight(next)
+        val unLock = ArrayList<NTreeNode>()
+        val queue: Queue<NTreeNode> = LinkedList()
+        queue.add(cur)
+        while (queue.isNotEmpty()) {
+            val size = queue.size
+            for (i in 0 until size) {
+                val node = queue.poll()
+                node.children.forEach {
+                    queue.offer(it)
+                    if (it in lockedMap) {
+                        unLock.add(it)
+                    }
+                }
             }
-            return ans
         }
-        if (!checkLeft(num)) return false
-        if (!checkRight(num)) return false
-        lockUser[num] = user
-        checkLeft(num, true)
-        checkRight(num)
+        if (unLock.isEmpty()) return false
+        lockedMap[cur] = user
+        unLock.forEach {
+            lockedMap.remove(it)
+        }
         return true
     }
 

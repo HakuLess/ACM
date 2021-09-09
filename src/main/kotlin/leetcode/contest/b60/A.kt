@@ -9,20 +9,12 @@ fun main() {
 
 class Solution5846 {
     fun findMiddleIndex(nums: IntArray): Int {
-        val left = IntArray(nums.size + 1)
-        val right = IntArray(nums.size + 1)
+        var left = 0
+        var right = nums.sum()
         for (i in nums.indices) {
-            left[i + 1] = left[i] + nums[i]
-        }
-        for (i in nums.indices.reversed()) {
-            right[i] = right[i + 1] + nums[i]
-        }
-        left.print()
-        right.print()
-        for (i in nums.indices) {
-            if (left[i] == right[i + 1]) {
-                return i
-            }
+            right -= nums[i]
+            if (left == right) return i
+            left += nums[i]
         }
         return -1
     }
