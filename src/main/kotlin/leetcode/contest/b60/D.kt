@@ -7,27 +7,26 @@ import utils.quickPower
 fun main() {
     val s = Solution5849()
     s.numberOfGoodSubsets(intArrayOf(1, 2, 3, 4)).print()
+    s.numberOfGoodSubsets(intArrayOf(4, 2, 3, 15)).print()
 }
 
 class Solution5849 {
     fun numberOfGoodSubsets(nums: IntArray): Int {
-        val arr = LongArray(32)
+        val arr = IntArray(32)
         val mod = 1000000007L
+        val black = intArrayOf(4, 8, 12, 16, 20, 24, 28, 9, 18, 27, 25)
         nums.forEach {
-            arr[it]++
+            if (it !in black)
+                arr[it]++
         }
         val ans = HashSet<String>()
-        val black = intArrayOf(4, 8, 12, 16, 20, 24, 28, 9, 18, 27, 25)
         fun select(cur: Int, list: ArrayList<Int> = arrayListOf()) {
             if (cur == 1) {
                 ans.add(list.joinToString(" "))
-                list.remove(1)
-                ans.add(list.joinToString(" "))
-                list.add(1)
                 return
             }
             for (i in cur - 1 downTo 1) {
-                if (i !in black && (arr[i] != 0L || i == 1) && list.all { gcd(it, i) == 1 }) {
+                if ((arr[i] != 0 || i == 1) && list.all { gcd(it, i) == 1 }) {
                     list.add(i)
                     select(i, list)
                     list.remove(i)
@@ -35,7 +34,7 @@ class Solution5849 {
             }
         }
         for (i in 30 downTo 1) {
-            if (arr[i] != 0L && i !in black) {
+            if (arr[i] != 0) {
                 select(i, arrayListOf(i))
             }
         }
@@ -44,16 +43,18 @@ class Solution5849 {
             if (it.isNotEmpty()) {
                 var temp = 1L
                 it.split(" ").forEach {
-                    if (it == "1") {
-                        temp = (temp * (quickPower(2L, arr[1]) - 1L)) % mod
+                    temp = if (it == "1") {
+                        (temp * (quickPower(2L, arr[1].toLong()))) % mod
                     } else {
-                        temp = (temp * arr[it.toInt()]) % mod
+                        (temp * arr[it.toInt()]) % mod
                     }
                 }
                 res += temp
             }
         }
-        res -= quickPower(2L, arr[1]) - 1L
+        if (arr[1] != 0) {
+            res -= quickPower(2L, arr[1].toLong())
+        }
         res += mod
         return (res % mod).toInt()
     }

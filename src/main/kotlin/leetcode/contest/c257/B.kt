@@ -11,20 +11,13 @@ fun main() {
 
 class Solution5864 {
     fun numberOfWeakCharacters(properties: Array<IntArray>): Int {
-        val st = properties.sortedWith(compareBy({ -it[0] }, { -it[1] }))
-        st.joinToString { it.joinToString(",") }.print()
+        val st = properties.sortedWith(compareBy({ -it[0] }, { it[1] }))
         var ans = 0
-        var a = Pair<Int, Int>(st[0][0], st[0][1])
-        var b = Pair<Int, Int>(st[0][0], st[0][1])
+        var maxDef = st[0][1]
         for (i in 1 until st.size) {
-            if ((st[i][0] < a.first && st[i][1] < a.second)
-                || (st[i][0] < b.first && st[i][1] < b.second))
+            if (st[i][1] < maxDef)
                 ans++
-
-            if (st[i][0] < b.first && st[i][1] > b.second) {
-                a = b
-                b = Pair(st[i][0], st[i][1])
-            }
+            maxDef = maxOf(maxDef, st[i][1])
         }
         return ans
     }

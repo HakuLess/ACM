@@ -14,6 +14,13 @@ fun Array<Suffix>.printSuffix() {
     }
 }
 
+fun Array<LongArray>.print() {
+    this.forEach {
+        println(it.joinToString(", "))
+    }
+    println()
+}
+
 fun Array<CharArray>.print() {
     this.forEach {
         println(it.joinToString(", "))
