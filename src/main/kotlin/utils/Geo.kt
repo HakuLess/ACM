@@ -79,3 +79,14 @@ val dir8 = arrayOf(
     intArrayOf(1, 0),
     intArrayOf(-1, 0)
 )
+
+/**
+ * 圆圈
+ * */
+class Circle(val x: Double, val y: Double, val r: Double) {
+
+    operator fun contains(c: Circle): Boolean {
+        // 圆心的距离平方，是否小于半径的差值平方
+        return (x - c.x) * (x - c.x) + (y - c.y) * (y - c.y) <= (r - c.r) * (r - c.r)
+    }
+}
