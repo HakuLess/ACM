@@ -17,7 +17,7 @@ class TreeNode(var `val`: Int = 0) {
     var right: TreeNode? = null
 }
 
-class NTreeNode(var `val`: Int = 0) {
+class NTreeNode(var `val`: Int = 0, var index: Int = 0) {
     var parent: NTreeNode? = null
     var children: ArrayList<NTreeNode> = arrayListOf()
 }
