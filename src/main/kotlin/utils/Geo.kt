@@ -1,6 +1,7 @@
 package utils
 
 import kotlin.math.abs
+import kotlin.math.sqrt
 
 /**
  * 几何操作相关工具类
@@ -16,6 +17,10 @@ class Point(val x: Double, val y: Double) {
         if (other !is Point) return false
         return this.x == other.x && this.y == other.y
     }
+}
+
+fun Point.distance(p: Point): Double {
+    return sqrt((p.x - this.x) * (p.x - this.x) + (p.y - this.y) * (p.y - this.y))
 }
 
 // vertical false
