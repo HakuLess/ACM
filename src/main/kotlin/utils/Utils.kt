@@ -402,7 +402,14 @@ fun IntArray.toAllSubSet(): HashSet<Int> {
 }
 
 fun String.isPalindrome(): Boolean {
-    return this == this.reversed()
+    var l = 0
+    var r = this.lastIndex
+    while (l < r) {
+        if (this[l] != this[r]) return false
+        l++
+        r--
+    }
+    return true
 }
 
 // 乘法逆元计算

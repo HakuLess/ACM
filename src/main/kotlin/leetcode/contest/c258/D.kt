@@ -23,15 +23,28 @@ class Solution5870 {
         }
 
         val ans = IntArray(n) { 1 }
-        fun dfs(root: NTreeNode): ArrayList<Int> {
-            val cur = ArrayList<Int>()
+        fun dfs(root: NTreeNode): Pair<HashSet<Int>, Int> {
+            var cur = HashSet<Int>()
+            var tmp = HashSet<Int>()
+            var max = 1
             root.children.forEach {
-                cur.addAll(dfs(it))
+                dfs(it).also {
+                    tmp = it.first
+                    if (cur.size >= tmp.size) {
+                        cur.addAll(tmp)
+                    } else {
+                        tmp.addAll(cur)
+                        cur = tmp
+                    }
+                    max = maxOf(max, it.second)
+                }
             }
             cur.add(root.`val`)
-            // println("${root.`val`}: ${cur.joinToString()}")
-//            ans[root.index] = firstMissingPositive(cur.toIntArray())
-            return cur
+            while (max in cur) {
+                max++
+            }
+            ans[root.index] = max
+            return Pair(cur, max)
         }
         dfs(nodeList[0])
         return ans
