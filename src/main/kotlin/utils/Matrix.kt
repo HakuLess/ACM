@@ -3,6 +3,20 @@ package utils
 // n行 m列 矩阵
 class Matrix(val n: Int, val m: Int, val matrix: Array<IntArray>) {
 
+    val sumDp = Array<IntArray>(n) { IntArray(m) { 0 } }
+
+    fun preSum() {
+        for (i in 0 until n) {
+            for (j in 0 until m) {
+                sumDp[i][j] =
+                    if (i == 0 && j == 0) matrix[i][j]
+                    else if (i == 0 && j > 0) sumDp[i][j - 1] + matrix[i][j]
+                    else if (j == 0 && i > 0) sumDp[i - 1][j] + matrix[i][j]
+                    else sumDp[i][j - 1] + sumDp[i - 1][j] - sumDp[i - 1][j - 1] + matrix[i][j]
+            }
+        }
+    }
+
     override fun toString(): String {
         return matrix.joinToString { it.joinToString() }
     }
@@ -26,12 +40,35 @@ class Matrix(val n: Int, val m: Int, val matrix: Array<IntArray>) {
     }
 }
 
+/**
+ * 获取子矩阵的和（通过PreSum预处理）
+ *
+ * @param x1 左上坐标
+ * @param y1 左上坐标
+ * @param x2 右下坐标
+ * @param y2 右下坐标
+ * */
+fun Matrix.subMatrixSum(x1: Int, y1: Int, x2: Int, y2: Int): Int {
+    return sumDp[x2][y2] +
+            (if (x1 > 0 && y1 > 0) sumDp[x1 - 1][y1 - 1] else 0) -
+            (if (x1 > 0) sumDp[x1 - 1][y2] else 0) -
+            (if (y1 > 0) sumDp[x2][y1 - 1] else 0)
+}
+
 fun Matrix.count(func: (x: Int) -> Boolean): Int {
     var ans = 0
     matrix.forEach {
         ans += it.count { func(it) }
     }
     return ans
+}
+
+fun Matrix.totalSum(): Long {
+    var sum = 0L
+    this.matrix.forEach {
+        sum += it.sum()
+    }
+    return sum
 }
 
 /**
