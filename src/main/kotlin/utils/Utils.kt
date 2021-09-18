@@ -333,33 +333,6 @@ fun lcp(strs: Array<String>): String {
     return prefix
 }
 
-/**
- * 获取minPrime列表
- * prime[k] == n 代表 k因式分解最小因子为n，若n==1代表k为质数
- *
- * @param k 要求的质数的最大值
- * */
-fun getPrime(k: Int): IntArray {
-    val minPrime = IntArray(k + 1) { 1 }
-    var p = 2
-    while (p <= k) {
-        var i = p
-        while (p <= k / i) {
-            if (minPrime[i * p] == 1) {
-                minPrime[i * p] = p
-            }
-            i++
-        }
-        p++
-        while (p <= k) {
-            if (minPrime[p] == 1)
-                break
-            p++
-        }
-    }
-    return minPrime
-}
-
 fun comb(m: BigInteger, n: BigInteger): BigInteger {
     var a = BigInteger.ONE
     var b = BigInteger.ONE
