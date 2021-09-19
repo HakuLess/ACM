@@ -2,6 +2,8 @@ package utils
 
 /**
  * 字符串操作相关工具类
+ *
+ * 下一个排列
  * */
 
 
@@ -60,4 +62,24 @@ fun computeLPSArray(pat: String, m: Int, lps: IntArray) {
             }
         }
     }
+}
+
+/**
+ * 下一个更大的排列
+ * */
+fun CharArray.nextPermutation(): Boolean {
+    for (i in this.size - 2 downTo 0) {
+        for (j in this.size - 1 downTo i + 1) {
+            if (this[j] > this[i]) {
+                val temp = this[i]
+                this[i] = this[j]
+                this[j] = temp
+                this.sort(i + 1, this.size)
+                return true
+            }
+        }
+    }
+    // 若已为最大，返回false，若要继续最小，则直接reverse即可
+//    this.reverse()
+    return false
 }

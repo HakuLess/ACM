@@ -170,6 +170,24 @@ fun lcm(a: BigInteger, b: BigInteger): BigInteger {
 }
 
 // 无重复数组，全排列
+fun CharArray.permute(): List<List<Char>> {
+    val ans = ArrayList<List<Char>>()
+    fun backtrack(nums: CharArray, tracker: ArrayList<Char>) {
+        if (tracker.size == nums.size) {
+            ans.add(ArrayList(tracker))
+            return
+        }
+        for (num in nums) {
+            tracker.add(num)
+            backtrack(nums, tracker)
+            tracker.remove(num)
+        }
+    }
+    backtrack(this, arrayListOf())
+    return ans
+}
+
+// 无重复数组，全排列
 fun IntArray.permute(): List<List<Int>> {
     val ans = ArrayList<List<Int>>()
     fun backtrack(nums: IntArray, tracker: ArrayList<Int>) {
