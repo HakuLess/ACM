@@ -294,3 +294,14 @@ fun manacher(s: String): IntArray {
     }
     return len
 }
+
+// 离散化
+fun IntArray.discretization(): IntArray {
+    val map = HashMap<Int, Int>()
+    var i = 1
+    this.sorted().distinct().forEach {
+        map[it] = i
+        i++
+    }
+    return this.map { map[it]!! }.toIntArray()
+}
