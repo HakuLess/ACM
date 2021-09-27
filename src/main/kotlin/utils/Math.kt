@@ -12,6 +12,7 @@ import java.util.*
  * 全排列
  * 二分查找
  * 回文字符串（Manacher算法）
+ * 表达式计算
  * */
 
 // 阶乘
@@ -304,4 +305,37 @@ fun IntArray.discretization(): IntArray {
         i++
     }
     return this.map { map[it]!! }.toIntArray()
+}
+
+// 表达式计算
+// 支持 +-*/ 并符合运算规律，先计算*/再计算+-
+// todo 增加括号的支持
+// todo 支持非单位数（10以内）
+fun eval(expression: String): Int {
+    val stn = Stack<Int>()
+    val op = Stack<Char>()
+    expression.forEach {
+        if (it in '0'..'9') {
+            stn.push(it - '0')
+            if (op.isNotEmpty() && op.peek() in arrayOf('*', '/')) {
+                val a = stn.pop()
+                val b = stn.pop()
+                when (op.pop()) {
+                    '*' -> stn.push(a * b)
+                    '/' -> stn.push(b / a)
+                }
+            }
+        } else {
+            op.push(it)
+        }
+    }
+    while (op.isNotEmpty()) {
+        val a = stn.pop()
+        val b = stn.pop()
+        when (op.pop()) {
+            '+' -> stn.push(a + b)
+            '-' -> stn.push(b - a)
+        }
+    }
+    return stn.pop()
 }

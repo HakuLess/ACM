@@ -11,49 +11,23 @@ fun main() {
 
 class Solution5882 {
     fun gridGame(grid: Array<IntArray>): Long {
-        val n = grid.size
         val m = grid[0].size
-        val dp = Array<LongArray>(n) { LongArray(m) }
-        for (i in grid.indices) {
-            for (j in grid[0].indices) {
-                if (i == 0 && j == 0) {
-                    dp[i][j] = grid[i][j].toLong()
-                } else if (i == 0 && j != 0) {
-                    dp[i][j] = dp[i][j - 1] + grid[i][j]
-                } else if (j == 0) {
-                    dp[i][j] = dp[i - 1][j] + grid[i][j]
-                } else {
-                    dp[i][j] = maxOf(dp[i - 1][j], dp[i][j - 1]) + grid[i][j]
-                }
-            }
+        val a = LongArray(m)
+        for (i in 0 until m) {
+            a[i] = (if (i != 0) a[i - 1] else 0) + grid[1][i]
         }
-        dp.print()
-        fun dfs(i: Int, j: Int) {
-            if (i - 1 >= 0 && dp[i][j] - grid[i][j] == dp[i - 1][j]) {
-                dfs(i - 1, j)
-            } else if (j - 1 >= 0 && dp[i][j] - grid[i][j] == dp[i][j - 1]) {
-                dfs(i, j - 1)
-            }
-            grid[i][j] = 0
+        val b = LongArray(m)
+        for (i in m - 1 downTo 0) {
+            b[i] = (if (i != m - 1) b[i + 1] else 0) + grid[0][i]
         }
-
-        dfs(n - 1, m - 1)
-        grid.print()
-        val ans = Array<LongArray>(n) { LongArray(m) }
-        for (i in grid.indices) {
-            for (j in grid[0].indices) {
-                if (i == 0 && j == 0) {
-                    ans[i][j] = grid[i][j].toLong()
-                } else if (i == 0 && j != 0) {
-                    ans[i][j] = ans[i][j - 1] + grid[i][j]
-                } else if (j == 0) {
-                    ans[i][j] = ans[i - 1][j] + grid[i][j]
-                } else {
-                    ans[i][j] = maxOf(ans[i - 1][j], ans[i][j - 1]) + grid[i][j]
-                }
-            }
+        var ans = Long.MAX_VALUE / 2
+        for (i in 0 until m) {
+            ans = minOf(
+                ans, maxOf(
+                    a.getOrElse(i - 1) { 0L },
+                    b.getOrElse(i + 1) { 0L })
+            )
         }
-//        ans.print()
-        return ans.last().last()
+        return ans
     }
 }
