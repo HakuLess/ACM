@@ -225,7 +225,7 @@ fun <T> ArrayList<T>.biFirstIndexOf(func: (T) -> Boolean): Int {
             else -> left = mid
         }
     }
-    println("$left $right")
+//    println("$left $right")
     return when {
         func(this[left]) -> left
         func(this[right]) -> right
