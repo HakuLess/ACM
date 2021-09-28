@@ -21,14 +21,12 @@ class Solution5862 {
         val root = SegmentTree<Int>(start = min, end = max, value = 0) { a, b ->
             a + b
         }
-        nums.sort()
         nums.forEach {
             root.update(root, it, 1)
         }
         var res = n
         nums.forEach {
             val ans = root.query(root, it, it + n - 1)
-//            println("$it ${it + n - 1} is $ans")
             res = minOf(res, n - ans)
         }
         return res
