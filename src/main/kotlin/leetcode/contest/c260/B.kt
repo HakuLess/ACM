@@ -13,19 +13,18 @@ class Solution5882 {
     fun gridGame(grid: Array<IntArray>): Long {
         val m = grid[0].size
         val a = LongArray(m)
-        for (i in 0 until m) {
+        for (i in 0 until m)
             a[i] = (if (i != 0) a[i - 1] else 0) + grid[1][i]
-        }
         val b = LongArray(m)
-        for (i in m - 1 downTo 0) {
+        for (i in m - 1 downTo 0)
             b[i] = (if (i != m - 1) b[i + 1] else 0) + grid[0][i]
-        }
         var ans = Long.MAX_VALUE / 2
         for (i in 0 until m) {
             ans = minOf(
                 ans, maxOf(
                     a.getOrElse(i - 1) { 0L },
-                    b.getOrElse(i + 1) { 0L })
+                    b.getOrElse(i + 1) { 0L }
+                )
             )
         }
         return ans

@@ -2,6 +2,7 @@ package utils
 
 import java.math.BigInteger
 import java.util.*
+import kotlin.collections.ArrayList
 
 /**
  * 数学相关操作
@@ -338,4 +339,40 @@ fun eval(expression: String): Int {
         }
     }
     return stn.pop()
+}
+
+/**
+ * 全组合下的全排列
+ * */
+inline fun <reified T : Comparable<T>> Array<T>.permutations(func: (Array<T>) -> Unit) {
+    val n = this.size
+    for (mask in (1 shl n) - 1 downTo 1) {
+        val arr = ArrayList<T>()
+        for (i in 0 until n) {
+            if (mask and (1 shl i) != 0) {
+                arr.add(this[i])
+            }
+        }
+        val permute = arr.toTypedArray()
+        do {
+            func(permute)
+        } while (permute.nextPermutation())
+    }
+}
+
+fun <T : Comparable<T>> Array<T>.nextPermutation(): Boolean {
+    for (i in this.size - 2 downTo 0) {
+        for (j in this.size - 1 downTo i + 1) {
+            if (this[j] > this[i]) {
+                val temp = this[i]
+                this[i] = this[j]
+                this[j] = temp
+                this.sort(i + 1, this.size)
+                return true
+            }
+        }
+    }
+    // 若已为最大，返回false，若要继续最小，则直接reverse即可
+//    this.reverse()
+    return false
 }
