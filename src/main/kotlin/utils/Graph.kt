@@ -33,7 +33,32 @@ class Graph(val n: Int) {
 }
 
 /**
+ * 多源最短路径
+ *
+ * 弗洛伊德算法
+ * */
+fun Graph.floyd(): Array<LongArray> {
+    // 注意点、边的取值从 0..n-1
+    val ans = Array<LongArray>(n) { LongArray(n) { Long.MAX_VALUE / 2 } }
+    for (i in 0 until n) ans[i][i] = 0
+    weight.forEach { i, map ->
+        map.forEach { j, v ->
+            ans[i][j] = v.toLong()
+        }
+    }
+    for (k in 0 until n) {
+        for (i in 0 until n) {
+            for (j in 0 until n) {
+                ans[i][j] = minOf(ans[i][j], ans[i][k] + ans[k][j])
+            }
+        }
+    }
+    return ans
+}
+
+/**
  * 堆优化Dijkstra 单源最短路径
+ *
  * @param source 源点(0..n-1)
  * */
 fun Graph.dijkstra(source: Int): LongArray {
