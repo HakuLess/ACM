@@ -95,3 +95,31 @@ class Circle(val x: Double, val y: Double, val r: Double) {
         return (x - c.x) * (x - c.x) + (y - c.y) * (y - c.y) <= (r - c.r) * (r - c.r)
     }
 }
+
+/**
+ * 矩形
+ *
+ * @param x0 横坐标小
+ * @param x1 横坐标大
+ * @param y0 纵坐标小
+ * @param y1 纵坐标大
+ * */
+class Rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double) {
+
+    val area: Double
+        get() = (x1 - x0) * (y1 - y0)
+}
+
+infix fun Rect.and(other: Rect): Rect? {
+    if (other.x1 < this.x0 ||
+        other.x0 > this.x1 ||
+        other.y1 < this.y0 ||
+        other.y0 > this.y1
+    ) return null
+    return Rect(
+        maxOf(this.x0, other.x0),
+        minOf(this.x1, other.x1),
+        maxOf(this.y0, other.y0),
+        minOf(this.y1, other.y1)
+    )
+}
