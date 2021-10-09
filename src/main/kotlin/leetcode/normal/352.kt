@@ -1,9 +1,6 @@
 package leetcode.normal
 
-import utils.Interval
-import utils.and
 import java.util.*
-import kotlin.collections.ArrayList
 
 class SummaryRanges() {
 
@@ -12,7 +9,6 @@ class SummaryRanges() {
 
     fun addNum(`val`: Int) {
         if ((tmLeft.floorEntry(`val`)?.value ?: -1) >= `val`) return
-        if ((tmRight.ceilingEntry(`val`)?.value ?: Int.MAX_VALUE) <= `val`) return
 
         var right = `val`
         var left = `val`
