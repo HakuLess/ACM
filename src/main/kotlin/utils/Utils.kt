@@ -212,15 +212,6 @@ fun Boolean.print() {
     println(this)
 }
 
-class Interval(
-    var start: Int = 0,
-    var end: Int = 0
-)
-
-fun Interval.print() {
-    println("start: ${this.start}, end: ${this.end}")
-}
-
 /**
  * 倍增法，后缀数组
  * */

@@ -6,6 +6,7 @@ import kotlin.math.sqrt
 /**
  * 几何操作相关工具类
  * 点、线、面
+ * 区间
  * */
 
 // 可忽略精度范围
@@ -122,4 +123,21 @@ infix fun Rect.and(other: Rect): Rect? {
         maxOf(this.y0, other.y0),
         minOf(this.y1, other.y1)
     )
+}
+
+// 区间
+class Interval(val left: Int, val right: Int) : Comparable<Interval> {
+
+    override fun compareTo(other: Interval): Int {
+        return this.left - other.left
+    }
+
+}
+
+infix fun Interval.and(other: Interval): Interval? {
+    // [4, 5] 与 [6, 7] 可合并则用1
+    // [4, 5] 与 [5, 7] 可合并则用0
+    val offset = 1
+    if (other.left > this.right + offset || other.right < this.left - offset) return null
+    return Interval(minOf(this.left, other.left), maxOf(this.right, other.right))
 }
