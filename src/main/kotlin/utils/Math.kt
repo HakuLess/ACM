@@ -50,6 +50,11 @@ fun inv(x: Long, mod: Long = 1000000007L): Long {
     return fexp(x, mod - 2, mod)
 }
 
+fun inv2(a: Long, b: Long): Long {
+    if (a == 1L) return 1L
+    return b + (1 - b * inv2(b % a, a)) / a
+}
+
 // 组合
 fun C(n: Int, m: Int, mod: Long = 1000000007L): Long {
     return fac(n, mod).let {
