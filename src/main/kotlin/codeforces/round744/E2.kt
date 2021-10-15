@@ -7,10 +7,17 @@ fun main(args: Array<String>) {
     repeat(t) {
         val n = readLine()!!.trim().toInt()
         val arr = readLine()!!.trim().split(" ").map { it.toInt() }
-        val min = arr.minOrNull()!!
-        val l = arr.map { it - min + 1 }
 
-        val end = l.maxOrNull()!! + 100
+        // 离散化
+        val map = HashMap<Int, Int>()
+        var i = 1
+        arr.sorted().distinct().forEach {
+            map[it] = i
+            i++
+        }
+        val l = arr.map { map[it]!! }
+        val end = i + 1
+
         val ans = ArrayList<Int>()
         val root = SegmentTree<Int>(start = 0, end = end, value = 0) { a, b -> a + b }
         var res = 0
