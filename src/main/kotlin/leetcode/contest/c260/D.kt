@@ -87,7 +87,7 @@ class Solution5884 {
         val set = dfs(0, s.length)
         return answers.map {
             when (it) {
-                real -> 5
+                real.toInt() -> 5
                 in set -> 2
                 else -> 0
             }

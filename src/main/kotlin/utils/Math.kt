@@ -3,6 +3,7 @@ package utils
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.exp
 
 /**
  * 数学相关操作
@@ -316,13 +317,18 @@ fun IntArray.discretization(): IntArray {
 // 表达式计算
 // 支持 +-*/ 并符合运算规律，先计算*/再计算+-
 // todo 增加括号的支持
-// todo 支持非单位数（10以内）
-fun eval(expression: String): Int {
-    val stn = Stack<Int>()
+fun eval(expression: String): Long {
+    val stn = Stack<Long>()
     val op = Stack<Char>()
-    expression.forEach {
-        if (it in '0'..'9') {
-            stn.push(it - '0')
+    var i = 0
+    while (i in expression.indices) {
+        if (expression[i] in '0'..'9') {
+            var cur = (expression[i] - '0').toLong()
+            while (i + 1 in expression.indices && expression[i + 1] in '0'..'9') {
+                i++
+                cur = cur * 10 + (expression[i] - '0')
+            }
+            stn.push(cur)
             if (op.isNotEmpty() && op.peek() in arrayOf('*', '/')) {
                 val a = stn.pop()
                 val b = stn.pop()
@@ -332,18 +338,19 @@ fun eval(expression: String): Int {
                 }
             }
         } else {
-            op.push(it)
+            op.push(expression[i])
+        }
+        i++
+    }
+    var ans = stn[0]
+    for (j in op.indices) {
+        ans = when (op[j]) {
+            '+' -> ans + stn[j + 1]
+            '-' -> ans - stn[j + 1]
+            else -> 0
         }
     }
-    while (op.isNotEmpty()) {
-        val a = stn.pop()
-        val b = stn.pop()
-        when (op.pop()) {
-            '+' -> stn.push(a + b)
-            '-' -> stn.push(b - a)
-        }
-    }
-    return stn.pop()
+    return ans
 }
 
 /**
