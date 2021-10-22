@@ -24,6 +24,7 @@ class Solution5887 {
             var c = 0L
             arr1.forEach { n1 ->
                 if (n1 >= 0) {
+                    // 二分计算满足条件的总数
                     c += arr2.biLastIndexOf { n2 ->
                         n1.toLong() * n2.toLong() <= mid
                     } + 1
