@@ -216,6 +216,32 @@ fun IntArray.permute(): List<List<Int>> {
     return ans
 }
 
+// 有重复元素数组，全排列
+fun IntArray.permuteUnique(): List<List<Int>> {
+    this.sort()
+    val res = ArrayList<List<Int>>()
+    val visited = IntArray(this.size)
+    fun dfs(nums: IntArray, tmp: ArrayList<Int>, visited: IntArray) {
+        if (tmp.size == nums.size) {
+            res.add(ArrayList(tmp))
+            return
+        }
+        for (i in nums.indices) {
+            if (visited[i] == 1) continue
+            if (i > 0 && nums[i - 1] == nums[i] && visited[i - 1] == 0) {
+                continue
+            }
+            visited[i] = 1
+            tmp.add(nums[i])
+            dfs(nums, tmp, visited)
+            visited[i] = 0
+            tmp.removeAt(tmp.size - 1)
+        }
+    }
+    dfs(this, ArrayList(), visited)
+    return res
+}
+
 /**
  * 二分查找，找到第一个满足条件的Index
  * 若整个列表都没有满足的，返回-1

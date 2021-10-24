@@ -13,6 +13,7 @@ import kotlin.collections.ArrayList
 
 // Definition for a binary tree node.
 class TreeNode(var `val`: Int = 0) {
+    var parent: TreeNode? = null
     var left: TreeNode? = null
     var right: TreeNode? = null
 }
