@@ -12,6 +12,7 @@ class Solution5904 {
         val n = nums.size
         var high = -1
         var ans = 0
+        // 状态压缩，取or的最大值
         for (mask in 0 until (1 shl n)) {
             var cur = 0
             for (i in 0 until n) {
