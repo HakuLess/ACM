@@ -1,9 +1,9 @@
 package leetcode.contest.c264
 
-import utils.permute
 import utils.permuteUnique
 import utils.print
 import java.util.*
+import kotlin.collections.ArrayList
 
 fun main() {
     val s = Solution5907()
@@ -14,41 +14,26 @@ class Solution5907 {
     fun nextBeautifulNumber(n: Int): Int {
         val ts = TreeSet<Int>()
 
-        ts.add(1)
-        ts.add(22)
-        ts.add(333)
-        ts.add(4444)
-        ts.add(55555)
-        ts.add(666666)
-        intArrayOf(1, 2, 2).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
+        val list = ArrayList<ArrayList<Int>>()
+        for (i in 1..6) {
+            val cur = arrayListOf<Int>()
+            repeat(i) {
+                cur.add(i)
+            }
+            list.add(cur)
         }
-        intArrayOf(1, 3, 3, 3).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
-        }
-        intArrayOf(1, 4, 4, 4, 4).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
-        }
-        intArrayOf(2, 2, 3, 3, 3).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
-        }
-        intArrayOf(2, 2, 4, 4, 4, 4).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
-        }
-        intArrayOf(1, 5, 5, 5, 5, 5).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
-        }
-        intArrayOf(1, 6, 6, 6, 6, 6, 6).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
-        }
-        intArrayOf(1, 2, 2, 3, 3, 3).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
-        }
-        intArrayOf(1, 2, 2, 4, 4, 4, 4).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
-        }
-        intArrayOf(3, 3, 3, 4, 4, 4, 4).permuteUnique().forEach {
-            ts.add(it.joinToString("").toInt())
+        for (mask in 1 until (1 shl 6)) {
+            val state = ArrayList<Int>()
+            for (i in 0 until 6) {
+                if (mask and (1 shl i) != 0) {
+                    state.addAll(list[i])
+                }
+            }
+            if (state.size <= 7) {
+                state.toIntArray().permuteUnique().forEach {
+                    ts.add(it.joinToString("").toInt())
+                }
+            }
         }
 
         return ts.ceiling(n + 1)!!

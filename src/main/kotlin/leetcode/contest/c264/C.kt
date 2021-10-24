@@ -24,6 +24,7 @@ class Solution5908 {
             map[parents[i]]!!.add(i)
         }
 
+        // 通过parents数组，构建二叉树
         val queue: Queue<Pair<Int, TreeNode>> = LinkedList<Pair<Int, TreeNode>>()
         queue.add(Pair(0, root))
         while (queue.isNotEmpty()) {
@@ -41,6 +42,7 @@ class Solution5908 {
             }
         }
 
+        // 获取所有节点的儿子数（包含自己）
         val seen = HashMap<TreeNode, Int>()
         fun TreeNode?.count(): Int = if (this == null) {
             0
@@ -71,7 +73,6 @@ class Solution5908 {
                 ans++
             }
 
-//            println("$max $ans")
             dfs(node.left)
             dfs(node.right)
         }
