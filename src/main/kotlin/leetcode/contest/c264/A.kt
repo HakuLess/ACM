@@ -19,16 +19,18 @@ class Solution5906 {
                         if (!str[index - 1].isLetter()
                             || str[index - 1].isUpperCase()
                             || str[index + 1].isUpperCase()
-                            || !str[index + 1].isLetter()) {
+                            || !str[index + 1].isLetter()
+                        ) {
                             ans = false
                         }
                     }
                 }
             }
-            if (str.count { it == '!' || it == '.' || it == ',' } > 1) {
+            val arr = arrayOf('!', '.', ',')
+            if (str.count { it in arr } > 1) {
                 ans = false
-            } else if (str.count { it == '!' || it == '.' || it == ',' } == 1) {
-                if (str.last() !in arrayOf('!', '.', ',')) {
+            } else if (str.count { it in arr } == 1) {
+                if (str.last() !in arr) {
                     ans = false
                 }
             }

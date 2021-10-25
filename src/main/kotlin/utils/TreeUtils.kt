@@ -16,11 +16,46 @@ class TreeNode(var `val`: Int = 0) {
     var parent: TreeNode? = null
     var left: TreeNode? = null
     var right: TreeNode? = null
+    var cnt = -1
 }
 
 class NTreeNode(var `val`: Int = 0, var index: Int = 0) {
     var parent: NTreeNode? = null
     var children: ArrayList<NTreeNode> = arrayListOf()
+}
+
+// parent数组构造树
+// -1代表该结点为根结点
+fun IntArray.toTree(): TreeNode {
+
+    val map = HashMap<Int, ArrayList<Int>>()
+    for (i in this.indices) {
+        map[this[i]] = map.getOrDefault(this[i], arrayListOf())
+        map[this[i]]!!.add(i)
+    }
+
+    // 根节点对应的index
+    val first = this.indexOf(-1)
+    val root = TreeNode(first)
+    val queue: Queue<Pair<Int, TreeNode>> = LinkedList<Pair<Int, TreeNode>>()
+    queue.add(Pair(first, root))
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        for (k in 0 until size) {
+            val item = queue.poll()
+            val node = item.second
+
+            map[item.first]?.forEach {
+                val next = TreeNode(it)
+                next.parent = node
+                if (node.left == null) node.left = next
+                else if (node.right == null) node.right = next
+                queue.offer(Pair(it, next))
+            }
+        }
+    }
+
+    return root
 }
 
 /**
@@ -58,7 +93,9 @@ fun TreeNode?.find(x: Int): TreeNode? = if (this == null) {
 fun TreeNode?.count(): Int = if (this == null) {
     0
 } else {
-    1 + this.left.count() + this.right.count()
+    (1 + this.left.count() + this.right.count()).also {
+        this.cnt = it
+    }
 }
 
 fun <T> Array<T>.toTree(): TreeNode? {
