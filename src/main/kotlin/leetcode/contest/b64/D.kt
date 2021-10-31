@@ -10,6 +10,7 @@ fun main() {
     s.countCombinations(arrayOf("queen", "bishop"), "[[5,7],[3,4]]".toGrid()).print()
 }
 
+// todo 处理国际象棋的类
 class SolutionD {
     fun countCombinations(pieces: Array<String>, positions: Array<IntArray>): Int {
 
