@@ -5,11 +5,11 @@ import utils.print
 import utils.toGrid
 
 fun main() {
-    val s = SolutionC()
+    val s = Solution2055()
     s.platesBetweenCandles("**|**|***|", "[[2,5],[5,9]]".toGrid()).print()
 }
 
-class SolutionC {
+class Solution2055 {
     fun platesBetweenCandles(s: String, queries: Array<IntArray>): IntArray {
         // 蜡烛最左侧index 蜡烛最右侧index 总蜡烛数
         val root = SegmentTree<Triple<Int, Int, Int>>(start = 0, end = s.length) { a, b ->

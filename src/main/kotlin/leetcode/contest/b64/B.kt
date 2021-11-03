@@ -4,36 +4,31 @@ import utils.print
 import utils.printInt
 import utils.toGrid
 import java.util.*
+import kotlin.collections.ArrayList
 
 fun main() {
-    val s = SolutionB()
+    val s = Solution2054()
     s.maxTwoEvents("[[1,3,2],[4,5,2],[2,4,3]]".toGrid()).print()
 }
 
-class SolutionB {
+// 最多选择两个不重叠的Events，最高价值
+class Solution2054 {
     fun maxTwoEvents(events: Array<IntArray>): Int {
-        events.sortBy { it[1] }
-        var cur = 0
-        val left = TreeMap<Int, Int>()
+        // 按照时间进行排序
+        val arr = ArrayList<IntArray>()
         events.forEach {
-            cur = maxOf(cur, it[2])
-            // 该点左侧最大值
-            left[it[1]] = cur
+            arr.add(intArrayOf(1, it[0], it[2]))
+            arr.add(intArrayOf(-1, it[1], it[2]))
         }
-        events.sortBy { it[0] }
-        val right = TreeMap<Int, Int>()
-        cur = 0
-        events.reversed().forEach {
-            cur = maxOf(cur, it[2])
-            // 该点右侧最大值
-            right[it[0] - 1] = cur
-        }
+        arr.sortWith(compareBy({ it[1] }, { -it[0] }))
+
+        var preMax = 0
         var ans = 0
-        for (key in left.keys) {
-            ans = if (right.ceilingKey(key) != null) {
-                maxOf(ans, left[key]!! + right[right.ceilingKey(key)]!!)
+        arr.forEach {
+            if (it[0] == 1) {
+                ans = maxOf(ans, it[2] + preMax)
             } else {
-                maxOf(ans, left[key]!!)
+                preMax = maxOf(preMax, it[2])
             }
         }
         return ans

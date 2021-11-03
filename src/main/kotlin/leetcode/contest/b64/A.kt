@@ -1,6 +1,6 @@
 package leetcode.contest.b64
 
-class SolutionA {
+class Solution2053 {
     fun kthDistinct(arr: Array<String>, k: Int): String {
         var cur = 0
         for (i in arr.indices) {

@@ -1,9 +1,6 @@
 package leetcode.contest.c264
 
-import utils.TreeNode
-import utils.count
-import utils.print
-import utils.toTree
+import utils.*
 
 fun main() {
     val s = Solution5908()
@@ -13,23 +10,25 @@ fun main() {
 
 class Solution5908 {
     fun countHighestScoreNodes(parents: IntArray): Int {
-        val root = parents.toTree()
+        val root = parents.toNTree()
 
         // 获取所有节点的儿子数（包含自己）
+        // 计算根节点时，同时会将所有子节点的cnt进行赋值
         val n = root.count()
 
         var max = -1L
         var ans = 0
-        fun dfs(node: TreeNode?) {
+        fun dfs(node: NTreeNode?) {
             if (node == null) return
 
-            var left = node.left?.cnt ?: 0
-            var right = node.right?.cnt ?: 0
-            var top = n - left - right - 1
-            if (left == 0) left = 1
-            if (right == 0) right = 1
-            if (top == 0) top = 1
-            val cur = top.toLong() * left * right
+            var cnt = 0
+            var cur = 1L
+            node.children.forEach {
+                cnt += it.cnt
+                cur *= it.cnt
+            }
+            val top = n - cnt - 1
+            if (top > 0) cur *= top
             if (cur > max) {
                 max = cur
                 ans = 1
@@ -37,8 +36,9 @@ class Solution5908 {
                 ans++
             }
 
-            dfs(node.left)
-            dfs(node.right)
+            node.children.forEach {
+                dfs(it)
+            }
         }
 
         dfs(root)

@@ -5,62 +5,42 @@ import utils.toGrid
 import kotlin.math.abs
 
 fun main() {
-    val s = SolutionD()
+    val s = Solution2056()
 //    s.countCombinations(arrayOf("rook"), "[[1,1]]".toGrid()).print()
     s.countCombinations(arrayOf("queen", "bishop"), "[[5,7],[3,4]]".toGrid()).print()
 }
 
-// todo 处理国际象棋的类
-class SolutionD {
+class Solution2056 {
     fun countCombinations(pieces: Array<String>, positions: Array<IntArray>): Int {
 
-        fun check(blacks: ArrayList<Int>): Boolean {
-            println(blacks.joinToString())
-            val ori = ArrayList<Pair<Int, Int>>()
-            for (i in blacks.indices) {
-                if ((blacks[i] % 10 - positions[i][0]) == 0 && (blacks[i] / 10 - positions[i][1]) == 0) {
-                    ori.add(Pair(0, 0))
-                } else if ((blacks[i] % 10 - positions[i][0]) == 0) {
-                    ori.add(
-                        Pair(
-                            0,
-                            (blacks[i] / 10 - positions[i][1]) / abs((blacks[i] / 10 - positions[i][1]))
-                        )
-                    )
-                } else if ((blacks[i] / 10 - positions[i][1]) == 0) {
-                    ori.add(
-                        Pair(
-                            (blacks[i] % 10 - positions[i][0]) / abs((blacks[i] % 10 - positions[i][0])),
-                            0
-                        )
-                    )
-                } else ori.add(
-                    Pair(
-                        (blacks[i] % 10 - positions[i][0]) / abs((blacks[i] % 10 - positions[i][0])),
-                        (blacks[i] / 10 - positions[i][1]) / abs((blacks[i] / 10 - positions[i][1]))
-                    )
-                )
+        // 获取方向值
+        fun getOri(start: Int, end: Int): Int {
+            if (start == end) return 0
+            if (start > end) return -1
+            return 1
+        }
+
+        fun check(targets: ArrayList<Int>): Boolean {
+            val ori = ArrayList<Int>()
+            for (i in targets.indices) {
+                ori.add((getOri(positions[i][0], targets[i] % 10) + getOri(positions[i][1], targets[i] / 10) * 10))
             }
-            val p = arrayListOf<IntArray>()
+            val pos = arrayListOf<Int>()
             positions.forEach {
-                p.add(it.clone())
+                pos.add(it[0] + it[1] * 10)
             }
-            while ((0..p.lastIndex).any { p[it][0] + p[it][1] * 10 != blacks[it] }) {
-                val set = HashSet<Int>()
-                for (i in blacks.indices) {
-                    if (p[i][0] + p[i][1] * 10 != blacks[i]) {
-                        p[i][0] += ori[i].first
-                        p[i][1] += ori[i].second
-                    }
-                    set.add(p[i][0] + p[i][1] * 10)
+            repeat(8) {
+                if (pos.size != pos.toHashSet().size) return false
+                for (i in pos.indices) {
+                    if (pos[i] != targets[i]) pos[i] += ori[i]
                 }
-                if (set.size != pieces.size) return false
             }
+            if (pos.size != pos.toHashSet().size) return false
             return true
         }
 
-        fun dfs(index: Int, blacks: ArrayList<Int>): Int {
-            if (index !in pieces.indices) return if (check(blacks)) 1 else 0
+        fun dfs(index: Int, targets: ArrayList<Int>): Int {
+            if (index !in pieces.indices) return if (check(targets)) 1 else 0
             val pos = positions[index]
             val type = pieces[index]
 
@@ -68,28 +48,27 @@ class SolutionD {
             for (i in 1..8) {
                 for (j in 1..8) {
                     val key = i + j * 10
-                    if (key in blacks) continue
+                    if (key in targets) continue
                     when (type) {
                         "rook" -> {
                             if (i == pos[0] || j == pos[1]) {
-                                blacks.add(key)
-                                ans += dfs(index + 1, blacks)
-                                blacks.remove(key)
+                                targets.add(key)
+                                ans += dfs(index + 1, targets)
+                                targets.remove(key)
                             }
                         }
                         "bishop" -> {
                             if (abs(i - pos[0]) == abs(j - pos[1])) {
-                                blacks.add(key)
-                                println("add key $key $i $j ${pos.joinToString()}")
-                                ans += dfs(index + 1, blacks)
-                                blacks.remove(key)
+                                targets.add(key)
+                                ans += dfs(index + 1, targets)
+                                targets.remove(key)
                             }
                         }
                         "queen" -> {
-                            if (i == pos[0] || j == pos[0] || abs(i - pos[0]) == abs(j - pos[1])) {
-                                blacks.add(key)
-                                ans += dfs(index + 1, blacks)
-                                blacks.remove(key)
+                            if (i == pos[0] || j == pos[1] || abs(i - pos[0]) == abs(j - pos[1])) {
+                                targets.add(key)
+                                ans += dfs(index + 1, targets)
+                                targets.remove(key)
                             }
                         }
                     }

@@ -9,15 +9,15 @@ import kotlin.math.sqrt
 fun main() {
     val t = readLine()!!.trim().toInt()
     val primes = ArrayList<Int>()
-    val max = Int.MAX_VALUE / 10
-    val isPrime = IntArray(max) { 1 }
+    val max = Int.MAX_VALUE / 100
+    val isPrime = BooleanArray(max) { true }
     for (i in 2 until max) {
-        if (isPrime[i] == 1) {
+        if (isPrime[i]) {
             primes.add(i)
         }
         var j = 0
         while (j < primes.size && i * primes[j] < max) {
-            isPrime[i * primes[j]] = 0
+            isPrime[i * primes[j]] = false
             if (i % primes[j] == 0) {
                 break
             }
@@ -25,7 +25,7 @@ fun main() {
         }
     }
 
-//        println(primes.joinToString())
+//    println(primes.joinToString())
     val ts = TreeSet<Long>()
     for (i in 1 until primes.size) {
         ts.add(primes[i].toLong() * primes[i - 1])

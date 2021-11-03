@@ -11,6 +11,7 @@ import kotlin.collections.ArrayList
  * 多叉树，且有parent信息
  **/
 
+// 提交时，注意类名可能需要更换
 // Definition for a binary tree node.
 class TreeNode(var `val`: Int = 0) {
     var parent: TreeNode? = null
@@ -22,6 +23,40 @@ class TreeNode(var `val`: Int = 0) {
 class NTreeNode(var `val`: Int = 0, var index: Int = 0) {
     var parent: NTreeNode? = null
     var children: ArrayList<NTreeNode> = arrayListOf()
+    var cnt = -1
+}
+
+// parent数组构造树
+// -1代表该结点为根结点
+fun IntArray.toNTree(): NTreeNode {
+
+    val map = HashMap<Int, ArrayList<Int>>()
+    for (i in this.indices) {
+        map[this[i]] = map.getOrDefault(this[i], arrayListOf())
+        map[this[i]]!!.add(i)
+    }
+
+    // 根节点对应的index
+    val first = this.indexOf(-1)
+    val root = NTreeNode(first)
+    val queue: Queue<Pair<Int, NTreeNode>> = LinkedList<Pair<Int, NTreeNode>>()
+    queue.add(Pair(first, root))
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        for (k in 0 until size) {
+            val item = queue.poll()
+            val node = item.second
+
+            map[item.first]?.forEach {
+                val next = NTreeNode(it)
+                next.parent = node
+                node.children.add(next)
+                queue.offer(Pair(it, next))
+            }
+        }
+    }
+
+    return root
 }
 
 // parent数组构造树
@@ -82,6 +117,23 @@ fun TreeNode?.find(x: Int): TreeNode? = if (this == null) {
         this
     } else {
         this.left.find(x) ?: this.right.find(x)
+    }
+}
+
+/**
+ * 计算树的总节点数（包括自己）
+ *
+ * @return 总Node数
+ * */
+fun NTreeNode?.count(): Int = if (this == null) {
+    0
+} else {
+    var ans = 1
+    this.children.forEach {
+        ans += it.count()
+    }
+    ans.also {
+        this.cnt = it
     }
 }
 
