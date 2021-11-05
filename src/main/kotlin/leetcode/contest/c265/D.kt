@@ -3,133 +3,71 @@ package leetcode.contest.c265
 import utils.print
 
 fun main() {
-    val s = SolutionD()
-//    s.possiblyEquals("internationalization", "i18n").print()
+    val s = Solution2060()
+    s.possiblyEquals("internationalization", "i18n").print()
 //    s.possiblyEquals("l123e", "44").print()
 
-    s.possiblyEquals("64g97q959g531q54g576g491q611g362g", "9g157q83q57q9g465q92q554g23g41q47").print()
+//    s.possiblyEquals("64g97q959g531q54g576g491q611g362g", "9g157q83q57q9g465q92q554g23g41q47").print()
 }
 
-class SolutionD {
+class Solution2060 {
     fun possiblyEquals(s1: String, s2: String): Boolean {
+        val seen = HashSet<String>()
 
-        fun helper(s: String): ArrayList<String> {
-            val ans = ArrayList<String>()
-            val sb = StringBuilder()
-            var i = 0
-            val c = StringBuilder()
-            while (i in s.indices) {
-                if (s[i] in 'a'..'z') {
-                    if (c.isNotEmpty()) {
-                        ans.add(c.toString())
-                        c.clear()
-                    }
-                    sb.append(s[i])
-                } else if (s[i] in '1'..'9') {
-                    if (sb.isNotEmpty()) {
-                        ans.add(sb.toString())
-                        sb.clear()
-                    }
-                    c.append(s[i])
-                }
-                i++
-            }
-            if (sb.isNotEmpty()) {
-                ans.add(sb.toString())
-                sb.clear()
-            }
-            if (c.isNotEmpty()) {
-                ans.add(c.toString())
-                c.clear()
-            }
-            return ans
-        }
+        var ans = false
 
-        fun getNum(i: String): HashSet<Int> {
-            val ans = hashSetOf<Int>()
-            ans.add(i.toInt())
-            if (i.length == 2) {
-                ans.add((i[0] - '0') + (i[1] - '0'))
-            }
-            if (i.length == 3) {
-                ans.add((i[0] - '0') + (i[1] - '0') + (i[2] - '0'))
-                ans.add((i[0] - '0') + (i[1] - '0') * 10 + (i[2] - '0'))
-                ans.add((i[0] - '0') * 10 + (i[1] - '0') + (i[2] - '0'))
-            }
-            return ans
-        }
+        fun dfs(i: Int, j: Int, rest1: Int, rest2: Int) {
+            if (ans) return
+            val key = "$i,$j,$rest1,$rest2"
+            if (key in seen) return
+            seen.add(key)
 
-        val res = ArrayList<StringBuilder>()
-
-        fun dfs(arr: ArrayList<String>, i: Int = 0, cur: ArrayList<StringBuilder> = ArrayList()) {
-            if (i !in arr.indices) {
-                res.addAll(cur)
+            // 刚好匹配完成
+            if (i == s1.length && j == s2.length && rest1 == 0 && rest2 == 0) {
+                ans = true
                 return
             }
-            if (arr[i].toIntOrNull() == null) {
-                for (j in cur.indices) {
-                    cur[j].append(arr[i])
+
+            // 有一方有剩余没用完，则互相消耗掉
+            if (rest1 != 0 && rest2 != 0) {
+                val min = minOf(rest1, rest2)
+                dfs(i, j, rest1 - min, rest2 - min)
+                return
+            }
+
+            // 无可消耗，需要字符匹对进行判断
+            if (rest1 == 0 && rest2 == 0 && i in s1.indices && s1[i] in 'a'..'z' && j in s2.indices && s2[j] in 'a'..'z') {
+                if (s1[i] == s2[j]) {
+                    dfs(i + 1, j + 1, 0, 0)
+                } else return
+            } else if (rest1 > 0 && j in s2.indices && s2[j] in 'a'..'z') {
+                return dfs(i, j + 1, rest1 - 1, 0)
+            } else if (rest2 > 0 && i in s1.indices && s1[i] in 'a'..'z') {
+                return dfs(i + 1, j, 0, rest2 - 1)
+            } else if (j in s2.indices && s2[j] in '1'..'9') {
+                var rest = 0
+                for (k in 0 until 3) {
+                    if (j + k in s2.indices && s2[j + k].isDigit()) {
+                        rest = rest * 10 + (s2[j + k] - '0')
+                        dfs(i, j + k + 1, rest1, rest2 + rest)
+                    } else break
                 }
-                if (cur.isEmpty()) cur.add(StringBuilder(arr[i]))
-                dfs(arr, i + 1, cur)
-            } else if (arr[i].toIntOrNull() != null) {
-                val set = getNum(arr[i])
-                set.forEach {
-                    val next = ArrayList<StringBuilder>()
-                    cur.forEach {
-                        next.add(StringBuilder(it))
-                    }
-                    if (next.isEmpty()) {
-                        next.add(StringBuilder())
-                    }
-                    for (j in next.indices) {
-                        repeat(it) {
-                            next[j].append('*')
-                        }
-                    }
-                    dfs(arr, i + 1, next)
+                return
+            } else if (i in s1.indices && s1[i] in '1'..'9') {
+                var rest = 0
+                for (k in 0 until 3) {
+                    if (i + k in s1.indices && s1[i + k].isDigit()) {
+                        rest = rest * 10 + (s1[i + k] - '0')
+                        dfs(i + k + 1, j, rest1 + rest, rest2)
+                    } else break
                 }
+                return
+            } else {
+                return
             }
         }
 
-        val source1 = helper(s1)
-        val source2 = helper(s2)
-
-        dfs(source1)
-        val res1 = res.map { it.toString() }
-        res.clear()
-        dfs(source2)
-        val res2 = res.map { it.toString() }
-
-        val map1 = HashMap<Int, ArrayList<String>>()
-        res1.forEach {
-            map1[it.length] = map1.getOrDefault(it.length, arrayListOf())
-            map1[it.length]!!.add(it)
-        }
-        val map2 = HashMap<Int, ArrayList<String>>()
-        res2.forEach {
-            map2[it.length] = map2.getOrDefault(it.length, arrayListOf())
-            map2[it.length]!!.add(it)
-        }
-
-        fun check(s1: String, s2: String): Boolean {
-            for (i in s1.indices) {
-                if (s1[i] == s2[i] || s1[i] == '*' || s2[i] == '*') continue
-                return false
-            }
-            return true
-        }
-
-//         res1.joinToString().print()
-//         res2.joinToString().print()
-
-        for (key in map1.keys) {
-            map1[key]?.forEach { a ->
-                map2[key]?.forEach { b ->
-                    if (check(a, b)) return true
-                }
-            }
-        }
-        return false
+        dfs(0, 0, 0, 0)
+        return ans
     }
 }

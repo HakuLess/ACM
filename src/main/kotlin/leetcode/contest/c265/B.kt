@@ -12,7 +12,7 @@ import utils.toIntArray
  *     var next: ListNode? = null
  * }
  */
-class SolutionB {
+class Solution2058 {
     fun nodesBetweenCriticalPoints(head: ListNode?): IntArray {
         val arr = head.toIntArray()
         val l = arrayListOf<Int>()

@@ -3,7 +3,7 @@ package leetcode.contest.c265
 import java.util.*
 import kotlin.collections.HashSet
 
-class SolutionC {
+class Solution2059 {
     fun minimumOperations(nums: IntArray, start: Int, goal: Int): Int {
         val queue: Queue<Int> = LinkedList<Int>()
         queue.add(start)
