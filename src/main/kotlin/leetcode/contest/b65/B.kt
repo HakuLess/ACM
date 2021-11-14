@@ -1,7 +1,6 @@
 package leetcode.contest.b65
 
 import utils.print
-import kotlin.math.abs
 
 fun main() {
     val r = Robot(20, 14)

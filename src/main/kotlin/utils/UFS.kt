@@ -6,9 +6,13 @@ package utils
  * @link https://hakuless.github.io/post/union-find-set/
  */
 class UFS(var n: Int = 0) {
-    private val parent = IntArray(n) { it }
-    private val rank = IntArray(n)
+    private var parent = IntArray(n) { it }
+    private var rank = IntArray(n)
     var size = n
+
+    private var resetParent = IntArray(n) { 0 }
+    private var resetRank = IntArray(n) { 0 }
+    private var resetSize = 0
 
     fun find(x: Int): Int {
         if (x != parent[x]) {
@@ -18,6 +22,9 @@ class UFS(var n: Int = 0) {
     }
 
     fun union(x: Int, y: Int): Boolean {
+        resetParent = parent.clone()
+        resetRank = rank.clone()
+        resetSize = size
         val px = find(x)
         val py = find(y)
         if (px == py) {
@@ -33,6 +40,13 @@ class UFS(var n: Int = 0) {
         }
         size--
         return true
+    }
+
+    // 回退最后一次union的状态
+    fun reset() {
+        parent = resetParent
+        rank = resetRank
+        size = resetSize
     }
 }
 
