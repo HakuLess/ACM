@@ -11,39 +11,49 @@ class Trie<T> {
     }
 
     var root = TrieNode<T>()
+}
 
-    /**
-     * insert value
-     * */
-    fun insert(value: Array<T>) {
-        fun dfs(node: TrieNode<T>, depth: Int) {
-            if (depth == value.size) node.isEnd = true
-            if (depth !in value.indices) return
-            if (!node.children.map { it.value }.contains(value[depth])) {
-                node.children.add(TrieNode<T>(value[depth]))
-            }
-            val next = node.children.first { it.value == value[depth] }
-            dfs(next, depth + 1)
+fun <T> Trie<T>.search(target: Array<T>): Boolean {
+    fun <T> dfs(node: Trie.TrieNode<T>, i: Int): Boolean {
+        if (i in target.indices) {
+            if (target[i] != node.value)
+                return false
         }
-        dfs(root, 0)
+        if (i == target.lastIndex) return node.isEnd
+        node.children.forEach {
+            if (dfs(it, i + 1)) {
+                return true
+            }
+        }
+        return false
     }
+    return dfs(root, -1)
+}
 
-    fun <T> search(target: Array<T>): Boolean {
-        fun <T> dfs(node: TrieNode<T>, i: Int): Boolean {
-            if (i in target.indices) {
-                if (target[i] != node.value)
-                    return false
-            }
-            if (i == target.lastIndex) return node.isEnd
-            node.children.forEach {
-                if (dfs(it, i + 1)) {
-                    return true
-                }
-            }
-            return false
+fun <T> Trie<T>.insert(value: Array<T>) {
+    fun dfs(node: Trie.TrieNode<T>, depth: Int) {
+        if (depth == value.size) node.isEnd = true
+        if (depth !in value.indices) return
+        if (!node.children.map { it.value }.contains(value[depth])) {
+            node.children.add(Trie.TrieNode<T>(value[depth]))
         }
-        return dfs(root, -1)
+        val next = node.children.first { it.value == value[depth] }
+        next.cnt++
+        dfs(next, depth + 1)
     }
+    dfs(root, 0)
+}
+
+fun <T> Trie<T>.remove(value: Array<T>) {
+    fun dfs(node: Trie.TrieNode<T>, depth: Int) {
+        val next = node.children.first { it.value == value[depth] }
+        next.cnt--
+        if (next.cnt == 0) {
+            node.children.remove(next)
+        }
+        dfs(next, depth + 1)
+    }
+    dfs(root, 0)
 }
 
 fun Trie<Int>.removeInt(n: Int) {
