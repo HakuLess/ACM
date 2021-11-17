@@ -3,6 +3,7 @@ package kickstart.round2020.a
 import utils.Trie
 import utils.insert
 
+// 字典树
 fun main() {
     val t = readLine()!!.trim().toInt()
     repeat(t) {
