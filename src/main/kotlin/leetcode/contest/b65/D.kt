@@ -1,60 +1,62 @@
 package leetcode.contest.b65
 
+import utils.biLastIndexOf
 import utils.print
+import utils.printInt
+import utils.toArrayList
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 fun main() {
     val s = SolutionD()
-    s.maxTaskAssign(intArrayOf(5, 9, 8, 5, 9), intArrayOf(1, 6, 4, 2, 6), 1, 5).print()
+    s.maxTaskAssign(intArrayOf(3, 2, 1), intArrayOf(0, 3, 3), 1, 1).print()
 }
 
 class SolutionD {
     // 二分，算isValid
     fun maxTaskAssign(tasks: IntArray, workers: IntArray, pills: Int, strength: Int): Int {
-        tasks.sortDescending()
+        tasks.sort()
+        workers.sortDescending()
 
-        val tm = TreeMap<Int, Int>()
-        workers.forEach {
-            tm[it] = tm.getOrDefault(it, 0) + 1
+        fun check(mid: Int): Boolean {
+            // 取出工作量最小的 及 最能干的工人 各mid个
+            val tm = TreeMap<Int, Int>()
+            for (i in 0 until mid) {
+                tm[workers[i]] = tm.getOrDefault(workers[i], 0) + 1
+            }
+            var p = 0
+            for (i in mid - 1 downTo 0) {
+                val it = tasks[i]
+                if (tm.ceilingKey(it) != null) {
+                    val key = tm.ceilingKey(it)
+                    tm[key] = tm.getOrDefault(key, 0) - 1
+                    if (tm[key] == 0) tm.remove(key)
+                } else if (tm.ceilingKey(it - strength) != null && p < pills) {
+                    p++
+                    val key = tm.ceilingKey(it - strength)
+                    tm[key] = tm.getOrDefault(key, 0) - 1
+                    if (tm[key] == 0) tm.remove(key)
+                } else {
+                    return false
+                }
+            }
+            return true
         }
 
-        val tmp = ArrayList<Int>()
-        val seen = HashMap<String, Int>()
-        fun dfs(i: Int, lp: Int): Int {
-            val seenKey = "$i,$lp,${tmp.joinToString()}"
-            if (seenKey in seen) return seen[seenKey]!!
-
-            if (i !in tasks.indices) return 0
-            var ans = 0
-
-            val key = tm.ceilingKey(tasks[i])
-            val keyP = tm.ceilingKey(tasks[i] - strength)
-
-            if (key != null) {
-                // 直接比这个大
-                tm[key] = tm.getOrDefault(key, 0) - 1
-                if (tm[key] == 0) tm.remove(key)
-                ans = maxOf(ans, 1 + dfs(i + 1, lp))
-                tm[key] = tm.getOrDefault(key, 0) + 1
-            }
-            if (keyP != null && lp != 0) {
-                // 用药片比这个大
-                tm[keyP] = tm.getOrDefault(keyP, 0) - 1
-                if (tm[keyP] == 0) tm.remove(keyP)
-                tmp.add(keyP)
-                ans = maxOf(ans, 1 + dfs(i + 1, lp - 1))
-                tmp.remove(keyP)
-                tm[keyP] = tm.getOrDefault(keyP, 0) + 1
-            }
-            // 不做这个任务
-            ans = maxOf(ans, dfs(i + 1, lp))
-            return ans.also {
-                seen[seenKey] = it
+        var left = 0
+        var right = minOf(tasks.size, workers.size)
+        while (left + 1 < right) {
+            val mid = (left + right).ushr(1)
+            when {
+                check(mid) -> left = mid
+                else -> right = mid
             }
         }
-
-        return dfs(0, pills)
+        return when {
+            check(right) -> right
+            check(left) -> left
+            else -> -1
+        }
     }
 }
