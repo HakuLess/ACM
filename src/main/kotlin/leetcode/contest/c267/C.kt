@@ -11,25 +11,16 @@ fun main() {
 class SolutionC {
     fun decodeCiphertext(encodedText: String, rows: Int): String {
         val cols = encodedText.length / rows
-        val m = Array<CharArray>(rows) { CharArray(cols) }
-        for (i in 0 until rows) {
-            for (j in 0 until cols) {
-                m[i][j] = encodedText[j + i * cols]
-            }
-        }
-
-        m.print()
-
         val sb = StringBuilder()
         var i = 0
         var j = 0
         var preJ = -1
-        while (j in m[0].indices) {
+        while (j in 0 until cols) {
             if (i == 0) preJ = j
-            sb.append(m[i][j])
+            sb.append(encodedText[j + i * cols])
             i++
             j++
-            if (i !in m.indices) {
+            if (i !in 0 until rows) {
                 i = 0
                 j = preJ + 1
             }
