@@ -282,6 +282,23 @@ fun biMax(l: Long = 1, r: Long = Long.MAX_VALUE / 2, func: (mid: Long) -> Boolea
     }
 }
 
+fun biMin(l: Long = 1, r: Long = Long.MAX_VALUE / 2, func: (mid: Long) -> Boolean): Long {
+    var left = l
+    var right = r
+    while (left + 1 < right) {
+        val mid = (left + right).ushr(1)
+        when {
+            func(mid) -> right = mid
+            else -> left = mid
+        }
+    }
+    return when {
+        func(left) -> left
+        func(right) -> right
+        else -> -1
+    }
+}
+
 /**
  * 二分查找，找到最后一个满足条件的Index
  * 若整个列表都没有满足的，返回-1
