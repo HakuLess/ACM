@@ -27,46 +27,31 @@ class SolutionD {
         }
 
         var ans = 0
-        for (i in 0 until m) {
-            for (j in 0 until n) {
-                if (grid[i][j] == 1) {
-                    var nextI = i + 1
-                    var nextJ = j + 1
-                    var step = 3
-                    while (nextI in 0 until m && nextJ in 0 until n) {
-                        if (g[nextI][nextJ] >= step) {
-                            ans++
-                        } else {
-                            break
+
+        fun getPyramids(add: Int) {
+            for (i in 0 until m) {
+                for (j in 0 until n) {
+                    if (grid[i][j] == 1) {
+                        var nextI = i + add
+                        var nextJ = j + 1
+                        var step = 3
+                        while (nextI in 0 until m && nextJ in 0 until n) {
+                            if (g[nextI][nextJ] >= step) {
+                                ans++
+                            } else {
+                                break
+                            }
+                            nextI += add
+                            nextJ++
+                            step += 2
                         }
-                        nextI++
-                        nextJ++
-                        step += 2
                     }
                 }
             }
         }
 
-        for (i in 0 until m) {
-            for (j in 0 until n) {
-                if (grid[i][j] == 1) {
-                    var nextI = i - 1
-                    var nextJ = j + 1
-                    var step = 3
-                    while (nextI in 0 until m && nextJ in 0 until n) {
-                        if (g[nextI][nextJ] >= step) {
-                            ans++
-                        } else {
-                            break
-                        }
-                        nextI--
-                        nextJ++
-                        step += 2
-                    }
-                }
-            }
-        }
-        g.print()
+        getPyramids(1)
+        getPyramids(-1)
         return ans
     }
 }
