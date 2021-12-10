@@ -54,8 +54,10 @@ class Solution753 {
             }
         }
         dfs0(pairs[0].first, ans)
-        return ans.reversed()[0].first + ans.reversed().map {
-            it.second.last()
-        }.joinToString("")
+        return ans.reversed().let {
+            it[0].first + it.map {
+                it.second.last()
+            }.joinToString("")
+        }
     }
 }

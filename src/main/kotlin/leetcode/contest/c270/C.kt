@@ -50,6 +50,4 @@ class SolutionC {
 
         return sl.substring(start, sl.length).map { "U" }.joinToString("") + sr.substring(start, sr.length)
     }
-
-
 }
