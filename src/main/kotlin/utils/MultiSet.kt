@@ -16,6 +16,10 @@ class MultiSet<T : Comparable<T>>(private val sumBy: (T) -> Int = { 0 }) {
             return valueList.last()
         }
 
+    fun get(index: Int): T {
+        return valueList[index]
+    }
+
     fun add(value: T) {
         val index = valueList.binarySearch(value)
         if (index < 0) {
