@@ -17,7 +17,6 @@ class SolutionC {
         var b = capacityB
         var c = 0
         while (l <= r) {
-            println("$l:$a $r:$b")
             if (l == r) break
             if (l in plants.indices && a >= plants[l]) {
                 a -= plants[l]

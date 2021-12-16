@@ -23,9 +23,7 @@ class SolutionB {
         for (i in nums.indices) {
             for (j in i + 1 until nums.size) {
                 if (i == j) continue
-                ans += getBound(i, j).also {
-                    println("$i, $j, $it")
-                }
+                ans += getBound(i, j)
             }
         }
         return ans

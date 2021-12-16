@@ -18,9 +18,6 @@ class SolutionA {
             map[index] = map.getOrDefault(index, hashSetOf())
             map[index]!!.add(c)
         }
-        map.forEach { t, u ->
-            println("$t, $u")
-        }
         return map.filterKeys { map[it]!!.size == 3 }.count()
     }
 }
