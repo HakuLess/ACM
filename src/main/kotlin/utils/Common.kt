@@ -12,7 +12,12 @@ fun String.toGrid(): Array<IntArray> {
     }.toTypedArray()
 }
 
-fun IntArray.lis(): Int {
+/**
+ * 单调递增子序列长度
+ *
+ * @param strict 是否严格递增 true 严格递增 false 可以相等
+ * */
+fun IntArray.lis(strict: Boolean = true): Int {
     var len = 1
     val n: Int = this.size
     if (n == 0) {
@@ -21,7 +26,7 @@ fun IntArray.lis(): Int {
     val d = IntArray(n + 1)
     d[len] = this[0]
     for (i in 1 until n) {
-        if (this[i] > d[len]) {
+        if (this[i] > d[len] || (!strict && this[i] == d[len])) {
             d[++len] = this[i]
         } else {
             var l = 1
@@ -29,7 +34,7 @@ fun IntArray.lis(): Int {
             var pos = 0
             while (l <= r) {
                 val mid = l + r shr 1
-                if (d[mid] < this[i]) {
+                if (d[mid] < this[i] || (!strict && d[mid] == this[i])) {
                     pos = mid
                     l = mid + 1
                 } else {
