@@ -1,9 +1,6 @@
 package leetcode.contest.b68
 
 import utils.print
-import java.math.BigInteger
-import kotlin.math.sign
-import kotlin.system.measureTimeMillis
 
 fun main() {
     val s = SolutionD()
@@ -62,7 +59,7 @@ class SolutionD {
                 }
             }
         }
-        
+
         var l5 = 1L
         var r5 = 1L
         var c2 = 0
