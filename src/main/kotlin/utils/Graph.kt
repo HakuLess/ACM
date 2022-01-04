@@ -33,6 +33,49 @@ class Graph(val n: Int) {
 }
 
 /**
+ * 获取基环内向树各枝杈的最大长度
+ *
+ * @return 基环内向树各点的最大枝长度，属于枝的结点标记为true
+ * */
+fun Graph.getBranches(): Pair<IntArray, BooleanArray> {
+    val indegree = IntArray(n)
+    val isVisited = BooleanArray(n)
+    val branches = IntArray(n)
+
+    val dep = IntArray(n)
+
+    // 基环内向树，每个点出度为1
+    // 统计每个点的入度
+    for (i in 0 until n) {
+        indegree[i] = adj[i].size
+        adj[i].forEach {
+            dep[it] = i
+        }
+    }
+
+    // 拓扑排序，先将入度为0的点入队
+    val q: Queue<Int> = LinkedList<Int>()
+    for (i in 0 until n) {
+        if (indegree[i] == 0) {
+            q.offer(i)
+            isVisited[i] = true
+        }
+    }
+
+    while (q.isNotEmpty()) {
+        val u = q.poll()
+        val v = dep[u]
+        branches[v] = maxOf(branches[v], branches[u] + 1)
+        if (--indegree[v] == 0) {
+            q.offer(v)
+            isVisited[v] = true
+        }
+    }
+
+    return Pair(branches, isVisited)
+}
+
+/**
  * 多源最短路径
  *
  * 弗洛伊德算法
