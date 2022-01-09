@@ -13,13 +13,13 @@ class Trie<T> {
     var root = TrieNode<T>()
 }
 
-fun <T> Trie<T>.search(target: Array<T>, loop: Boolean = false): Boolean {
+fun <T> Trie<T>.search(target: Array<T>, loop: Boolean = false, needEnd: Boolean = true): Boolean {
     fun <T> dfs(node: Trie.TrieNode<T>, i: Int): Boolean {
         if (i in target.indices) {
             if (target[i] != node.value)
                 return false
         }
-        if (i == target.lastIndex) return node.isEnd
+        if (i == target.lastIndex) return if (needEnd) node.isEnd else true
         // 支持循环查找的情况下，从根节点重新查找
         if (loop && node.isEnd) {
             root.children.forEach {
