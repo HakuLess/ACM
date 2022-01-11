@@ -19,7 +19,6 @@ fun main(args: Array<String>) {
             // 可以有多少余量
             b += map.getOrDefault(i, 0) % 2
         }
-//        println("$a $b ${a - a / k * k}")
         println("${a / k * 2 + if (b + 2 * (a - a / k * k) >= k) 1 else 0}")
     }
 }

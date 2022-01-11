@@ -12,7 +12,7 @@ fun main() {
         repeat(m) {
             val arr = readLine()!!.split(" ").map { it.toInt() }
             for (i in arr.indices) {
-                ufs.union()
+//                ufs.union()
 
             }
         }

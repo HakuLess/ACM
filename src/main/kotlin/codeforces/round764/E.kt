@@ -6,7 +6,7 @@ fun main(args: Array<String>) {
     var meet = false
     fun dfs(target: String, start: Int, arr: ArrayList<String>) {
         if (meet) return
-        for (i in start + 2..target.length) {
+        for (i in target.length downTo start + 2) {
             for (j in arr.indices) {
                 val index = arr[j].indexOf(target.substring(start, i))
                 if (index != -1) {
@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
                     }
                     dfs(target, i, arr)
                     if (meet) return
-                    ans.remove(Triple(index + 1, i - start + index, j + 1))
+                    ans.removeAt(ans.lastIndex)
                 }
             }
         }
