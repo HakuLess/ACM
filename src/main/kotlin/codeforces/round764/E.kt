@@ -1,28 +1,10 @@
 package codeforces.round764
 
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
+
 fun main(args: Array<String>) {
     val t = readLine()!!.trim().toInt()
-    val ans = ArrayList<Triple<Int, Int, Int>>()
-    var meet = false
-    fun dfs(target: String, start: Int, arr: ArrayList<String>) {
-        if (meet) return
-        for (i in target.length downTo start + 2) {
-            for (j in arr.indices) {
-                val index = arr[j].indexOf(target.substring(start, i))
-                if (index != -1) {
-                    ans.add(Triple(index + 1, i - start + index, j + 1))
-                    if (i == target.length) {
-                        meet = true
-                        return
-                    }
-                    dfs(target, i, arr)
-                    if (meet) return
-                    ans.removeAt(ans.lastIndex)
-                }
-            }
-        }
-    }
-
     repeat(t) {
         readLine()
         val (n, m) = readLine()!!.split(" ").map { it.toInt() }
@@ -31,17 +13,48 @@ fun main(args: Array<String>) {
             val num = readLine()!!
             arr.add(num)
         }
-        val target = readLine()!!
-        meet = false
-        ans.clear()
-        dfs(target, 0, arr)
-        if (meet) {
-            println(ans.size)
-            ans.forEach {
-                println("${it.first} ${it.second} ${it.third}")
+        val map = HashMap<String, Triple<Int, Int, Int>>()
+        for (i in arr.indices) {
+            for (j in arr[i].indices) {
+                for (k in j + 2..minOf(j + 3, arr[i].length)) {
+                    map[arr[i].substring(j, k)] = Triple(j + 1, k, i + 1)
+                }
             }
-        } else {
+        }
+        val target = readLine()!!
+        val dp = IntArray(target.length + 1) { -1 }
+        dp[0] = 0
+        for (i in target.indices) {
+            if (i + 2 <= target.length && target.substring(i, i + 2) in map.keys) {
+                if (dp[i] != -1) {
+                    dp[i + 2] = i
+                }
+            }
+            if (i + 3 <= target.length && target.substring(i, i + 3) in map.keys) {
+                if (dp[i] != -1) {
+                    dp[i + 3] = i
+                }
+            }
+        }
+
+        if (dp.last() == -1) {
             println(-1)
+        } else {
+            val ans = ArrayList<Triple<Int, Int, Int>>()
+            var left = dp.last()
+            var right = target.length
+            while (right != 0) {
+                ans.add(map[target.substring(left, right)]!!)
+                right = left
+                left = dp[left]
+            }
+            println(ans.size)
+            // 这里要注意... 输出多行要拼装一起输出，println放在for循环里会超时...
+            val output = StringBuilder()
+            ans.reversed().forEach {
+                output.appendLine("${it.first} ${it.second} ${it.third}")
+            }
+            print(output)
         }
     }
 }

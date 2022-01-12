@@ -9,10 +9,11 @@ class UFS(var n: Int = 0) {
     private var parent = IntArray(n) { it }
     private var rank = IntArray(n)
     var size = n
-
-    private var resetParent = IntArray(n) { 0 }
-    private var resetRank = IntArray(n) { 0 }
-    private var resetSize = 0
+    // 快速判断是否全联通
+    var sz = IntArray(n) { 1 }
+//    private var resetParent = IntArray(n) { 0 }
+//    private var resetRank = IntArray(n) { 0 }
+//    private var resetSize = 0
 
     fun find(x: Int): Int {
         if (x != parent[x]) {
@@ -22,19 +23,24 @@ class UFS(var n: Int = 0) {
     }
 
     fun union(x: Int, y: Int): Boolean {
-        resetParent = parent.clone()
-        resetRank = rank.clone()
-        resetSize = size
+//        resetParent = parent.clone()
+//        resetRank = rank.clone()
+//        resetSize = size
         val px = find(x)
         val py = find(y)
         if (px == py) {
             return false
         }
         when {
-            rank[px] > rank[py] -> parent[py] = px
-            rank[px] < rank[py] -> parent[px] = py
+            rank[px] > rank[py] -> parent[py] = px.also {
+                sz[px] += sz[py]
+            }
+            rank[px] < rank[py] -> parent[px] = py.also {
+                sz[py] += sz[px]
+            }
             else -> {
                 parent[px] = py
+                sz[py] += sz[px]
                 rank[px]++
             }
         }
@@ -44,9 +50,9 @@ class UFS(var n: Int = 0) {
 
     // 回退最后一次union的状态
     fun reset() {
-        parent = resetParent
-        rank = resetRank
-        size = resetSize
+//        parent = resetParent
+//        rank = resetRank
+//        size = resetSize
     }
 }
 
@@ -54,7 +60,9 @@ class TypedUFS<T>(var n: Int = 0) {
     private val parent = IntArray(n) { i -> i }
     private val rank = IntArray(n)
 //    private val weight = DoubleArray(n) { 1.0 }
-//    val count = IntArray(n) { 1 }
+
+    // 节点下，有多少个是一组的
+    val count = IntArray(n) { 1 }
 
     val map = hashMapOf<T, Int>()
     private val rev = hashMapOf<Int, T>()
@@ -87,18 +95,18 @@ class TypedUFS<T>(var n: Int = 0) {
             rank[px] > rank[py] -> {
                 parent[py] = px
 //                weight[py] = weight[map[x]!!] / value / weight[map[y]!!]
-//                count[px] += count[py]
+                count[px] += count[py]
             }
             rank[px] < rank[py] -> {
                 parent[px] = py
 //                weight[px] = weight[map[y]!!] * value / weight[map[x]!!]
-//                count[py] += count[px]
+                count[py] += count[px]
             }
             else -> {
                 parent[px] = py
                 rank[px]++
 //                weight[px] = weight[map[y]!!] * value / weight[map[x]!!]
-//                count[py] += count[px]
+                count[py] += count[px]
             }
         }
         return true
