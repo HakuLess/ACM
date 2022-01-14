@@ -413,6 +413,42 @@ fun eval(expression: String): Long {
     return ans
 }
 
+fun evalDouble(expression: String): Double {
+    val stn = Stack<Double>()
+    val op = Stack<Char>()
+    var i = 0
+    while (i in expression.indices) {
+        if (expression[i] in '0'..'9') {
+            var cur = (expression[i] - '0').toDouble()
+            while (i + 1 in expression.indices && expression[i + 1] in '0'..'9') {
+                i++
+                cur = cur * 10 + (expression[i] - '0')
+            }
+            stn.push(cur)
+            if (op.isNotEmpty() && op.peek() in arrayOf('*', '/')) {
+                val a = stn.pop()
+                val b = stn.pop()
+                when (op.pop()) {
+                    '*' -> stn.push(a * b)
+                    '/' -> stn.push(b / a)
+                }
+            }
+        } else {
+            op.push(expression[i])
+        }
+        i++
+    }
+    var ans = stn[0]
+    for (j in op.indices) {
+        ans = when (op[j]) {
+            '+' -> ans + stn[j + 1]
+            '-' -> ans - stn[j + 1]
+            else -> 0.0
+        }
+    }
+    return ans
+}
+
 /**
  * 全组合下的全排列
  * */
