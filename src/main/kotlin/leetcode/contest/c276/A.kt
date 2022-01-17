@@ -14,11 +14,8 @@ class SolutionA {
         var cur = 0
         while (cur * k in s.indices) {
             val a = s.substring(cur * k, minOf(s.length, (cur + 1) * k))
-            arr.add(a)
+            arr.add(a.padEnd(k, fill))
             cur++
-        }
-        while (arr.last().length != k) {
-            arr[arr.lastIndex] = arr[arr.lastIndex] + fill
         }
         return arr.toTypedArray()
     }

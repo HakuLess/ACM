@@ -1,5 +1,6 @@
 package atcoder.abc235
 
+// 排列组合，一脸懵逼
 fun main(args: Array<String>) {
     val mod = 998244353L
     val (n, a, b, c) = readLine()!!.trim().split(' ').map { it.toInt() }
