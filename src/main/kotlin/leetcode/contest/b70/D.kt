@@ -29,7 +29,7 @@ class SolutionD {
                     curP++
                 }
             }
-            if (curS == 2 && (i + 1 !in corridor.indices || corridor[i + 1] == 'S')) {
+            if (curS == 2 && (i + 1 !in a.indices || a[i + 1] == 'S')) {
                 ans *= (curP + 1)
                 ans %= mod
                 curS = 0
