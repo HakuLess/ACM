@@ -1,6 +1,7 @@
 package utils
 
 import java.util.*
+import kotlin.collections.ArrayList
 
 // n为包含节点数
 class Graph(val n: Int) {
@@ -30,6 +31,49 @@ class Graph(val n: Int) {
         weight[i]!![j] = w
         weight[j]!![i] = w
     }
+}
+
+/**
+ * n条边，n个点且图连通，找到唯一环的路径
+ * 仅适用于找到图中的第一个环
+ *
+ * @return 按连接顺序返回环中的点
+ * */
+fun Graph.findCircle(): IntArray {
+    val visit = BooleanArray(n) { false }
+    val route = Stack<Int>()
+    val ans = ArrayList<Int>()
+
+    var find = false
+
+    fun dfs(cur: Int, from: Int = -1) {
+        if (find) return
+        if (visit[cur]) {
+            if (cur == 0) {
+                ans.addAll(route)
+            } else {
+                // 先把当前点出栈
+                if (route.isNotEmpty())
+                    route.pop()
+                while (route.isNotEmpty() && route.peek() != cur) {
+                    ans.add(route.pop())
+                }
+                ans.add(cur)
+            }
+            find = true
+            return
+        }
+        visit[cur] = true
+        for (next in adj[cur]) {
+            if (next == from) continue
+            route.push(next)
+            dfs(next, cur)
+            if (route.isNotEmpty())
+                route.pop()
+        }
+    }
+    dfs(0)
+    return ans.toIntArray()
 }
 
 /**
