@@ -3,7 +3,7 @@ package utils
 /**
  * 支持排序的多集合
  * */
-class MultiSet<T : Comparable<T>>(private val sumBy: (T) -> Int = { 0 }) {
+class MultiSet<T : Comparable<T>>(private val sumBy: (T) -> Long = { 0 }) {
 
     private val valueList = ArrayList<T>()
     private val countMap = HashMap<T, Int>()

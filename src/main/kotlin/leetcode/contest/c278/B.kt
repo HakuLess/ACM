@@ -5,9 +5,6 @@ import utils.print
 fun main() {
     val s = SolutionB()
     s.maxScoreIndices(intArrayOf(0, 0, 1, 0)).joinToString().print()
-//    [0,0,1,0]
-//    [0,0,0]
-//    [1,1]
 }
 
 class SolutionB {
@@ -26,8 +23,7 @@ class SolutionB {
                 right[i]++
             }
         }
-        left.print()
-        right.print()
+
         val ans = ArrayList<Int>()
         var max = 0
         for (i in left.indices) {

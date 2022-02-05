@@ -15,12 +15,13 @@ class SolutionC {
         var cur = 0L
         var l = 0
         var ans = ""
+        val powerMod = quickPower(power.toLong(), k.toLong(), modulo.toLong())
         for (i in s.indices.reversed()) {
             cur *= power
             cur += s[i] - 'a' + 1
             l++
             if (l > k) {
-                cur -= (s[i + k] - 'a' + 1) * quickPower(power.toLong(), k.toLong(), modulo.toLong())
+                cur -= (s[i + k] - 'a' + 1) * powerMod
                 cur %= modulo
                 cur = (cur + modulo) % modulo
             }
