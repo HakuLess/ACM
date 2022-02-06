@@ -13,71 +13,45 @@ fun main() {
 
 class Bitset(val size: Int) {
 
-    val z0 = HashSet<Int>()
-    val z1 = HashSet<Int>()
+    val b = BooleanArray(size) { false }
     var flip = false
+    var sum = 0
 
     fun fix(idx: Int) {
-        if (!flip) {
-            z1.add(idx)
-            z0.remove(idx)
-        } else {
-            z1.remove(idx)
-            z0.add(idx)
+        if (!(flip xor b[idx])) {
+            b[idx] = !b[idx]
+            sum++
         }
     }
 
     fun unfix(idx: Int) {
-        if (!flip) {
-            z0.add(idx)
-            z1.remove(idx)
-        } else {
-            z0.remove(idx)
-            z1.add(idx)
+        if (flip xor b[idx]) {
+            b[idx] = !b[idx]
+            sum--
         }
     }
 
     fun flip() {
         flip = !flip
+        sum = size - sum
     }
 
     fun all(): Boolean {
-        if (flip) {
-            return z1.isEmpty()
-        } else {
-            return z1.size == size
-        }
+        return sum == size
     }
 
     fun one(): Boolean {
-        println("$flip ${z0} ${z1}")
-        if (flip) {
-            return z1.size != size
-        } else {
-            return z1.isNotEmpty()
-        }
+        return sum > 0
     }
 
     fun count(): Int {
-        if (!flip) {
-            return z1.size
-        } else {
-            return size - z1.size
-        }
+        return sum
     }
 
     override fun toString(): String {
         val sb = StringBuilder()
         for (i in 0 until size) {
-            if (!flip) {
-                if (i in z0) sb.append('0')
-                else if (i in z1) sb.append('1')
-                else sb.append('0')
-            } else {
-                if (i in z0) sb.append('1')
-                else if (i in z1) sb.append('0')
-                else sb.append('1')
-            }
+            sb.append(if (b[i] xor flip) '1' else '0')
         }
         return sb.toString()
     }
