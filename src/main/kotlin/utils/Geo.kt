@@ -86,6 +86,18 @@ val dir8 = arrayOf(
     intArrayOf(-1, 0)
 )
 
+val dir9 = arrayOf(
+    intArrayOf(0, 0),
+    intArrayOf(0, 1),
+    intArrayOf(1, 1),
+    intArrayOf(-1, 1),
+    intArrayOf(0, -1),
+    intArrayOf(1, -1),
+    intArrayOf(-1, -1),
+    intArrayOf(1, 0),
+    intArrayOf(-1, 0)
+)
+
 /**
  * 圆圈
  * */

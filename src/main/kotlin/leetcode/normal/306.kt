@@ -5,8 +5,8 @@ import utils.print
 fun main() {
     val s = Solution306()
     s.isAdditiveNumber("112358").print()
-    s.isAdditiveNumber("199111992").print()
-    s.isAdditiveNumber("12").print()
+//    s.isAdditiveNumber("199111992").print()
+//    s.isAdditiveNumber("12").print()
 }
 
 class Solution306 {
