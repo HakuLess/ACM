@@ -11,6 +11,7 @@ fun main() {
 //    s.groupStrings(arrayOf("b", "q")).print()
 }
 
+// 状态压缩
 class SolutionD {
     fun groupStrings(words: Array<String>): IntArray {
         val map = HashMap<Int, Int>()

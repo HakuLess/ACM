@@ -31,6 +31,17 @@ class Bits(val n: Int) {
 }
 
 /**
+ * 将第offset位改变
+ * 如 10010改变第1位（从低到高），则变为10000
+ *
+ * @param offset 偏移位
+ * @return 改变后的值
+ * */
+fun Int.changeBit(offset: Int): Int {
+    return this xor (1 shl offset)
+}
+
+/**
  * 从低位到高位数，第offset位是否为1
  *
  * @param offset 偏移index
