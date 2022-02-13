@@ -53,6 +53,13 @@ fun Map<String, Int>.print() {
     println()
 }
 
+fun IntArray.fits(grid: Array<IntArray>, func: (Int, Int) -> Unit) {
+    val (x, y) = this
+    if (x in grid.indices && y in grid[0].indices) {
+        func(x, y)
+    }
+}
+
 fun Array<IntArray>.print() {
     this.forEach {
         println(it.joinToString(", "))
