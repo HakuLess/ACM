@@ -17,7 +17,7 @@ class SolutionD {
             for (j in 0 until numSlots * 2) {
                 if (i and (1 shl j) == 0) {
                     val k = i or (1 shl j)
-                    dp[k] = maxOf(dp[k], dp[i] + (j / 2 + 1 and nums[c]))
+                    dp[k] = maxOf(dp[k], dp[i] + ((j / 2 + 1) and nums[c]))
                     ans = maxOf(ans, dp[k])
                 }
             }
