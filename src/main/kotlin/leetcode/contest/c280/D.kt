@@ -7,6 +7,8 @@ fun main() {
     s.maximumANDSum(intArrayOf(1, 2, 3, 4, 5, 6), 3).print()
 }
 
+// 状态压缩
+// DP
 class SolutionD {
     fun maximumANDSum(nums: IntArray, numSlots: Int): Int {
         var ans = 0
