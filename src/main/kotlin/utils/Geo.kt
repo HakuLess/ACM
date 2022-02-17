@@ -75,6 +75,16 @@ val dir4 = arrayOf(
     intArrayOf(-1, 0)
 )
 
+// 六边形方向
+val dir6 = arrayOf(
+    intArrayOf(0, 1),
+    intArrayOf(0, -1),
+    intArrayOf(1, 0),
+    intArrayOf(1, -1),
+    intArrayOf(-1, 0),
+    intArrayOf(-1, 1),
+)
+
 val dir8 = arrayOf(
     intArrayOf(0, 1),
     intArrayOf(1, 1),
