@@ -5,7 +5,7 @@ package utils
  * */
 class MultiSet<T : Comparable<T>>(private val sumBy: (T) -> Long = { 0 }) {
 
-    private val valueList = ArrayList<T>()
+    val valueList = ArrayList<T>()
     private val countMap = HashMap<T, Int>()
     var size = 0
     var sum = 0L
