@@ -25,12 +25,11 @@ fun main() {
                 }
             }
         }
+
         if (b - r > 1 || b - r < -1) {
             println("Case #${it + 1}: Impossible")
             return@repeat
         }
-
-        var winCheck = Pair(0, 0)
 
         fun bfs(type: Int): Boolean {
             val seen = HashSet<Pair<Int, Int>>()
@@ -59,12 +58,10 @@ fun main() {
                     val item = queue.poll()
                     if (type == 0) {
                         if (item.second == n - 1) {
-                            winCheck = item
                             return true
                         }
                     } else {
                         if (item.first == n - 1) {
-                            winCheck = item
                             return true
                         }
                     }
@@ -86,9 +83,18 @@ fun main() {
 
         val blueWin = bfs(0)
         if (blueWin) {
-            matrix[winCheck.first][winCheck.second] = '.'
-            winCheck = Pair(-1, -1)
-            val checkBlueWin = bfs(0)
+            var checkBlueWin = true
+            for (i in 0 until n) {
+                for (j in 0 until n) {
+                    if (matrix[i][j] == 'B') {
+                        matrix[i][j] = '.'
+                        if (!bfs(0)) {
+                            checkBlueWin = false
+                        }
+                        matrix[i][j] = 'B'
+                    }
+                }
+            }
             if (checkBlueWin) {
                 println("Case #${it + 1}: Impossible")
                 return@repeat
@@ -97,8 +103,18 @@ fun main() {
 
         val redWin = bfs(1)
         if (redWin) {
-            matrix[winCheck.first][winCheck.second] = '.'
-            val checkRedWin = bfs(1)
+            var checkRedWin = true
+            for (i in 0 until n) {
+                for (j in 0 until n) {
+                    if (matrix[i][j] == 'R') {
+                        matrix[i][j] = '.'
+                        if (!bfs(1)) {
+                            checkRedWin = false
+                        }
+                        matrix[i][j] = 'R'
+                    }
+                }
+            }
             if (checkRedWin) {
                 println("Case #${it + 1}: Impossible")
                 return@repeat

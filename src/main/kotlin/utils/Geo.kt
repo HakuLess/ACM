@@ -108,6 +108,17 @@ val dir9 = arrayOf(
     intArrayOf(-1, 0)
 )
 
+val dirHouse8 = arrayOf(
+    intArrayOf(1, 2),
+    intArrayOf(1, -2),
+    intArrayOf(-1, 2),
+    intArrayOf(-1, -2),
+    intArrayOf(2, 1),
+    intArrayOf(2, -1),
+    intArrayOf(-2, 1),
+    intArrayOf(-2, -1)
+)
+
 /**
  * 圆圈
  * */
