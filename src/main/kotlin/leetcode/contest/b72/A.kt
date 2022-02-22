@@ -13,7 +13,6 @@ class SolutionA {
         for (i in nums.indices) {
             for (j in i + 1 until nums.size) {
                 if (nums[i] == nums[j] && ((i * j) % k == 0)) {
-                    println("$i $j")
                     ans++
                 }
             }
