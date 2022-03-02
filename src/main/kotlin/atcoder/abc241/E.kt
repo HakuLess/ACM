@@ -26,17 +26,13 @@ fun main() {
 //            println("$lstLeft, $lstValue : $left $cur")
             val diff = aLeft - bLeft
             val diffValue = bValue - aValue
-            println("c: $diff $diffValue")
-
-//            cur += diffValue
-//            left -= diff
-
-//            println("c $left $cur")
+//            println("c: $diff $diffValue")
             cur += diffValue * (left / diff)
             left %= diff
-            left--
+            seenA.clear()
+            seenB.clear()
         }
     }
     println(cur)
-    println(826617499998784056)
+//    println(826617499998784056)
 }

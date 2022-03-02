@@ -1,36 +1,48 @@
 package atcoder.abc241
 
-import utils.biFirstIndexOf
-import utils.biLastIndexOf
+import java.util.*
 
 fun main(args: Array<String>) {
     val n = readLine()!!.toInt()
-    val list = ArrayList<Long>()
+    val tm = TreeMap<Long, Int>()
     repeat(n) {
         val arr = readLine()!!.split(" ").map { it.toLong() }
         when (arr[0]) {
             1L -> {
-                val index = list.binarySearch(arr[1])
-                if (index < 0) {
-                    list.add(-index - 1, arr[1])
-                } else {
-                    list.add(index, arr[1])
-                }
+                tm[arr[1]] = tm.getOrDefault(arr[1], 0) + 1
             }
             2L -> {
-                val index = list.biLastIndexOf { it <= arr[1] }
-                if (index - arr[2] + 1 in arr.indices) {
-                    println(list[index - arr[2].toInt() + 1])
-                } else {
-                    println(-1)
+                var left = arr[2]
+                var key = arr[1]
+                while (left > 0L) {
+                    val nextKey = tm.floorKey(key) ?: null
+                    if (nextKey == null) {
+                        println(-1)
+                        break
+                    }
+                    left -= tm[nextKey]!!
+                    key = if (left > 0L) nextKey - 1
+                    else nextKey
+                }
+                if (left <= 0) {
+                    println(key)
                 }
             }
             3L -> {
-                val index = list.biFirstIndexOf { it >= arr[1] }
-                if (index + arr[2] - 1 in list.indices) {
-                    println(list[index + arr[2].toInt() - 1])
-                } else {
-                    println(-1)
+                var left = arr[2]
+                var key = arr[1]
+                while (left > 0L) {
+                    val nextKey = tm.ceilingKey(key) ?: null
+                    if (nextKey == null) {
+                        println(-1)
+                        break
+                    }
+                    left -= tm[nextKey]!!
+                    key = if (left > 0L) nextKey + 1
+                    else nextKey
+                }
+                if (left <= 0) {
+                    println(key)
                 }
             }
         }

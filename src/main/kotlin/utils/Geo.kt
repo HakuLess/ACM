@@ -18,6 +18,10 @@ class Point(val x: Double, val y: Double) {
         if (other !is Point) return false
         return this.x == other.x && this.y == other.y
     }
+
+    override fun toString(): String {
+        return "Point is ($x, $y)"
+    }
 }
 
 fun Point.distance(p: Point): Double {
@@ -128,6 +132,30 @@ class Circle(val x: Double, val y: Double, val r: Double) {
         // 圆心的距离平方，是否小于半径的差值平方
         return (x - c.x) * (x - c.x) + (y - c.y) * (y - c.y) <= (r - c.r) * (r - c.r)
     }
+
+    operator fun contains(p: Point): Boolean {
+        return (x - p.x) * (x - p.x) + (y - p.y) * (y - p.y) <= r * r
+    }
+
+    override fun toString(): String {
+        return "Point is ($x, $y)  Radius is $r"
+    }
+}
+
+/**
+ * 三点确定一个圆（点均在圆的边上）
+ * */
+fun getCircle(p0: Point, p1: Point, p2: Point): Circle {
+    val a1: Double = p1.x - p0.x
+    val b1: Double = p1.y - p0.y
+    val c1 = (a1 * a1 + b1 * b1) / 2
+    val a2: Double = p2.x - p0.x
+    val b2: Double = p2.y - p0.y
+    val c2 = (a2 * a2 + b2 * b2) / 2
+    val d = a1 * b2 - a2 * b1
+    val centerX = p0.x + (c1 * b2 - c2 * b1) / d
+    val centerY = p0.y + (a1 * c2 - a2 * c1) / d
+    return Circle(centerX, centerY, Point(centerX, centerY).distance(p0))
 }
 
 /**
