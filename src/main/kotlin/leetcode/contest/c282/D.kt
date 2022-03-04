@@ -6,38 +6,33 @@ import java.util.*
 
 fun main() {
     val s = SolutionD()
-    s.minimumFinishTime("[[2,3],[3,4]]".toGrid(), 5, 4).print()
+//    s.minimumFinishTime("[[2,3],[3,4]]".toGrid(), 5, 4).print()
 //    s.minimumFinishTime("[[1,10],[2,2],[3,4]]".toGrid(), 6, 5).print()
+    s.minimumFinishTime("[[2,2]]".toGrid(), 24, 27).print()
 }
 
 class SolutionD {
     fun minimumFinishTime(tires: Array<IntArray>, changeTime: Int, numLaps: Int): Int {
-
-//        fun dfs(cur: Int): Int {
-//            var ans = 0
-//            // 当前总cost 跑圈cost 乘数
-//            val pq = PriorityQueue<Triple<Int, Int, Int>>(compareBy { it.first })
-//            for (i in tires.indices) {
-//                if (i == cur) {
-//                    pq.offer(Triple(tires[i][0], tires[i][0], tires[i][1]))
-//                } else {
-//                    pq.offer(Triple(tires[i][0] + changeTime, tires[i][0], tires[i][1]))
-//                }
-//            }
-//            repeat(numLaps) {
-//                val item = pq.poll()
-//                ans += item.first
-//                // 换轮胎
-////                pq.offer(Triple(item))
-//                // 不换轮胎
-//                pq.offer(Triple(item.second * item.third, item.second * item.third, item.third))
-//            }
-//        }
-
-        var ans = Int.MAX_VALUE
-//        for (i in tires.indices) {
-//            ans = minOf(ans, dfs(i))
-//        }
-        return ans
+        val max = 20
+        val a = LongArray(max + 1) { Int.MAX_VALUE.toLong() }
+        for (i in tires.indices) {
+            var cur = tires[i][0].toLong()
+            var step = tires[i][0].toLong()
+            for (j in 0 until max) {
+                a[j + 1] = minOf(a[j + 1], 0L + changeTime + cur)
+                step = minOf(step * tires[i][1], Int.MAX_VALUE.toLong())
+                cur += step
+            }
+        }
+        val dp = LongArray(numLaps + 1) { Long.MAX_VALUE }
+        dp[0] = 0
+        for (i in 0 until numLaps) {
+            for (j in 0 until max) {
+                if (i + j in dp.indices) {
+                    dp[i + j] = minOf(dp[i + j], dp[i] + a[j])
+                }
+            }
+        }
+        return (dp.last() - changeTime).toInt()
     }
 }

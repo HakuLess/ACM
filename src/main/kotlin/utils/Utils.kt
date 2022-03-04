@@ -2,7 +2,7 @@ package utils
 
 import java.math.BigInteger
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 object L {
     operator fun <T> get(vararg a: T) = listOf(*a)
@@ -394,4 +394,50 @@ fun getFac(n: Int, mod: Long = 1000000007L): Pair<LongArray, LongArray> {
         invFac[i] = inv(fac[i], mod)
     }
     return Pair(fac, invFac)
+}
+
+/**
+ * 单调栈 Monotonic Stack
+ *
+ * @param reversed 是否逆序
+ * @param isMin 单调递增 or 递减
+ * @param strict 严格递增递减
+ *
+ * @return 获取该数组对应Index，左侧 or 右侧 第一个大于 or 小于当前值的Index
+ */
+fun IntArray.getStackIndex(reversed: Boolean, isMin: Boolean, strict: Boolean): IntArray {
+    val n = this.size
+    val ans = IntArray(n)
+    val d: Deque<Int> = ArrayDeque()
+    fun func(i: Int) {
+        while (!d.isEmpty() && if (isMin) {
+                if (!strict) {
+                    this[d.peekLast()] >= this[i]
+                } else {
+                    this[d.peekLast()] > this[i]
+                }
+            } else {
+                if (!strict) {
+                    this[d.peekLast()] <= this[i]
+                } else {
+                    this[d.peekLast()] < this[i]
+                }
+            }
+        )
+            d.pollLast()
+        ans[i] = if (d.isEmpty()) {
+            if (reversed) n else -1
+        } else d.peekLast()
+        d.addLast(i)
+    }
+    if (reversed) {
+        for (i in n - 1 downTo 0) {
+            func(i)
+        }
+    } else {
+        for (i in 0 until n) {
+            func(i)
+        }
+    }
+    return ans
 }
