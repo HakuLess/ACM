@@ -173,6 +173,10 @@ fun lcm(a: Long, b: Long): Long {
     return a / gcd(a, b) * b
 }
 
+fun lcm(a: Int, b: Int): Int {
+    return a / gcd(a, b) * b
+}
+
 fun lcm(a: BigInteger, b: BigInteger): BigInteger {
     return a / gcd(a, b) * b
 }
