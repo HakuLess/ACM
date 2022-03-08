@@ -14,8 +14,7 @@ fun main() {
 class SolutionD {
     fun replaceNonCoprimes(nums: IntArray): List<Int> {
         val ans = Stack<Int>()
-        var i = 0
-        while (i in nums.indices) {
+        for (i in nums.indices) {
             ans.push(nums[i])
             while (ans.size >= 2) {
                 val a = ans.pop()
@@ -28,7 +27,6 @@ class SolutionD {
                     break
                 }
             }
-            i++
         }
         return ans
     }
