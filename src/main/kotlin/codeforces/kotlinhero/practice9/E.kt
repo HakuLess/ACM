@@ -31,8 +31,8 @@ fun main(args: Array<String>) {
     println("YES")
     val ans = ArrayList<Long>()
     var cur = 1L
-    for (i in arr.indices.reversed()) {
-        for(i in 0 until arr[i]) {
+    for (a in arr.indices.reversed()) {
+        for(b in 0 until arr[a]) {
             ans.add(cur)
         }
         cur *= 2

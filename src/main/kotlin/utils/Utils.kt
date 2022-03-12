@@ -81,6 +81,13 @@ fun ArrayList<Pair<Int, Int>>.print() {
     println()
 }
 
+fun <T> ArrayList<T>.swap(a: Int, b: Int) {
+    val tmpA = this[a]
+    val tmpB = this[b]
+    this[b] = tmpA
+    this[a] = tmpB
+}
+
 fun String.print() {
     println("String is $this")
 }
