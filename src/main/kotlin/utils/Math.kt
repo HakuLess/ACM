@@ -367,6 +367,29 @@ fun manacher(s: String): IntArray {
     return len
 }
 
+// 最长回文子字符串
+fun String.longestPalindrome(): String {
+    val sb = StringBuilder()
+    sb.append('#')
+    this.forEach {
+        sb.append(it)
+        sb.append('#')
+    }
+    val manacher = manacher(sb.toString())
+    var center = 0
+    var max = 1
+    for (i in manacher.indices) {
+        if (manacher[i] > max) {
+            center = i
+            max = manacher[i]
+        }
+    }
+    if (max == 1) {
+        return sb[1].toString()
+    }
+    return sb.substring(center - max, center + max).filter { it != '#' }
+}
+
 // 离散化
 fun IntArray.discretization(): IntArray {
     val map = HashMap<Int, Int>()
