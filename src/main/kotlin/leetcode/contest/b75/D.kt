@@ -13,6 +13,7 @@ fun main() {
     s.sumScores("mrahgszbidrjkdhyocyixreymnjdbaonvctvymstfmjifrftgbwsafqsofqnxmuwb").print()
 }
 
+// https://oi-wiki.org/string/z-func/#_3
 class SolutionD {
     fun sumScores(s: String): Long {
         val suf = SuffixArray(s)
