@@ -49,6 +49,11 @@ class Matrix(val n: Int, val m: Int, val matrix: Array<IntArray>) {
  * @param y2 右下坐标
  * */
 fun Matrix.subMatrixSum(x1: Int, y1: Int, x2: Int, y2: Int): Int {
+    if (x1 !in sumDp.indices ||
+        x2 !in sumDp.indices ||
+        y1 !in sumDp[0].indices ||
+        y2 !in sumDp[0].indices
+    ) return 0
     return sumDp[x2][y2] +
             (if (x1 > 0 && y1 > 0) sumDp[x1 - 1][y1 - 1] else 0) -
             (if (x1 > 0) sumDp[x1 - 1][y2] else 0) -
