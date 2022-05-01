@@ -10,7 +10,7 @@ fun main() {
     s.countRectangles("[[1,1],[2,2],[3,3]]".toGrid(), "[[1,3],[1,1]]".toGrid()).print()
 }
 
-// 双维度大小
+// 双维度大小比较
 class SolutionC {
     fun countRectangles(rectangles: Array<IntArray>, points: Array<IntArray>): IntArray {
         rectangles.sortBy { -it[0] }
