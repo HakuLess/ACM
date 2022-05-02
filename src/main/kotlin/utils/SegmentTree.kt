@@ -2,6 +2,8 @@ package utils
 
 /**
  * 线段树工具类
+ *
+ * 1. 单点更新、范围查询
  * */
 class SegmentTree<T>(
     val start: Int = 0,

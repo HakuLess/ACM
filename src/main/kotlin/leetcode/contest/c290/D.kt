@@ -1,9 +1,6 @@
 package leetcode.contest.c290
 
-import utils.SortedList
-import utils.print
-import utils.toGrid
-import utils.toSortedList
+import utils.*
 
 fun main() {
     val s = SolutionD()
@@ -13,11 +10,14 @@ fun main() {
 
 class SolutionD {
     fun fullBloomFlowers(flowers: Array<IntArray>, persons: IntArray): IntArray {
-        val start = flowers.map { it[0] }.toSortedList()
-        val end = flowers.map { it[1] }.toSortedList()
-        val n = flowers.size
-        return persons.map {
-            n - start.largerThanAndEqual(it + 1) - end.smallerThanAndEqual(it - 1)
-        }.toIntArray()
+        val ans = IntArray(persons.size)
+        val bit = BitTree(Int.MAX_VALUE / 4)
+        flowers.forEach {
+            bit.add(it[0], it[1], 1)
+        }
+        for (i in persons.indices) {
+            ans[i] = bit.query(persons[i], persons[i])
+        }
+        return ans
     }
 }
