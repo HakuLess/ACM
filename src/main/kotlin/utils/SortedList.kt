@@ -40,3 +40,11 @@ class SortedList<T : Comparable<T>> {
         println(valueList.joinToString())
     }
 }
+
+fun <T : Comparable<T>> List<T>.toSortedList(): SortedList<T> {
+    val st = SortedList<T>()
+    this.forEach {
+        st.insert(it)
+    }
+    return st
+}
