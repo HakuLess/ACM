@@ -25,6 +25,17 @@ class SortedList<T : Comparable<T>> {
         return valueList.size - minIndex
     }
 
+    fun smallerThanAndEqual(value: T): Int {
+        if (valueList.isEmpty()) return 0
+        if (value > valueList.last()) return valueList.size
+        if (value < valueList.first()) return 0
+        // 获取最小的 大于value的index
+        val minIndex = biMax(0L, valueList.lastIndex.toLong()) {
+            valueList[it.toInt()] <= value
+        }.toInt()
+        return minIndex + 1
+    }
+
     fun print() {
         println(valueList.joinToString())
     }

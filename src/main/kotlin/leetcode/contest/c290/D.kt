@@ -1,34 +1,34 @@
 package leetcode.contest.c290
 
+import utils.SortedList
 import utils.print
 import utils.toGrid
 
 fun main() {
     val s = SolutionD()
     s.fullBloomFlowers("[[1,6],[3,7],[9,12],[4,13]]".toGrid(), intArrayOf(2, 3, 7, 11)).print()
+    s.fullBloomFlowers("[[1,10],[3,3]]".toGrid(), intArrayOf(3, 3, 2)).print()
 }
 
 class SolutionD {
     fun fullBloomFlowers(flowers: Array<IntArray>, persons: IntArray): IntArray {
-        val map = HashMap<Int, Int>()
-        var index = 0
-        flowers.forEach {
-            if (it[0] !in map.keys) {
-                map[it[0]] = index++
-            }
-            if (it[1] !in map.keys) {
-                map[it[1]] = index++
-            }
-        }
-        val n = map.keys.size
-//        val root = SegmentAddTree(n * 2)
-//        root.build(1, 1, n)
-//        flowers.forEach {
-//            root.update(1, it[0], it[1], 1)
-//        }
+
+        flowers.sortBy { it[0] }
+        val n = persons.size
+        val ids = IntRange(0, n - 1).toList().toTypedArray()
+        // 对id进行排序
+        ids.sortBy { persons[it] }
+
+        val cur = SortedList<Int>()
         val ans = IntArray(persons.size)
-        for (i in persons.indices) {
-//            ans[i] = root.query(1, i, i, 0).toInt()
+        var i = 0
+        for (id in ids) {
+            while (i in flowers.indices && flowers[i][0] <= persons[id]) {
+                // 增加纵坐标
+                cur.insert(flowers[i][1])
+                i++
+            }
+            ans[id] = cur.largerThanAndEqual(persons[id])
         }
         return ans
     }
