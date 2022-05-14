@@ -8,6 +8,7 @@ class SolutionD {
     fun hasValidPath(grid: Array<CharArray>): Boolean {
         val n = grid.size
         val m = grid[0].size
+        if (grid[0][0] == ')') return false
         if ((n + m) % 2 == 0) return false
 
         // 当前值
