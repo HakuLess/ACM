@@ -24,6 +24,22 @@ class BitTree(val size: Int) {
         return _query(right) - _query(left - 1)
     }
 
+    /**
+     * 直接设置值，不可与add混用
+     * */
+    fun update(left: Int, right: Int, value: Int) {
+        val cur = query(left, right)
+        if (cur == 0) {
+            add(left, right, value)
+        } else if (cur == (right - left + 1) * value) {
+            // 当前值已set过，则不用再次Set
+        } else {
+            val mid = (left + right) / 2
+            update(left, mid, value)
+            update(mid + 1, right, value)
+        }
+    }
+
     fun _add(i: Int, delta: Int) {
         var index = i
         val rawIndex = index

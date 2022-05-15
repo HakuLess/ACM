@@ -202,3 +202,14 @@ infix fun Interval.and(other: Interval): Interval? {
     if (other.left > this.right + offset || other.right < this.left - offset) return null
     return Interval(minOf(this.left, other.left), maxOf(this.right, other.right))
 }
+
+/**
+ *
+ * */
+class Triangle(val p: Point, val q: Point, val r: Point) {
+
+}
+
+fun Triangle.area(): Double {
+    return 0.5 * abs(p.x * q.y + q.x * r.y + r.x * p.y - p.y * q.x - q.y * r.x - r.y * p.x)
+}
