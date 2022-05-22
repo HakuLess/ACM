@@ -183,12 +183,75 @@ fun IntArray.swap(index0: Int, index1: Int) {
 
 // 第0位为0，第1位为arr[0]，第2位为arr[0] + arr[1]
 // 前缀和
-fun IntArray.preSumArray(): LongArray {
-    val preSum = LongArray(this.size + 1)
-    for (i in this.indices) {
-        preSum[i + 1] = preSum[i] + this[i]
+fun IntArray.preSumArray(needZero: Boolean = true): LongArray {
+    val n = this.size
+    val preSum: LongArray
+    if (!needZero) {
+        preSum = LongArray(n)
+        this.foldIndexed(0L) { index, acc, e ->
+            preSum[index] = acc + e
+            acc + e
+        }
+    } else {
+        preSum = LongArray(this.size + 1)
+        this.foldIndexed(0L) { index, acc, e ->
+            preSum[index + 1] = acc + e
+            acc + e
+        }
     }
     return preSum
+}
+
+// 第0位为0，第1位为arr[0]，第2位为arr[0] + arr[1]
+// 前缀和
+fun LongArray.preSumArray(needZero: Boolean = true): LongArray {
+    val n = this.size
+    val preSum: LongArray
+    if (!needZero) {
+        preSum = LongArray(n)
+        this.foldIndexed(0L) { index, acc, e ->
+            preSum[index] = acc + e
+            acc + e
+        }
+    } else {
+        preSum = LongArray(this.size + 1)
+        this.foldIndexed(0L) { index, acc, e ->
+            preSum[index + 1] = acc + e
+            acc + e
+        }
+    }
+    return preSum
+}
+
+/**
+ * 获取作为最小值的范围
+ *
+ * 右侧到绝对小于当前值
+ * 左侧到小于等于当前值
+ * */
+fun IntArray.minBound(): Array<IntArray> {
+    val n = this.size
+    val ans = Array(n) { intArrayOf(-1, n) }
+    val st = Stack<Int>()
+    for (i in this.indices) {
+        while (st.isNotEmpty() && this[st.peek()] > this[i]) {
+            ans[st.pop()][1] = i
+        }
+        st.push(i)
+    }
+
+    st.clear()
+    for (i in this.indices.reversed()) {
+        while (st.isNotEmpty() && this[st.peek()] >= this[i]) {
+            ans[st.pop()][0] = i
+        }
+        st.push(i)
+    }
+    return ans
+}
+
+fun IntArray.maxBound() {
+
 }
 
 fun IntArray.biLastIndexOf(func: (Int) -> Boolean): Int {
