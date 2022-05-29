@@ -2,59 +2,13 @@ package leetcode.contest.c295
 
 import utils.print
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashMap
-import kotlin.collections.HashSet
 
 fun main() {
     val s = SolutionC()
     // 1
-//    s.totalSteps(intArrayOf(10, 6, 5, 10, 15)).print()
+    s.totalSteps(intArrayOf(10, 6, 5, 10, 15)).print()
     // 3
-//    s.totalSteps(intArrayOf(5, 3, 4, 4, 7, 3, 6, 11, 8, 5, 11)).print()
-    // 10
-    s.totalSteps(
-        intArrayOf(
-            1945,
-            323,
-            984,
-            1886,
-            346,
-            481,
-            1059,
-            1388,
-            1483,
-            1516,
-            1842,
-            1868,
-            1877,
-            504,
-            1197,
-            785,
-            955,
-            970,
-            1848,
-            1851,
-            398,
-            907,
-            995,
-            1167,
-            1214,
-            1423,
-            1452,
-            1464,
-            1474,
-            1311,
-            1427,
-            1757,
-            1992,
-            57,
-            1625,
-            1260,
-            700,
-            725
-        )
-    ).print()
+    s.totalSteps(intArrayOf(5, 3, 4, 4, 7, 3, 6, 11, 8, 5, 11)).print()
 }
 
 // not finished
