@@ -10,15 +10,6 @@ fun main() {
     e.deleteText(4).print()
     e.addText("practice")
     e.cursorRight(3).print()
-//    e.cursorLeft(8).print()
-//    e.deleteText(10).print()
-//    e.cursorLeft(2).print()
-//    e.cursorRight(6).print()
-
-//    e.addText("dsqdmtbhxxltl")
-//    e.deleteText(13).print()
-//    e.addText("iykwsfld")
-//    e.deleteText(17).print()
 }
 
 class TextEditor() {
@@ -28,11 +19,7 @@ class TextEditor() {
     var cur = StringBuilder()
 
     fun addText(text: String) {
-        val left = cur.substring(0, index)
-        val right = cur.substring(index, cur.length)
-        cur = StringBuilder(left)
-        cur.append(text)
-        cur.append(right)
+        cur.insert(index, text)
         index += text.length
     }
 
