@@ -16,6 +16,8 @@ fun main() {
     textEditor.cursorRight(6).print()
 }
 
+// 链表就使用ArrayDeque!
+// 可以用两个ArrayDeque模拟一整条链表（当前Node在链表中间的Case）
 class TextEditor() {
 
     val left = ArrayDeque<Char>()
