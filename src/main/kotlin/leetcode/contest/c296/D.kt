@@ -5,48 +5,113 @@ import java.util.*
 
 
 fun main() {
-    val e = TextEditor()
-    e.addText("leetcode")
-    e.deleteText(4).print()
-    e.addText("practice")
-    e.cursorRight(3).print()
+    val textEditor = TextEditor()
+    textEditor.addText("leetcode")
+    textEditor.deleteText(4).print()
+    textEditor.addText("practice")
+    textEditor.cursorRight(3).print()
+    textEditor.cursorLeft(8).print()
+    textEditor.deleteText(10).print()
+    textEditor.cursorLeft(2).print()
+    textEditor.cursorRight(6).print()
 }
 
 class TextEditor() {
 
-    var index = 0
+    val left = ArrayDeque<Char>()
 
-    var cur = StringBuilder()
+    val right = ArrayDeque<Char>()
 
     fun addText(text: String) {
-        cur.insert(index, text)
-        index += text.length
+        text.forEach {
+            left.addLast(it)
+        }
     }
 
     fun deleteText(k: Int): Int {
-        val right = index
-        val left = maxOf(0, index - k)
-        cur.delete(left, right)
-        if (index >= k) {
-            index -= k
-            return k
+        var ans = 0
+        while (left.isNotEmpty() && ans < k) {
+            left.removeLast()
+            ans++
         }
-        val ans = index
-        index = 0
         return ans
     }
 
     fun cursorLeft(k: Int): String {
-        index = maxOf(0, index - k)
-        return cur.substring(maxOf(0, index - 10), index)
+        var step = 0
+        while (left.isNotEmpty() && step < k) {
+            right.addFirst(left.removeLast())
+            step++
+        }
+        val ans = StringBuilder()
+        val t = minOf(left.size, 10)
+        repeat(t) {
+            val c = left.removeLast()
+            ans.append(c)
+            right.addFirst(c)
+        }
+        repeat(t) {
+            left.addLast(right.removeFirst())
+        }
+        return ans.reversed().toString()
     }
 
     fun cursorRight(k: Int): String {
-        index = minOf(index + k, cur.length)
-        return cur.substring(maxOf(0, index - 10), index)
+        var step = 0
+        while (right.isNotEmpty() && step < k) {
+            left.addLast(right.removeFirst())
+            step++
+        }
+        val ans = StringBuilder()
+        val t = minOf(left.size, 10)
+        repeat(t) {
+            val c = left.removeLast()
+            ans.append(c)
+            right.addFirst(c)
+        }
+        repeat(t) {
+            left.addLast(right.removeFirst())
+        }
+        return ans.reversed().toString()
     }
 
 }
+
+//class TextEditor() {
+//
+//    var index = 0
+//
+//    var cur = StringBuilder()
+//
+//    fun addText(text: String) {
+//        cur.insert(index, text)
+//        index += text.length
+//    }
+//
+//    fun deleteText(k: Int): Int {
+//        val right = index
+//        val left = maxOf(0, index - k)
+//        cur.delete(left, right)
+//        if (index >= k) {
+//            index -= k
+//            return k
+//        }
+//        val ans = index
+//        index = 0
+//        return ans
+//    }
+//
+//    fun cursorLeft(k: Int): String {
+//        index = maxOf(0, index - k)
+//        return cur.substring(maxOf(0, index - 10), index)
+//    }
+//
+//    fun cursorRight(k: Int): String {
+//        index = minOf(index + k, cur.length)
+//        return cur.substring(maxOf(0, index - 10), index)
+//    }
+//
+//}
 
 /**
  * Your TextEditor object will be instantiated and called as such:
