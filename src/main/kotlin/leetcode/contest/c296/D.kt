@@ -1,6 +1,6 @@
 package leetcode.contest.c296
 
-import utils.print
+import utils.*
 import java.util.*
 
 
@@ -20,59 +20,44 @@ fun main() {
 // 可以用两个ArrayDeque模拟一整条链表（当前Node在链表中间的Case）
 class TextEditor() {
 
-    val left = ArrayDeque<Char>()
-
-    val right = ArrayDeque<Char>()
+    var cur = LinkedNode<Char>()
 
     fun addText(text: String) {
         text.forEach {
-            left.addLast(it)
+            cur.addLeft(it)
         }
     }
 
     fun deleteText(k: Int): Int {
         var ans = 0
-        while (left.isNotEmpty() && ans < k) {
-            left.removeLast()
+        while (ans < k && cur.deleteLeft()) {
             ans++
         }
         return ans
     }
 
     fun cursorLeft(k: Int): String {
-        var step = 0
-        while (left.isNotEmpty() && step < k) {
-            right.addFirst(left.removeLast())
-            step++
+        repeat(k) {
+            cur.moveLeft()
         }
         val ans = StringBuilder()
-        val t = minOf(left.size, 10)
-        repeat(t) {
-            val c = left.removeLast()
-            ans.append(c)
-            right.addFirst(c)
-        }
-        repeat(t) {
-            left.addLast(right.removeFirst())
+        var t = cur.left
+        while (t != null && ans.length < 10) {
+            ans.append(t.v)
+            t = t.left
         }
         return ans.reversed().toString()
     }
 
     fun cursorRight(k: Int): String {
-        var step = 0
-        while (right.isNotEmpty() && step < k) {
-            left.addLast(right.removeFirst())
-            step++
+        repeat(k) {
+            cur.moveRight()
         }
         val ans = StringBuilder()
-        val t = minOf(left.size, 10)
-        repeat(t) {
-            val c = left.removeLast()
-            ans.append(c)
-            right.addFirst(c)
-        }
-        repeat(t) {
-            left.addLast(right.removeFirst())
+        var t = cur.left
+        while (t != null && ans.length < 10) {
+            ans.append(t.v)
+            t = t.left
         }
         return ans.reversed().toString()
     }
