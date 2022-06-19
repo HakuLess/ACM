@@ -17,6 +17,16 @@ class Matrix(val n: Int, val m: Int, val matrix: Array<IntArray>) {
         }
     }
 
+    fun clone(): Matrix {
+        val new = Array<IntArray>(n) { IntArray(m) }
+        for (i in 0 until n) {
+            for (j in 0 until m) {
+                new[i][j] = matrix[i][j]
+            }
+        }
+        return Matrix(n, m, new)
+    }
+
     override fun toString(): String {
         return matrix.joinToString { it.joinToString() }
     }
