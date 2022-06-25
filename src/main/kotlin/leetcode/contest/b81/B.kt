@@ -17,6 +17,6 @@ class SolutionB {
         map.forEach { key, value ->
             ans += 1L * value * (n - value)
         }
-        return ans
+        return ans / 2
     }
 }

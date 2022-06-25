@@ -17,7 +17,7 @@ class SolutionD {
         val seen = HashMap<Int, Long>()
 
         fun dfs(a: Int, b: Int, c: Int, index: Int): Long {
-            val key = a + b * 6 + c * 36 + index * 1000
+            val key = a + b * 10 + c * 100 + index * 1000
             if (key in seen) return seen[key]!!
             if (index == n) return 1L
 
