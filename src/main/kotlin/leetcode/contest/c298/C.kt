@@ -5,7 +5,8 @@ import java.math.BigInteger
 
 fun main() {
     val s = SolutionC()
-    s.longestSubsequence("1001010", 5).print()
+//    s.longestSubsequence("1001010", 5).print()
+    s.longestSubsequence("010", 1).print()
 }
 
 class SolutionC {
@@ -19,26 +20,20 @@ class SolutionC {
                 ans.append('0')
             }
         }
-
-        fun cal(sb: String): BigInteger {
-            var ans = BigInteger.ZERO
-            var step = BigInteger.ONE
-            sb.reversed().forEach {
-                if (it == '1') {
-                    ans += step
-                }
-                step *= 2.toBigInteger()
-            }
-            return ans
-        }
-
         arr.forEach {
-            if (cal(ans.toString()) > k.toBigInteger()) {
+            if ((if (ans.isEmpty())
+                    BigInteger.ZERO
+                else
+                    ans.toString().toBigInteger(2))
+                > k.toBigInteger()
+            ) {
                 return ans.length - 1
             } else {
                 ans.insert(ans.length - it, '1')
-//                println("insert $it got $ans")
             }
+        }
+        if (ans.toString().toBigInteger(2) > k.toBigInteger()) {
+            return ans.length - 1
         }
         return ans.length
     }
