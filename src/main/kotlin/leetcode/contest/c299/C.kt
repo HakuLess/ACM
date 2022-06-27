@@ -10,20 +10,23 @@ fun main() {
 
 class SolutionC {
     fun maximumsSplicedArray(nums1: IntArray, nums2: IntArray): Int {
-        val pre1 = nums1.preSumArray(true)
-        val pre2 = nums2.preSumArray(true)
-//        pre1.print()
-        var min = Long.MAX_VALUE / 2
-        var max = Long.MIN_VALUE / 2
-        for (i in pre1.indices) {
-            for (j in i + 1 until pre1.size) {
-                val diff1 = pre1[i] - pre1[j]
-                val diff2 = pre2[i] - pre2[j]
-
-                min = minOf(min, diff1 - diff2)
-                max = maxOf(max, diff1 - diff2)
-            }
+        val diff = IntArray(nums1.size)
+        for (i in diff.indices) {
+            diff[i] = nums1[i] - nums2[i]
         }
-        return maxOf(nums1.sum() + max, nums2.sum() - min).toInt()
+
+        // 获取子数组的最大值
+        fun getMax(diff: IntArray): Int {
+            var ans = Int.MIN_VALUE
+            var cur = 0
+            for (i in diff.indices) {
+                cur += diff[i]
+                cur = maxOf(cur, 0)
+                ans = maxOf(ans, cur)
+            }
+            return ans
+        }
+
+        return maxOf(nums1.sum() + getMax(diff.map { -it }.toIntArray()), nums2.sum() + getMax(diff))
     }
 }
