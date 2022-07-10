@@ -1,7 +1,6 @@
 package leetcode.contest.b82
 
 import utils.print
-import java.util.*
 import kotlin.math.abs
 
 fun main() {
@@ -19,23 +18,19 @@ class SolutionC {
             diff[i] = abs(0L + nums1[i] - nums2[i])
         }
         diff.sortDescending()
-        diff.print()
         var left = 0L + k1 + k2
         var sum = 0L
         var index = -1
         for (i in diff.indices) {
-//            println("$sum ${sum - diff[i] * i}")
             if (sum - diff[i] * i <= left) {
                 // 左侧值全变为当前值
             } else {
-                println("break $i")
                 index = i - 1
                 break
             }
             sum += diff[i]
         }
         if (left >= sum) return 0L
-        println("diff index ${diff[index]}")
         for (i in 0 until index) {
             left -= diff[i] - diff[index]
             diff[i] = diff[index]
@@ -43,7 +38,6 @@ class SolutionC {
         val a = left / (index + 1)
         val b = left % (index + 1)
 
-        println("diff left $left $a $b")
         for (i in 0..index) {
             if (i in 0 until b) {
                 diff[i] -= a + 1
@@ -51,7 +45,6 @@ class SolutionC {
                 diff[i] -= a
             }
         }
-        diff.print()
         var ans = 0L
         for (i in diff.indices) {
             ans += diff[i] * diff[i]
