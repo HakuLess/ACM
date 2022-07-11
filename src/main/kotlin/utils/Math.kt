@@ -17,6 +17,24 @@ import kotlin.math.exp
  * 表达式计算
  * */
 
+fun comb(m: BigInteger, n: BigInteger): BigInteger {
+    var a = BigInteger.ONE
+    var b = BigInteger.ONE
+    var result = BigInteger.ONE
+    val qc = minOf(n, m - n)
+    for (j in 0 until qc.toInt()) {
+        a = a.multiply(m - BigInteger.valueOf(j.toLong()))
+        b = b.multiply(qc - BigInteger.valueOf(j.toLong()))
+    }
+    result = a / b
+    return result
+}
+
+// 组合数，从m个不同的数中，取出n个数的组合
+fun longComb(m: Long, n: Long): Long {
+    return comb(m.toBigInteger(), n.toBigInteger()).mod(BigInteger.valueOf(1000000007L)).toLong()
+}
+
 // 阶乘
 // 乘法逆元计算
 fun fac(n: Int, mod: Long = 1000000007L): Pair<LongArray, LongArray> {

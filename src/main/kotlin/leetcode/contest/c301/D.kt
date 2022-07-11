@@ -1,48 +1,36 @@
 package leetcode.contest.c301
 
+import utils.longComb
 import utils.print
 
 fun main() {
     val s = SolutionD()
     s.idealArrays(2, 5).print()
     s.idealArrays(5, 3).print()
-//    s.idealArrays(5878, 2900).print()
+    s.idealArrays(5878, 2900).print()
     s.idealArrays(9767, 9557).print()
 }
 
-// todo 组合数
 class SolutionD {
     fun idealArrays(n: Int, maxValue: Int): Int {
         val mod = 1000000007L
-
-        val primes = Array<ArrayList<Int>>(maxValue + 1) { arrayListOf() }
-        for (i in 1..maxValue) {
-            for (j in i..maxValue) {
-                if (j % i == 0) {
-                    primes[j].add(i)
-                }
-            }
-        }
-
-        // 长度 && 最终值
-        var pre: LongArray
-        var cur = LongArray(maxValue + 1) { 1 }
-
-        for (i in 2..n) {
-            pre = cur
-            cur = LongArray(maxValue + 1) { 0 }
-            for (j in 1..maxValue) {
-                for (k in 1..maxValue / j) {
-                    cur[j * k] += pre[k]
-                    cur[j * k] %= mod
-                }
-            }
-        }
-
         var ans = 0L
-        for (i in 1..maxValue) {
-            ans += cur[i]
+        val seen = HashMap<Int, Long>()
+        fun dfs(cur: Int, cnt: Int) {
+            // n - 1个数，插入cnt - 1个板子
+            // 插板法获取组合可能性
+            ans += if (cnt in seen) seen[cnt]!! else
+                longComb((n - 1).toLong(), (cnt - 1).toLong()).also {
+                    seen[cnt] = it
+                }
             ans %= mod
+            if (cnt == n) return
+            for (i in 2..maxValue / cur) {
+                dfs(i * cur, cnt + 1)
+            }
+        }
+        for (i in 1..maxValue) {
+            dfs(i, 1)
         }
         return ans.toInt()
     }
