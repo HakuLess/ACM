@@ -1,6 +1,7 @@
 package utils
 
 import java.math.BigInteger
+import java.text.DecimalFormat
 import java.util.*
 
 
@@ -493,4 +494,12 @@ fun IntArray.getStackIndex(reversed: Boolean, isMin: Boolean, strict: Boolean): 
         }
     }
     return ans
+}
+
+// Double保留几位小数
+fun Double.format(len: Int): String {
+    val pattern = "0." + "#".multi(len)
+    val format = DecimalFormat(pattern)
+    //未保留小数的舍弃规则，RoundingMode.FLOOR表示直接舍弃。
+    return format.format(this)
 }
