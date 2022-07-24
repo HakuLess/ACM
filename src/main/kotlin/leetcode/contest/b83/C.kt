@@ -37,7 +37,6 @@ class NumberContainers() {
 
     fun find(number: Int): Int {
         return map[number]?.peek() ?: -1
-//        return map[number]?.min() ?: -1
     }
 
 }
