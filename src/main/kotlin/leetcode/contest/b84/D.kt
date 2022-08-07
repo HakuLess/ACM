@@ -20,12 +20,9 @@ class SolutionD {
             } else if (nums[i] % cur == 0) {
                 ans += (nums[i] / cur) - 1
             } else {
-                ans += (nums[i] / cur)
-                cur--
-                // 可拆分到的最大值
-                while (nums[i] % cur > nums[i] / cur) {
-                    cur--
-                }
+                val diff = nums[i] / cur
+                ans += diff
+                cur = nums[i] / (diff + 1)
             }
 //            println("$i: cur is $cur, ans is $ans")
         }
