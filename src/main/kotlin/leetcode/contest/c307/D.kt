@@ -11,6 +11,7 @@ fun main() {
     s.kSum(intArrayOf(-1, 1), 1).print()
 }
 
+// 求第k大的子序列的和
 class SolutionD {
     fun kSum(nums: IntArray, k: Int): Long {
         var ans = 0L
