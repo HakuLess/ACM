@@ -12,7 +12,7 @@ fun main() {
 class SolutionC {
     fun garbageCollection(garbage: Array<String>, travel: IntArray): Int {
         var sum = 0
-        var preSum = travel.preSumArray(false)
+        val preSum = travel.preSumArray(false)
 
         arrayOf('G', 'P', 'M').forEach { c ->
             for (i in garbage.indices) {
