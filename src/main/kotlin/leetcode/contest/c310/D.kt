@@ -14,13 +14,13 @@ fun main() {
 
 class SolutionD {
     fun lengthOfLIS(nums: IntArray, k: Int): Int {
-        val rootMax = SegmentTree<Long>(start = 0, end = Int.MAX_VALUE / 4, value = 0L) { a, b ->
+        val root = SegmentTree<Long>(start = 0, end = 1000005, value = 0L) { a, b ->
             maxOf(a, b)
         }
         nums.forEach {
-            val q = rootMax.query(rootMax, it - k, it - 1)
-            rootMax.update(rootMax, it, q + 1)
+            val q = root.query(root, it - k, it - 1)
+            root.update(root, it, q + 1)
         }
-        return rootMax.query(rootMax, 0, Int.MAX_VALUE / 4).toInt()
+        return root.query(root, 0, 1000005).toInt()
     }
 }

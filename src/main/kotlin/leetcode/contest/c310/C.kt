@@ -10,27 +10,18 @@ fun main() {
     s.minGroups("[[5,10],[6,8],[1,5],[2,3],[1,10]]".toGrid()).print()
 }
 
+// 差分数组
 class SolutionC {
     fun minGroups(intervals: Array<IntArray>): Int {
-        val tm = TreeMap<Int, Int>()
-        intervals.sortBy { it[0] }
+        val arr = IntArray(1000005)
         intervals.forEach {
-            val k = tm.floorEntry(it[0] - 1)
-            if (k == null) {
-                tm[it[1]] = tm.getOrDefault(it[1], 0) + 1
-            } else {
-                if (k.value == 1) {
-                    tm.remove(k.key)
-                } else {
-                    tm[k.key] = tm[k.key]!! - 1
-                }
-                tm[it[1]] = tm.getOrDefault(it[1], 0) + 1
-            }
-//            tm.printInt()
+            arr[it[0]]++
+            arr[it[1] + 1]--
         }
         var ans = 0
-        tm.forEach { t, u ->
-            ans += u
+        for (i in 1 until arr.size) {
+            arr[i] += arr[i - 1]
+            ans = maxOf(ans, arr[i])
         }
         return ans
     }
