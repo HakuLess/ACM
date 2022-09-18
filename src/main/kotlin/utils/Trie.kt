@@ -38,6 +38,32 @@ fun <T> Trie<T>.search(target: Array<T>, loop: Boolean = false, needEnd: Boolean
     return dfs(root, -1)
 }
 
+// 增加搜索前缀值的功能
+fun <T> Trie<T>.searchVal(target: Array<T>, loop: Boolean = false): Int {
+    var ans = 0
+    fun <T> dfs(node: Trie.TrieNode<T>, i: Int) {
+        if (i in target.indices) {
+            if (target[i] != node.value)
+                return
+        }
+        ans += node.cnt
+        if (i == target.lastIndex) {
+            return
+        }
+        // 支持循环查找的情况下，从根节点重新查找
+        if (loop && node.isEnd) {
+            root.children.forEach {
+                dfs(it, i + 1)
+            }
+        }
+        node.children.forEach {
+            dfs(it, i + 1)
+        }
+    }
+    dfs(root, -1)
+    return ans
+}
+
 fun <T> Trie<T>.insert(value: Array<T>) {
     fun dfs(node: Trie.TrieNode<T>, depth: Int) {
         if (depth == value.size) node.isEnd = true

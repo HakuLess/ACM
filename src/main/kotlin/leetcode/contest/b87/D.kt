@@ -15,13 +15,11 @@ class SolutionD {
         var maxCost = 0L
         for (i in transactions.indices) {
             cost[i] = (transactions[i][1] - transactions[i][0]).toLong()
-//            cost[i].print()
             if (cost[i] < 0) {
                 maxCost += cost[i]
             }
         }
         var ans = 0L
-//        maxCost.print()
         for (i in transactions.indices) {
             val c = if (cost[i] < 0) {
                 maxCost - cost[i]
