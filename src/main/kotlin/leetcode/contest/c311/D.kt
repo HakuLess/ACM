@@ -19,7 +19,7 @@ class SolutionD {
 
         val ans = ArrayList<Int>()
         words.forEach {
-            val cur = trie.searchVal(it.toCharArray().toTypedArray(), false, false)
+            val cur = trie.searchVal(it.toCharArray().toTypedArray(), false)
             ans.add(cur)
         }
         return ans.toIntArray()
