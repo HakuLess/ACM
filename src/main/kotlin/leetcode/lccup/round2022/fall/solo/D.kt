@@ -1,4 +1,4 @@
-package leetcode.lccup.fall2022
+package leetcode.lccup.round2022.fall.solo
 
 import utils.TreeNode
 import utils.print
