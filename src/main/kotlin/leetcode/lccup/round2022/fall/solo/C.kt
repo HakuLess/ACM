@@ -1,6 +1,5 @@
-package leetcode.lccup.fall2022
+package leetcode.lccup.round2022.fall.solo
 
-import utils.dir4
 import utils.print
 import java.util.*
 import kotlin.collections.ArrayList
@@ -38,15 +37,15 @@ class SolutionC {
         }
         var step = -1
         val ans = ArrayList<IntArray>()
-        val seen = HashSet<Triple<Int, Int, Int>>()
+        val seen = HashSet<Int>()
         while (queue.isNotEmpty()) {
             val size = queue.size
             step++
             if (step > num) return ans.toTypedArray()
             for (i in 0 until size) {
                 val item = queue.poll()
-                if (item in seen) continue
-                seen.add(item)
+                if (item.first * 10000 + item.second * 10 + item.third in seen) continue
+                seen.add(item.first * 10000 + item.second * 10 + item.third)
                 val (x, y, z) = item
 //                println("item ${Triple(x, y, z)}")
                 var ori = z
@@ -76,7 +75,11 @@ class SolutionC {
 
                         } else {
                             println("add $x $y with $ori")
-                            ans.add(intArrayOf(x, y))
+                            if (plate[x][y] == '.') {
+                                ans.add(intArrayOf(x, y))
+                            } else {
+
+                            }
                         }
                     } else {
                         queue.offer(Triple(x + it[0], y + it[1], (ori + 4) % 4))

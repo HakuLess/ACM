@@ -1,9 +1,6 @@
-package leetcode.lccup.fall2022
+package leetcode.lccup.round2022.fall.solo
 
-import utils.biMin
 import utils.print
-import java.util.*
-import kotlin.math.abs
 
 fun main() {
     val s = SolutionE()
