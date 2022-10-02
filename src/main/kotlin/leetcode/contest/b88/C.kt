@@ -11,27 +11,14 @@ fun main() {
 class SolutionC {
     fun xorAllNums(nums1: IntArray, nums2: IntArray): Int {
         var ans = 0
-        for (j in 0 until 32) {
-            var zc = 0
-            var oc = 0
-            for (k in nums1.indices) {
-                if (nums1[k] % 2 == 0) {
-                    zc += nums2.size
-                } else {
-                    oc += nums2.size
-                }
-                nums1[k] /= 2
+        if (nums1.size % 2 != 0) {
+            nums2.forEach {
+                ans = ans xor it
             }
-            for (k in nums2.indices) {
-                if (nums2[k] % 2 == 0) {
-                    zc += nums1.size
-                } else {
-                    oc += nums1.size
-                }
-                nums2[k] /= 2
-            }
-            if (oc % 2 == 1) {
-                ans += (1 shl j)
+        }
+        if (nums2.size % 2 != 0) {
+            nums1.forEach {
+                ans = ans xor it
             }
         }
         return ans

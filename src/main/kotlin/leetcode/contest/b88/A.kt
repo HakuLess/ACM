@@ -13,10 +13,13 @@ class SolutionA {
         word.forEach {
             c[it - 'a']++
         }
-        val max = c.maxOrNull()!!
-//        val max = c.max()!!
-        return (c.count { it == max - 1 || it == 0 } == 25 && c.count { it == max } == 1) ||
-                (c.count { it == max || it == 0 } == 25 && c.count { it == 1 } == 1) ||
-                c.all { it == 1 || it == 0 }
+        for (i in c.indices) {
+            c[i]--
+            val max = c.maxOrNull()!!
+//            val max = c.max()!!
+            if (c.all { it == max || it == 0 }) return true
+            c[i]++
+        }
+        return false
     }
 }
