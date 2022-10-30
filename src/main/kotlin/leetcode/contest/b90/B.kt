@@ -8,8 +8,8 @@ class SolutionB {
                 var c = 0
                 val a = queries[i]
                 val b = dictionary[j]
-                for (i in a.indices) {
-                    if (a[i] != b[i]) {
+                for (k in a.indices) {
+                    if (a[k] != b[k]) {
                         c++
                     }
                 }
