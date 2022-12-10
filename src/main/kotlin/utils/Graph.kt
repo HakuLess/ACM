@@ -143,25 +143,6 @@ fun Graph.floyd(): Array<LongArray> {
     return ans
 }
 
-fun Graph.floydMax(): Array<LongArray> {
-    // 注意点、边的取值从 0..n-1
-    val ans = Array<LongArray>(n) { LongArray(n) { Long.MAX_VALUE / 2 } }
-    for (i in 0 until n) ans[i][i] = 0
-    weight.forEach { i, map ->
-        map.forEach { j, v ->
-            ans[i][j] = v.toLong()
-        }
-    }
-    for (k in 0 until n) {
-        for (i in 0 until n) {
-            for (j in 0 until n) {
-                ans[i][j] = minOf(ans[i][j], maxOf(ans[i][k], ans[k][j]))
-            }
-        }
-    }
-    return ans
-}
-
 /**
  * 堆优化Dijkstra 单源最短路径
  *
@@ -318,4 +299,22 @@ fun Graph.km(): Int {
         res += weight[match[i]]!![i + m]!!
     }
     return res
+}
+
+/**
+ * 将Grid转换为图
+ *
+ * @param n 总点数
+ * @param offset 偏移（点从1开始，offset写1）
+ */
+fun Array<IntArray>.toGraph(n: Int, offset: Int): Graph {
+    if (this.isEmpty()) return Graph(0)
+
+    val g = Graph(n)
+    // 边有无权重，无权重默认按0处理
+    val hasWeight = this[0].size == 3
+    this.forEach {
+        g.addEdge(it[0] - offset, it[1] - offset, if (hasWeight) it[2] else 1)
+    }
+    return g
 }
