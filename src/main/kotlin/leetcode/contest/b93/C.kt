@@ -1,6 +1,5 @@
 package leetcode.contest.b93
 
-import utils.biMin
 import utils.print
 import java.util.*
 
@@ -11,38 +10,11 @@ fun main() {
 
 class SolutionC {
     fun maxJump(stones: IntArray): Int {
-
-        val target = stones.last()
-        return biMin(1L, stones.maxOrNull()!!.toLong()) {
-//            println("check $it =============")
-            val ts = TreeSet<Int>()
-            ts.addAll(stones.toList())
-
-            var cur = 0
-            while (cur < target) {
-//                println("in $cur with $ts")
-                ts.floor(cur + it.toInt()).let {
-                    if (it == null) {
-                        return@biMin false
-                    } else {
-                        cur = it
-                        ts.remove(cur)
-                    }
-                }
-            }
-            cur = target
-            while (cur > 0) {
-                ts.ceiling(cur - it.toInt()).let {
-//                    println("out $cur with $ts  to $it")
-                    if (it == null) {
-                        return@biMin false
-                    } else {
-                        cur = it
-                        ts.remove(cur)
-                    }
-                }
-            }
-            cur <= 0
-        }.toInt()
+        val n: Int = stones.size
+        var ans = stones[1] - stones[0]
+        for (i in 0 until n - 2) {
+            ans = maxOf(ans, stones[i + 2] - stones[i])
+        }
+        return ans
     }
 }

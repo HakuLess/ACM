@@ -11,7 +11,7 @@ class SolutionB {
             map[it[1]]!!.add(vals[it[0]])
         }
         var ans = Int.MIN_VALUE
-        map.forEach { t, u ->
+        map.forEach { (t, u) ->
             u.sortDescending()
             ans = maxOf(ans, u.take(k).filter { it >= 0 }.sum() + vals[t])
         }

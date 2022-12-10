@@ -4,10 +4,10 @@ class SolutionA {
     fun maximumValue(strs: Array<String>): Int {
         var ans = 0
         strs.forEach {
-            if (it.toIntOrNull() == null) {
-                ans = maxOf(it.length, ans)
+            ans = if (it.toIntOrNull() == null) {
+                maxOf(it.length, ans)
             } else {
-                ans = maxOf(it.toInt(), ans)
+                maxOf(it.toInt(), ans)
             }
         }
         return ans
