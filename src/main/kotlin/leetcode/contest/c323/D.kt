@@ -12,56 +12,29 @@ fun main() {
 
 class SolutionD {
     fun maxPoints(grid: Array<IntArray>, queries: IntArray): IntArray {
-        val map = HashMap<Int, Int>()
-
         val queue: PriorityQueue<Triple<Int, Int, Int>> = PriorityQueue<Triple<Int, Int, Int>>(compareBy { it.third })
         queue.offer(Triple(0, 0, grid[0][0]))
-        val seen = HashSet<Int>()
-        while (queue.isNotEmpty()) {
-            val item = queue.poll()
-            val key = item.first * 2000 + item.second
-            if (key in seen) continue
-            seen.add(key)
-            map[key] = item.third
-            dir4.forEach {
-                val nextX = item.first + it[0]
-                val nextY = item.second + it[1]
-                if (nextX in grid.indices && nextY in grid[0].indices) {
-                    val nextV = maxOf(item.third, grid[nextX][nextY])
-                    queue.offer(Triple(nextX, nextY, nextV))
-                }
-            }
-        }
+        grid[0][0] = 0
 
-        val ansMap = HashMap<Int, Int>()
-        var i = 0
-        val sorted = queries.sorted()
-        var cur = 0
-        map.values.sorted().forEach {
-            while (i in sorted.indices) {
-                if (sorted[i] <= it) {
-                    i++
-                } else {
-                    break
-                }
-            }
-            if (i in sorted.indices) {
-                cur++
-                ansMap[sorted[i]] = cur
-            }
-        }
-
+        val sorted = queries.mapIndexed { index, i -> Pair(index, i) }.sortedBy { it.second }
+        val ans = IntArray(queries.size)
         var c = 0
         sorted.forEach {
-            if (it in ansMap.keys) {
-                c = ansMap[it]!!
-            } else {
-                ansMap[it] = c
+            while (queue.isNotEmpty() && queue.peek().third < it.second) {
+                val item = queue.poll()
+                c++
+                dir4.forEach {
+                    val nextX = item.first + it[0]
+                    val nextY = item.second + it[1]
+                    if (nextX in grid.indices && nextY in grid[0].indices && grid[nextX][nextY] != 0) {
+                        val nextV = maxOf(item.third, grid[nextX][nextY])
+                        queue.offer(Triple(nextX, nextY, nextV))
+                        grid[nextX][nextY] = 0
+                    }
+                }
             }
+            ans[it.first] = c
         }
-
-        return queries.map {
-            ansMap.getOrDefault(it, 0)
-        }.toIntArray()
+        return ans
     }
 }
