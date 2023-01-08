@@ -23,7 +23,7 @@ class SolutionD {
             var sum = 0L
             val st = stations.map { it.toLong() }.toLongArray()
             var offset = 0L
-            val off = LongArray(st.size)
+            val off = LongArray(st.size + r)
             for (i in st.indices) {
 
                 if (i - r - 1 in st.indices) {
@@ -38,7 +38,7 @@ class SolutionD {
                     sum += add
                     if (sum > k) return@biMax false
                     offset += add
-                    off[minOf(i + r, off.lastIndex)] = add
+                    off[i + r] = add
                 }
             }
             sum <= k
