@@ -1,12 +1,12 @@
 package leetcode.contest.c328
 
-import utils.Graph
 import utils.print
 import utils.toGrid
 
 fun main() {
     val s = SolutionD()
-//    s.maxOutput(6, "[[0,1],[1,2],[1,3],[3,4],[3,5]]".toGrid(), intArrayOf(9, 8, 7, 6, 10, 5)).print()
+    // 24
+    s.maxOutput(6, "[[0,1],[1,2],[1,3],[3,4],[3,5]]".toGrid(), intArrayOf(9, 8, 7, 6, 10, 5)).print()
     // 39
     s.maxOutput(
         9,
@@ -15,65 +15,55 @@ fun main() {
     ).print()
 }
 
-// todo Not Finished
 class SolutionD {
     fun maxOutput(n: Int, edges: Array<IntArray>, price: IntArray): Long {
-        val g = Graph(n)
-        edges.forEach {
-            g.addEdge(it[0], it[1])
+        val g = Array<ArrayList<Int>>(n) { ArrayList() }
+        for ((x, y) in edges) {
+            g[x].add(y)
+            g[y].add(x)
         }
+        g[0].add(-1)
 
-        var start = -1
-        for (i in 0 until n) {
-            if (g.adj[i].size == 1) {
-                start = i
-                break
+        var ans = 0L
+
+        // 当前节点
+        // 上一节点值
+        // 返回算最后叶子总值 + 不算最后叶子总值
+        fun dfs(x: Int, pre: Int = -1): Pair<Long, Long> {
+//            println("enter $x from $pre")
+            val p = price[x].toLong()
+
+            // 叶子节点直接返回
+            if (g[x].size == 1) {
+                return Pair(p, 0L)
             }
-        }
 
-        val seen = HashSet<Int>()
+            // 算叶子节点最大值
+            var max1 = 0L
+            // 不算叶子节点最大值
+            var max2 = 0L
 
-        var tmp = 0L
+            g[x].forEach {
+                if (it == pre) return@forEach
+                val (s1, s2) = dfs(it, x)
 
-        // 返回总值及另外一个顶点
-        fun dfs(c: Int, cur: Long): Pair<Long, Int> {
-            var ans = price[c].toLong()
-            seen.add(c)
-            var second = c
-            val l = ArrayList<Pair<Long, Int>>()
-            g.adj[c].forEach {
-                if (it !in seen) {
-                    dfs(it, cur + price[c]).let { next ->
-                        l.add(next)
-                        if (price[c] + next.first > ans) {
-                            ans = price[c] + next.first
-                            second = next.second
-                        }
-                    }
+                // 之前不算叶子 当前 之后算叶子
+                ans = if (max2 == 0L) {
+                    maxOf(ans, s1)
+                } else {
+                    maxOf(ans, max2 + p + s1)
                 }
-            }
 
-            l.add(Pair(cur, start))
+                // 之前算叶子 当前 之后不算叶子
+                ans = maxOf(ans, max1 + p + s2)
 
-//            println("$c:  ${l.size} with ${l.map { Triple(it.first, it.second, price[it.second]) }}")
-
-            if (l.size == 1) {
-                tmp = maxOf(tmp, price[c] + l[0].first - price[l[0].second])
+                // 更新前序可能的最大值
+                max1 = maxOf(max1, s1)
+                max2 = maxOf(max2, s2)
             }
-            if (l.size == 2) {
-                tmp = maxOf(tmp, price[c] + l[0].first + l[1].first - minOf(price[l[0].second], price[l[1].second]))
-            }
-            if (l.size == 3) {
-                tmp = maxOf(tmp, price[c] + l[0].first + l[1].first - minOf(price[l[0].second], price[l[1].second]))
-                tmp = maxOf(tmp, price[c] + l[0].first + l[2].first - minOf(price[l[0].second], price[l[2].second]))
-                tmp = maxOf(tmp, price[c] + l[1].first + l[2].first - minOf(price[l[1].second], price[l[2].second]))
-            }
-            return Pair(ans, second)
+            return Pair(max1 + p, max2 + p)
         }
-
-//        println("start with $start")
-        dfs(start, 0L)
-
-        return tmp
+        dfs(0)
+        return ans
     }
 }
