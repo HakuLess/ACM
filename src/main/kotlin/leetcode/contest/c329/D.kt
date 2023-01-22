@@ -1,8 +1,6 @@
 package leetcode.contest.c329
 
-import utils.SegmentTree
 import utils.print
-import utils.printInt
 
 fun main() {
     val s = SolutionD()
@@ -11,6 +9,7 @@ fun main() {
     s.minCost(intArrayOf(3, 3, 3, 3, 4, 5, 4, 6, 2, 4, 2, 1, 5, 6, 4, 5, 1, 1, 3, 3), 1).print()
 }
 
+// DP拆分子数组
 class SolutionD {
     fun minCost(nums: IntArray, k: Int): Int {
         val n = nums.size
