@@ -12,14 +12,13 @@ fun main() {
 
 class SolutionD {
     fun isReachable(targetX: Int, targetY: Int): Boolean {
-        val seen = HashMap<Long, Boolean>()
-        val set = HashSet<Long>()
+        val seen = HashMap<String, Boolean>()
+        val set = HashSet<String>()
         fun dfs(a: Int, b: Int): Boolean {
-//            println("$a $b")
             val x = minOf(a, b)
             val y = maxOf(a, b)
             if (x <= 0 || y <= 0) return false
-            val key = x.toLong() * y.toLong()
+            val key = "$x,$y"
             if (key in set) return false
             set.add(key)
             if (key in seen) return seen[key]!!

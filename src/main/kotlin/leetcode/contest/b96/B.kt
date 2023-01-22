@@ -3,8 +3,8 @@ package leetcode.contest.b96
 class SolutionB {
     fun minOperations(nums1: IntArray, nums2: IntArray, k: Int): Long {
         if (k == 0) {
-            if (nums1.joinToString() == nums2.joinToString()) return 0L
-            else return -1L
+            return if (nums1.joinToString() == nums2.joinToString()) 0L
+            else -1L
         }
         var a = 0L
         var b = 0L
@@ -15,7 +15,7 @@ class SolutionB {
                 else b += it
             }
         }
-        if (a + b == 0L) return a
-        else return -1L
+        return if (a + b == 0L) a
+        else -1L
     }
 }
