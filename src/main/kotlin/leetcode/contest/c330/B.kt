@@ -11,6 +11,6 @@ fun main() {
 class SolutionB {
     fun monkeyMove(n: Int): Int {
         val mod = 1000000007L
-        return ((quickPower(2L, n.toLong()).toInt() + mod - 2) % mod).toInt()
+        return ((quickPower(2L, n.toLong()) + mod - 2) % mod).toInt()
     }
 }

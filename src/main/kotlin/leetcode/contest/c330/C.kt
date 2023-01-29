@@ -1,7 +1,6 @@
 package leetcode.contest.c330
 
 import utils.print
-import java.util.*
 import kotlin.collections.ArrayList
 
 fun main() {
@@ -19,16 +18,6 @@ class SolutionC {
             val b = weights[i + 1]
             l.add(b.toLong() + a.toLong())
         }
-
-        var ans = 0L
-        l.sortDescending()
-        for (i in 0 until k - 1) {
-            ans += l[i]
-        }
-        l.sort()
-        for (i in 0 until k - 1) {
-            ans -= l[i]
-        }
-        return ans
+        return l.sortedDescending().take(k - 1).sum() - l.sorted().take(k - 1).sum()
     }
 }
