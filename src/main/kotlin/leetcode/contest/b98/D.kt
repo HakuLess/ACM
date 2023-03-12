@@ -1,12 +1,10 @@
 package leetcode.contest.b98
 
-import utils.BitTree
-import utils.SegmentTree
-import utils.print
-import utils.toGrid
+import utils.*
 
 fun main() {
     val s = SolutionD()
+    // [3]
 //    s.handleQuery(intArrayOf(1, 0, 1), intArrayOf(0, 0, 0), "[[1,1,1],[2,1,0],[3,0,0]]".toGrid()).print()
 //    s.handleQuery(intArrayOf(1), intArrayOf(5), "[[2,0,0],[3,0,0]]".toGrid()).print()
     // [679,679,1053]
@@ -15,31 +13,42 @@ fun main() {
         intArrayOf(30, 46, 43, 34, 39, 16, 14, 41, 22, 11, 32, 2, 44, 12, 22, 36, 44, 49, 50, 10, 33, 7, 42),
         "[[1,15,21],[3,0,0],[3,0,0],[2,21,0],[2,13,0],[3,0,0]]".toGrid()
     ).print()
+
+    // [2]
+    s.handleQuery(
+        intArrayOf(1),
+        intArrayOf(1),
+        "[[2,1,0],[3,0,0]]".toGrid()
+    ).print()
 }
 
-// TODO 30 线段树 乘积
 class SolutionD {
     fun handleQuery(nums1: IntArray, nums2: IntArray, queries: Array<IntArray>): LongArray {
-
-        var sum = 0L
-        nums2.forEach {
-            sum += it
-        }
+        val n = nums1.size
         val ans = ArrayList<Long>()
-        queries.forEach { item ->
-            when (item[0]) {
+        var curr = 0L
+        nums2.forEach {
+            curr += it
+        }
+        val st = SegmentTreeGPT(LongArray(n))
+        for (i in nums1.indices) {
+            if (nums1[i] == 1) {
+                st.updateAdd(i, i, 1)
+            }
+        }
+        for ((x, y, z) in queries) {
+//            for (i in 0..n - 1) {
+//                println("cur $i: ${st.querySum(i, i)}")
+//            }
+            when (x) {
                 1 -> {
-                    for (i in item[1]..item[2]) {
-                        nums1[i] = 1 - nums1[i]
-                    }
+                    st.updateMul(y, z, -1)
+                    st.updateAdd(y, z, 1)
                 }
                 2 -> {
-                    val left = nums1.sum().toLong()
-                    sum += left * item[1]
+                    curr += y * st.querySum(0, n - 1)
                 }
-                3 -> {
-                    ans.add(sum)
-                }
+                else -> ans.add(curr)
             }
         }
         return ans.toLongArray()

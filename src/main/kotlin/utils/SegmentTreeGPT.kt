@@ -1,9 +1,10 @@
 package utils
 
-class SegmentTreeGPT(private val arr: IntArray) {
-    private val treeSum = IntArray(4 * arr.size)
-    private val treeMul = IntArray(4 * arr.size)
-    private val treeAdd = IntArray(4 * arr.size)
+// 支持乘积与加法的线段树
+class SegmentTreeGPT(private val arr: LongArray) {
+    private val treeSum = LongArray(4 * arr.size)
+    private val treeMul = LongArray(4 * arr.size)
+    private val treeAdd = LongArray(4 * arr.size)
 
     init {
         buildTree(1, 0, arr.size - 1)
@@ -20,11 +21,11 @@ class SegmentTreeGPT(private val arr: IntArray) {
         updateNode(node, leftChild(node), rightChild(node))
     }
 
-    fun querySum(left: Int, right: Int): Int {
+    fun querySum(left: Int, right: Int): Long {
         return queryHelperSum(1, 0, arr.size - 1, left, right)
     }
 
-    private fun queryHelperSum(node: Int, start: Int, end: Int, left: Int, right: Int): Int {
+    private fun queryHelperSum(node: Int, start: Int, end: Int, left: Int, right: Int): Long {
         if (left > end || right < start) {
             return 0
         }
@@ -38,7 +39,7 @@ class SegmentTreeGPT(private val arr: IntArray) {
     }
 
     private fun pushUpdatesToChildren(node: Int, start: Int, end: Int) {
-        if (treeMul[node] != 1 || treeAdd[node] != 0) {
+        if (treeMul[node] != 1L || treeAdd[node] != 0L) {
             val mid = (start + end) / 2
             updateNode(leftChild(node), treeMul[node], treeAdd[node], mid - start + 1)
             updateNode(rightChild(node), treeMul[node], treeAdd[node], end - mid)
@@ -51,17 +52,17 @@ class SegmentTreeGPT(private val arr: IntArray) {
         treeSum[node] = treeSum[left] + treeSum[right]
     }
 
-    private fun updateNode(node: Int, mul: Int, add: Int, len: Int) {
+    private fun updateNode(node: Int, mul: Long, add: Long, len: Int) {
         treeSum[node] = treeSum[node] * mul + add * len
         treeMul[node] *= mul
         treeAdd[node] = treeAdd[node] * mul + add
     }
 
-    fun updateAdd(left: Int, right: Int, value: Int) {
+    fun updateAdd(left: Int, right: Int, value: Long) {
         updateAddHelper(1, 0, arr.size - 1, left, right, value)
     }
 
-    private fun updateAddHelper(node: Int, start: Int, end: Int, left: Int, right: Int, value: Int) {
+    private fun updateAddHelper(node: Int, start: Int, end: Int, left: Int, right: Int, value: Long) {
         if (left > end || right < start) {
             return
         }
@@ -77,11 +78,11 @@ class SegmentTreeGPT(private val arr: IntArray) {
         updateNode(node, leftChild(node), rightChild(node))
     }
 
-    fun updateMul(left: Int, right: Int, value: Int) {
+    fun updateMul(left: Int, right: Int, value: Long) {
         updateMulHelper(1, 0, arr.size - 1, left, right, value)
     }
 
-    private fun updateMulHelper(node: Int, start: Int, end: Int, left: Int, right: Int, value: Int) {
+    private fun updateMulHelper(node: Int, start: Int, end: Int, left: Int, right: Int, value: Long) {
         if (left > end || right < start) {
             return
         }
