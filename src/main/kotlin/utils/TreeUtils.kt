@@ -2,6 +2,7 @@ package utils
 
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.log2
 
 /**
  * 树相关方法
@@ -191,4 +192,77 @@ fun TreeNode?.isBST(): Boolean {
         return dfs(node.left, minOf(up, node.`val`), down) && dfs(node.right, up, maxOf(down, node.`val`))
     }
     return dfs(this.left, this.`val`, Int.MIN_VALUE) && dfs(this.right, Int.MAX_VALUE, this.`val`)
+}
+
+class Tree(n: Int, edges: Array<IntArray>) {
+    private val LOG_N = log2(n.toDouble()).toInt() + 1
+    private val parent = Array(n) { IntArray(LOG_N) }
+    private val depth = IntArray(n)
+    private val adj = Array(n) { mutableListOf<Int>() }
+
+    init {
+        for ((u, v) in edges) {
+            adj[u].add(v)
+            adj[v].add(u)
+        }
+
+        // 使用 DFS 预处理父节点和深度
+        fun dfs(u: Int, p: Int, d: Int) {
+            parent[u][0] = p
+            depth[u] = d
+            for (v in adj[u]) {
+                if (v != p) {
+                    dfs(v, u, d + 1)
+                }
+            }
+        }
+        dfs(0, -1, 0)
+
+        // 使用倍增算法预处理父节点
+        for (j in 1 until LOG_N) {
+            for (i in 0 until n) {
+                val p = parent[i][j - 1]
+                if (p != -1) {
+                    parent[i][j] = parent[p][j - 1]
+                }
+            }
+        }
+    }
+
+    // 计算节点 u 和节点 v 之间的距离
+    fun distance(u: Int, v: Int): Int {
+        val lca = findLca(u, v)
+        return depth[u] + depth[v] - 2 * depth[lca]
+    }
+
+    // 计算节点 u 和节点 v 的最近公共祖先
+    private fun findLca(u: Int, v: Int): Int {
+        // 将节点 u 和节点 v 向上跳到同一深度
+        var u = u
+        var v = v
+        if (depth[u] < depth[v]) {
+            u = v.also { v = u }
+        }
+        for (j in LOG_N - 1 downTo 0) {
+            if (depth[u] - (1 shl j) >= depth[v]) {
+                u = parent[u][j]
+            }
+        }
+
+        // 如果 u 和 v 相等，则直接返回 u
+        if (u == v) {
+            return u
+        }
+
+        // 将 u 和 v 一起向上跳，直到它们的父节点相等
+        for (j in LOG_N - 1 downTo 0) {
+            if (parent[u][j] != parent[v][j]) {
+                u = parent[u][j]
+                v = parent[v][j]
+            }
+        }
+
+        // 返回 u 和 v 的公共父节点
+        return parent[u][0]
+    }
 }
