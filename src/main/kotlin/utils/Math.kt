@@ -4,6 +4,7 @@ import java.math.BigInteger
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.exp
+import kotlin.math.sqrt
 
 /**
  * 数学相关操作
@@ -81,6 +82,13 @@ fun C(n: Int, m: Int, mod: Long = 1000000007L): Long {
     }
 }
 
+fun isPrime(num: Int): Boolean {
+    if (num <= 1) return false
+    for (i in 2..sqrt(num.toDouble()).toInt()) {
+        if (num % i == 0) return false
+    }
+    return true
+}
 
 // 线性筛出法
 // 获取0..N的素数的个数

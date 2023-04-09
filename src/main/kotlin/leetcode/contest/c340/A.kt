@@ -1,6 +1,6 @@
 package leetcode.contest.c340
 
-import kotlin.math.sqrt
+import utils.isPrime
 
 class SolutionA {
     fun diagonalPrime(nums: Array<IntArray>): Int {
@@ -11,13 +11,5 @@ class SolutionA {
             if (isPrime(nums[i][n - i - 1])) primes.add(nums[i][n - i - 1])
         }
         return if (primes.isEmpty()) 0 else primes.maxOrNull()!!
-    }
-
-    fun isPrime(num: Int): Boolean {
-        if (num <= 1) return false
-        for (i in 2..sqrt(num.toDouble()).toInt()) {
-            if (num % i == 0) return false
-        }
-        return true
     }
 }
