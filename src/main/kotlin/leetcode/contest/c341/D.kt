@@ -22,35 +22,23 @@ class SolutionD {
             g.addEdge(it[0], it[1])
         }
 
-        fun getRoute(start: Int, end: Int): ArrayList<Int> {
-            val queue: Queue<Pair<Int, ArrayList<Int>>> = LinkedList()
-            queue.offer(Pair(start, arrayListOf(start)))
-            val seen = HashSet<Int>()
-            while (queue.isNotEmpty()) {
-                val size = queue.size
-                for (i in 0 until size) {
-                    val (item, l) = queue.poll()
-                    seen.add(item)
-                    if (item == end) return l
-                    g.adj[item].forEach {
-                        if (it !in seen) {
-                            val nl = l.clone() as ArrayList<Int>
-                            nl.add(it)
-                            queue.offer(Pair(it, nl))
-                        }
-                    }
+        val cnt = IntArray(n)
+        fun dfs(x: Int, pre: Int, end: Int): Boolean {
+            if (x == end) {
+                cnt[x] += price[x]
+                return true
+            }
+            for (y in g.adj[x]) {
+                if (y != pre && dfs(y, x, end)) {
+                    cnt[x] += price[x]
+                    return true
                 }
             }
-            return arrayListOf()
+            return false
         }
 
-        val cnt = IntArray(n)
-
         for ((start, end) in trips) {
-            val r = getRoute(start, end)
-            r.forEach {
-                cnt[it] += price[it]
-            }
+            dfs(start, -1, end)
         }
 
         fun dfs(tree: Array<out List<Int>>, f: Array<IntArray>, valArray: IntArray, u: Int, father: Int) {
