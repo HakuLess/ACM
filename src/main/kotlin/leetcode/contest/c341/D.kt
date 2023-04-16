@@ -3,9 +3,6 @@ package leetcode.contest.c341
 import utils.Graph
 import utils.print
 import utils.toGrid
-import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 fun main() {
     val s = SolutionD()
