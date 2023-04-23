@@ -14,6 +14,11 @@ class SortedList<T : Comparable<T>> {
         }
     }
 
+    fun remove(value: T) {
+        val index = valueList.binarySearch(value)
+        valueList.removeAt(index)
+    }
+
     fun largerThanAndEqual(value: T): Int {
         if (valueList.isEmpty()) return 0
         if (value > valueList.last()) return 0
