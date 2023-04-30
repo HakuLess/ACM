@@ -9,6 +9,7 @@ fun main() {
     s.minimumCost(intArrayOf(1, 1), intArrayOf(4, 5), "[[1,2,3,3,2],[3,4,4,5,1]]".toGrid()).print()
 }
 
+// todo 可以简单构建图
 class SolutionC {
     fun minimumCost(start: IntArray, target: IntArray, specialRoads: Array<IntArray>): Int {
         val dp = HashMap<Pair<Int, Int>, Int>()
