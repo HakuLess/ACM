@@ -15,6 +15,7 @@ fun main() {
 
 // todo BIT Tree
 // 按x 从大到小 直接遍历，不断更新y值
+// 二维比较大小 双维度
 class SolutionD {
     fun maximumSumQueries(nums1: IntArray, nums2: IntArray, queries: Array<IntArray>): IntArray {
         val rectangles = Array<IntArray>(nums1.size) { IntArray(2) }
