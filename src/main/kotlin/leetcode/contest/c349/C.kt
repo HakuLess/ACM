@@ -1,15 +1,9 @@
 package leetcode.contest.c349
 
-import utils.preSumArray
 import utils.print
 
 fun main() {
     val s = SolutionC()
-//    s.minCost(intArrayOf(20, 1, 15), 5).print()
-
-    // 298
-//    s.minCost(intArrayOf(15, 150, 56, 69, 214, 203), 42).print()
-
     // 2714
     s.minCost(intArrayOf(288, 457, 953, 700, 464, 785, 203, 729, 725, 422), 76).print()
 }
