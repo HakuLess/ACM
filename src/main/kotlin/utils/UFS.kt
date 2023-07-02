@@ -9,6 +9,7 @@ class UFS(var n: Int = 0) {
     private var parent = IntArray(n) { it }
     private var rank = IntArray(n)
     var size = n
+
     // 快速判断是否全联通
     var sz = IntArray(n) { 1 }
 //    private var resetParent = IntArray(n) { 0 }
@@ -68,6 +69,9 @@ class TypedUFS<T>(var n: Int = 0) {
     private val rev = hashMapOf<Int, T>()
     private var total = 0
 
+    // 所有分组，仅记录parent
+    val keys = HashSet<Int>()
+
     fun typedFind(key: T): Int {
         var x = total
         if (map.containsKey(key)) {
@@ -88,6 +92,8 @@ class TypedUFS<T>(var n: Int = 0) {
     fun union(x: T, y: T, value: Double = 1.0): Boolean {
         val px = typedFind(x)
         val py = typedFind(y)
+        keys.add(px)
+        keys.add(py)
         if (px == py) {
             return false
         }
@@ -96,17 +102,26 @@ class TypedUFS<T>(var n: Int = 0) {
                 parent[py] = px
 //                weight[py] = weight[map[x]!!] / value / weight[map[y]!!]
                 count[px] += count[py]
+
+                keys.add(px)
+                keys.remove(py)
             }
             rank[px] < rank[py] -> {
                 parent[px] = py
 //                weight[px] = weight[map[y]!!] * value / weight[map[x]!!]
                 count[py] += count[px]
+
+                keys.add(py)
+                keys.remove(px)
             }
             else -> {
                 parent[px] = py
                 rank[px]++
 //                weight[px] = weight[map[y]!!] * value / weight[map[x]!!]
                 count[py] += count[px]
+
+                keys.add(py)
+                keys.remove(px)
             }
         }
         return true
