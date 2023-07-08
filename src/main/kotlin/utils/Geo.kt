@@ -123,6 +123,13 @@ val dirHouse8 = arrayOf(
     intArrayOf(-2, -1)
 )
 
+val dir4lp = arrayOf(
+    intArrayOf(-1, -1),
+    intArrayOf(0, -1),
+    intArrayOf(-1, 0),
+    intArrayOf(0, 0)
+)
+
 /**
  * 圆圈
  * */
