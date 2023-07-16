@@ -1,7 +1,6 @@
 package leetcode.contest.c354
 
 import utils.print
-import utils.printInt
 
 fun main() {
     val s = SolutionC()
@@ -26,12 +25,7 @@ class SolutionC {
             return ans
         }
 
-
         val main = getMain()
-
-        map.printInt()
-        println("main is $main")
-
         var l = 0
         var r = n
         var lmain = 0
@@ -44,7 +38,7 @@ class SolutionC {
                 lmain++
                 rmain--
             }
-            println("$i with $lmain in $l  $rmain in $r")
+//            println("$i with $lmain in $l  $rmain in $r")
             if (lmain * 2 > l && rmain * 2 > r) {
                 return i
             }
