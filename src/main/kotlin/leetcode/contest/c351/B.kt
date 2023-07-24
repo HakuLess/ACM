@@ -18,11 +18,7 @@ class SolutionB {
         for (i in 1..60) {
             c -= num2
             if (c <= 0) continue
-            if (c.toString(2).all { it == '1' }) {
-                if (c.toString(2).length == i) {
-                    return i
-                }
-            } else if (c.toString(2).count { it == '1' } <= i) {
+            if (c.toString(2).count { it == '1' } <= i && c >= i) {
                 return i
             }
         }
