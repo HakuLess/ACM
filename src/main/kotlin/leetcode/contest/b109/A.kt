@@ -5,12 +5,11 @@ class SolutionA {
         if (nums.size == 1) return false
         nums.sort()
         val n = nums.size
-        for (i in 0 until n - 2) {
+        for (i in 0 until n - 1) {
             if (nums[i] != i + 1) {
                 return false
             }
         }
-        if (nums[n - 1] != n - 1) return false
-        return true
+        return nums[n - 1] == n - 1
     }
 }
