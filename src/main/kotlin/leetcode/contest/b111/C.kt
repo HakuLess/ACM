@@ -12,25 +12,14 @@ fun main() {
 
 class SolutionC {
     fun minimumOperations(nums: List<Int>): Int {
-        val n = nums.size
-        var ans = n
-        for (i in 0..nums.size) {
-            for (j in i - 1 until nums.size) {
-                // 只有i -> j是2
-                // 若j<i 则无2
-                var tmp = 0
-                for (a in 0..i - 1) {
-                    if (a in nums.indices && nums[a] != 1) tmp++
-                }
-                for (a in i..j) {
-                    if (a in nums.indices && nums[a] != 2) tmp++
-                }
-                for (a in j + 1..nums.lastIndex) {
-                    if (a in nums.indices && nums[a] != 3) tmp++
-                }
-                ans = minOf(ans, tmp)
-            }
+        var dp1 = 0
+        var dp2 = 0
+        var dp3 = 0
+        nums.forEach {
+            dp1 += if (it > 1) 1 else 0
+            dp2 = minOf(dp1, dp2 + if (it < 2) 1 else 0) + (if (it > 2) 1 else 0)
+            dp3 = minOf(dp1, dp2 + if (it < 2) 1 else 0, dp3 + if (it < 3) 1 else 0)
         }
-        return ans
+        return dp3
     }
 }
