@@ -31,10 +31,8 @@ class SolutionD {
             var l = i
             while (j < dp.size) {
                 if (k shr j and 1 > 0) {
-                    max = maxOf(max, sum[j][l].let {
-                        curr += it
-                        curr
-                    })
+                    curr += sum[j][l]
+                    max = maxOf(max, curr)
                     l = dp[j][l]
                 }
                 j++

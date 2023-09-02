@@ -82,6 +82,21 @@ fun C(n: Int, m: Int, mod: Long = 1000000007L): Long {
     }
 }
 
+fun originC(n: Int, m: Int, mod: Long = 1000000007L): Long {
+    var ans = BigInteger.valueOf(1L)
+    var cur = n.toLong()
+    repeat(minOf(m, n - m)) {
+        ans *= cur.toBigInteger()
+        cur--
+    }
+    var c = 1L
+    repeat(minOf(m, n - m)) {
+        ans /= c.toBigInteger()
+        c++
+    }
+    return ans.mod(mod.toBigInteger()).toLong()
+}
+
 fun isPrime(num: Int): Boolean {
     if (num <= 1) return false
     for (i in 2..sqrt(num.toDouble()).toInt()) {
