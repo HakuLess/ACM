@@ -26,16 +26,15 @@ class SolutionC {
         }
         if (l.size % 2 != 0) return -1
         if (l.isEmpty()) return 0
-        l.joinToString().print()
+//        l.joinToString().print()
 
-        val ans = x * (l.size / 2)
         val dp = IntArray(l.size + 1)
         for (i in l.indices) {
-            dp[i + 1] = maxOf(dp[i + 1], dp[i])
-            if (i + 2 in dp.indices)
-                dp[i + 2] = maxOf(dp[i + 2], dp[i] + x - (l[i + 1] - l[i]))
+            if (i % 2 == 0) dp[i + 1] = dp[i]
+            else dp[i + 1] = dp[i] + x
+            if (i > 0)
+                dp[i + 1] = minOf(dp[i + 1], dp[i - 1] + l[i] - l[i - 1])
         }
-
-        return ans - dp.last()
+        return dp.last()
     }
 }
