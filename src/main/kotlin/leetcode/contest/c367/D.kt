@@ -21,7 +21,7 @@ class SolutionD {
                 row[i] = (row[i] * grid[i][j]) % mod
             }
         }
-//        row.print()
+
         val rowLeft = LongArray(n) { 1L }
         val rowRight = LongArray(n) { 1L }
         for (i in 0 until n) {
@@ -52,9 +52,6 @@ class SolutionD {
                 colRight[i][j] = colRight[i][j] % mod
             }
         }
-
-        rowLeft.print()
-        rowRight.print()
 
         val ans = Array<IntArray>(n) { IntArray(m) }
         for (i in 0 until n) {
