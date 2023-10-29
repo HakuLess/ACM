@@ -94,6 +94,45 @@ fun IntArray.toTree(): TreeNode {
     return root
 }
 
+fun Array<IntArray>.toNTree(): NTreeNode {
+    val map = HashMap<Int, ArrayList<Int>>()
+    for (i in this.indices) {
+        val (parent, child) = this[i]
+        map[parent] = map.getOrDefault(parent, arrayListOf())
+        map[parent]!!.add(child)
+        map[child] = map.getOrDefault(child, arrayListOf())
+        map[child]!!.add(parent)
+    }
+
+    // 根节点对应的index
+    val first = 0
+    val root = NTreeNode(first)
+    val queue: Queue<Pair<Int, NTreeNode>> = LinkedList<Pair<Int, NTreeNode>>()
+    queue.add(Pair(first, root))
+
+    val seen = HashSet<Int>()
+    seen.add(root.`val`)
+
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        for (k in 0 until size) {
+            val item = queue.poll()
+            val node = item.second
+
+            map[item.first]?.forEach {
+                if (it in seen) return@forEach
+                val next = NTreeNode(it)
+                next.parent = node
+                node.children.add(next)
+                queue.offer(Pair(it, next))
+                seen.add(it)
+            }
+        }
+    }
+
+    return root
+}
+
 /**
  * 获取 TreeNode 的深度
  *
