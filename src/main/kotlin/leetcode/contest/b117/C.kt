@@ -11,30 +11,36 @@ fun main() {
 
 class SolutionC {
     fun stringCount(n: Int): Int {
-        if (n < 4) return 0
         val mod = 1000000007L
-        val dp = LongArray(n + 1)
-        dp[0] = 1L
-        for (i in 1..n) {
-            dp[i] = dp[i - 1] * 26L
-        }
-        dp.print()
+        val p = Array(n + 1) { Array(2) { Array(2) { LongArray(3) } } }
 
-        // 无L方案数
-        val dp1 = LongArray(n + 1)
-        dp1[0] = 1L
-        for (i in 1..n) {
-            dp1[i] = dp1[i - 1] * 25L
-        }
-        dp1.print()
+        p[0][0][0][0] = 1
 
-        // 无L 也 无T
-        val dp2 = LongArray(n + 1)
-        dp2[0] = 1L
         for (i in 1..n) {
-            dp2[i] = dp2[i - 1] * 24L
+            for (l in 0 until 2) {
+                for (t in 0 until 2) {
+                    for (e in 0 until 3) {
+                        // 第i个字符为非l,e,t的字符
+                        p[i][l][t][e] = (p[i - 1][l][t][e] * 23) % mod
+                        // 第i个字符为l
+                        if (l != 0) {
+                            p[i][l][t][e] = (p[i][l][t][e] + (p[i - 1][l - 1][t][e] + p[i - 1][l][t][e]) % mod) % mod
+                        }
+                        // 第i个字符为t
+                        if (t != 0) {
+                            p[i][l][t][e] = (p[i][l][t][e] + (p[i - 1][l][t - 1][e] + p[i - 1][l][t][e]) % mod) % mod
+                        }
+                        // 第i个字符为e
+                        if (e != 0) {
+                            p[i][l][t][e] = (p[i][l][t][e] + p[i - 1][l][t][e - 1]) % mod
+                            if (e == 2) {
+                                p[i][l][t][e] = (p[i][l][t][e] + p[i - 1][l][t][e]) % mod
+                            }
+                        }
+                    }
+                }
+            }
         }
-        dp2.print()
-        return 0
+        return ((p[n][1][1][2] + mod) % mod).toInt()
     }
 }
