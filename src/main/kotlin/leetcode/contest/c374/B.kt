@@ -14,7 +14,7 @@ fun main() {
     s.minimumAddedCoins(intArrayOf(15, 1, 12), 43).print()
 }
 
-// 获得连续值
+// 构造连续值
 class SolutionB {
     fun minimumAddedCoins(coins: IntArray, target: Int): Int {
         coins.sort()
