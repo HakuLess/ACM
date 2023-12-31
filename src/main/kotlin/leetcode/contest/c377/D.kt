@@ -44,25 +44,25 @@ class SolutionD {
         cost: IntArray
     ): Long {
 
-        val map = HashMap<String, Int>()
+        val map = HashMap<Int, Int>()
         var cur = 0
         original.forEach {
-            if (it !in map.keys) {
-                map[it] = cur
+            if (it.hashCode() !in map.keys) {
+                map[it.hashCode()] = cur
                 cur++
             }
         }
         changed.forEach {
-            if (it !in map.keys) {
-                map[it] = cur
+            if (it.hashCode() !in map.keys) {
+                map[it.hashCode()] = cur
                 cur++
             }
         }
 
         val graph = Graph(map.size)
         for (i in original.indices) {
-            val a = map[original[i]]!!
-            val b = map[changed[i]]!!
+            val a = map[original[i].hashCode()]!!
+            val b = map[changed[i].hashCode()]!!
             if (graph.weight[a]!!.getOrDefault(b, Int.MAX_VALUE) > cost[i]) {
                 graph.addEdgeOri(a, b, cost[i])
             }
@@ -76,8 +76,8 @@ class SolutionD {
             val bCur = StringBuilder()
             bCur.append(target[i])
             for (j in i + 1..source.length) {
-                val left = aCur.toString()
-                val right = bCur.toString()
+                val left = aCur.toString().hashCode()
+                val right = bCur.toString().hashCode()
                 if (j in source.indices) {
                     aCur.append(source[j])
                     bCur.append(target[j])
