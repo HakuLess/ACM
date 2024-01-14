@@ -27,7 +27,7 @@ fun kmpSearch(pat: String, txt: String, func: (Int) -> Unit) {
             i++
         }
         if (j == m) {
-            println("Found pattern at index " + (i - j))
+//            println("Found pattern at index " + (i - j))
             func(i - j)
             j = lps[j - 1]
         } else if (i < n && pat[j] != txt[i]) {
