@@ -21,6 +21,7 @@ fun main() {
 // BIT Tree
 // 按x 从大到小 直接遍历，不断更新y值
 // 二维比较大小 双维度
+// https://leetcode.cn/problems/maximum-sum-queries/description/
 class SolutionD {
     fun maximumSumQueries(nums1: IntArray, nums2: IntArray, queries: Array<IntArray>): IntArray {
         // x, y, 是否为插入
