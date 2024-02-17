@@ -17,7 +17,7 @@ fun main() {
 class SolutionD {
     fun maxSelectedElements(nums: IntArray): Int {
         nums.sort()
-        nums.joinToString().print()
+//        nums.joinToString().print()
 
         val cnt = IntArray(1000001)
         val set = nums.toHashSet()
