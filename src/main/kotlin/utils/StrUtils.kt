@@ -4,6 +4,8 @@ package utils
  * 字符串操作相关工具类
  *
  * 下一个排列
+ *
+ * 字符串Hash
  * */
 
 
@@ -82,4 +84,12 @@ fun CharArray.nextPermutation(): Boolean {
     // 若已为最大，返回false，若要继续最小，则直接reverse即可
 //    this.reverse()
     return false
+}
+
+/**
+ * 字符串Hash
+ * */
+fun String.hash(): Int {
+    // todo 实现自定义
+    return this.hashCode()
 }
