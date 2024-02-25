@@ -177,6 +177,10 @@ class Rect(val x0: Double, val x1: Double, val y0: Double, val y1: Double) {
 
     val area: Double
         get() = (x1 - x0) * (y1 - y0)
+
+    override fun toString(): String {
+        return "$x0..$x1 with $y0..$y1"
+    }
 }
 
 infix fun Rect.and(other: Rect): Rect? {
