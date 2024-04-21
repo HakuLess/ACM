@@ -307,7 +307,7 @@ fun Graph.km(): Int {
  * @param n 总点数
  * @param offset 偏移（点从1开始，offset写1）
  */
-fun Array<IntArray>.toGraph(n: Int, offset: Int): Graph {
+fun Array<IntArray>.toGraph(n: Int, offset: Int = 0): Graph {
     if (this.isEmpty()) return Graph(0)
 
     val g = Graph(n)
