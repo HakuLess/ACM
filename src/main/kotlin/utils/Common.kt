@@ -12,6 +12,18 @@ fun String.toGrid(): Array<IntArray> {
     }.toTypedArray()
 }
 
+fun String.toLongArray(): LongArray {
+    return this.trim { it == '[' || it == ']' }.split(',').map {
+        it.toLong()
+    }.toLongArray()
+}
+
+fun String.toLongGrid(): Array<LongArray> {
+    return this.trim(']').split("],[").map {
+        it.toLongArray()
+    }.toTypedArray()
+}
+
 /**
  * 单调递增子序列长度
  *
