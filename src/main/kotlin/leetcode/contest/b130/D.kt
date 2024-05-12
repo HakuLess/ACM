@@ -13,7 +13,7 @@ class SolutionD {
     fun findProductsOfElements(queries: Array<LongArray>): IntArray {
         val mod = 1000000007L
 
-        
+
 
         return intArrayOf()
     }
