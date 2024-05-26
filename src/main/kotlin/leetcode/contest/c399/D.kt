@@ -2,10 +2,20 @@ package leetcode.contest.c399
 
 import utils.print
 import utils.toGrid
+import kotlin.system.measureTimeMillis
 
 fun main() {
     val s = SolutionD()
     s.maximumSumSubsequence(intArrayOf(3, 5, 9), "[[1,-2],[0,-3]]".toGrid()).print()
+
+    val nums = IntArray(5 * 10000) { 2 }
+    val queries = Array<IntArray>(5 * 10000) { intArrayOf(1, 1) }
+
+    measureTimeMillis {
+        s.maximumSumSubsequence(nums, queries).print()
+    }.also {
+        println("cost $it")
+    }
 }
 
 class SolutionD {
@@ -22,7 +32,7 @@ class SolutionD {
             }
 
             return maxOf(incl, excl).also {
-                println("${nums.joinToString()} with $it")
+//                println("${nums.joinToString()} with $it")
             }
         }
 
