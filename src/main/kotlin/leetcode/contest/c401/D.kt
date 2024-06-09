@@ -2,6 +2,7 @@ package leetcode.contest.c401
 
 import kotlin.collections.HashMap
 
+// TODO 位运算 BitSet 硬优化
 class SolutionD {
     fun maxTotalReward(rewardValues: IntArray): Int {
         rewardValues.sort()
