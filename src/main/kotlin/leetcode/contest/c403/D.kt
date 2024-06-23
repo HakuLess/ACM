@@ -8,88 +8,74 @@ fun main() {
     s.minimumSum("[[1,0,1],[1,1,1]]".toGrid()).print()
 }
 
+// 矩形分割
+// https://leetcode.cn/circle/discuss/9NYliL/
 class SolutionD {
     fun minimumSum(grid: Array<IntArray>): Int {
         val n = grid.size
         val m = grid[0].size
 
-        // 1的点
-        val ones = ArrayList<Point>()
-        for (x in 0 until n) {
-            for (y in 0 until m) {
-                if (grid[x][y] == 1) {
-                    ones.add(Point(x, y))
-                }
-            }
-        }
-
-        if (ones.size == 3) return 3
-
-        var a = Rect(0, 0, 0, 0)
-        var b = Rect(0, 0, 0, 0)
-        var c = Rect(0, 0, 0, 0)
-
         var ans = Int.MAX_VALUE / 2
-        fun check(a: Rect, b: Rect, c: Rect) {
-            if (ones.all { it in a || it in b || it in c }) {
-                // 包含所有1
-                if (a and b == null && a and c == null && b and c == null) {
-                    // 无重叠部分
-                    ans = minOf(ans, a.area + b.area + c.area)
-                }
-            }
-        }
 
-        fun selectRec(minX: Int, minY: Int, func: (Int, Int, Int, Int) -> Unit) {
-            for (x0 in minX until n) {
-                for (y0 in minY until m) {
-                    for (x1 in x0 until n) {
-                        for (y1 in y0 until m) {
-                            if (ones.any { it in Rect(x0, y0, x1, y1) }) {
-                                func(x0, y0, x1, y1)
-                            }
-                        }
+        fun minArea(U: Int, D: Int, L: Int, R: Int): Int {
+            var u = Int.MAX_VALUE
+            var d = Int.MIN_VALUE
+            var l = Int.MAX_VALUE
+            var r = Int.MIN_VALUE
+            for (i in U..D) {
+                for (j in L..R) {
+                    if (grid[i][j] == 1) {
+                        u = minOf(u, i)
+                        d = maxOf(d, i)
+                        l = minOf(l, j)
+                        r = maxOf(r, j)
                     }
                 }
             }
+            if (u > d || l > r) return Int.MAX_VALUE
+            return (d - u + 1) * (r - l + 1)
         }
 
-        selectRec(0, 0) { x0_a, y0_a, x1_a, y1_a ->
-            // 选定第一个矩形
-            a = Rect(x0_a, y0_a, x1_a, y1_a)
-
-            selectRec(x1_a + 1, 0) { x0_b, y0_b, x1_b, y1_b ->
-                // 选定第二个矩形
-                b = Rect(x0_b, y0_b, x1_b, y1_b)
-
-                selectRec(x1_b + 1, 0) { x0_c, y0_c, x1_c, y1_c ->
-                    // 选定第三个矩形
-                    c = Rect(x0_c, y0_c, x1_c, y1_c)
-                    check(a, b, c)
-                }
-
-                selectRec(0, y1_b + 1) { x0_c, y0_c, x1_c, y1_c ->
-                    // 选定第三个矩形
-                    c = Rect(x0_c, y0_c, x1_c, y1_c)
-                    check(a, b, c)
-                }
+        // 横横型
+        for (i in 0 until n - 1) {
+            for (ii in i + 1 until n - 1) {
+                ans = minOf(
+                    ans,
+                    minArea(0, i, 0, m - 1) + minArea(i + 1, ii, 0, m - 1) + minArea(ii + 1, n - 1, 0, m - 1)
+                )
             }
+        }
 
-            selectRec(0, y1_a + 1) { x0_b, y0_b, x1_b, y1_b ->
-                // 选定第二个矩形
-                b = Rect(x0_b, y0_b, x1_b, y1_b)
+        // 竖竖型
+        for (j in 0 until m - 1) {
+            for (jj in j + 1 until m - 1) {
+                ans = minOf(
+                    ans,
+                    minArea(0, n - 1, 0, j) + minArea(0, n - 1, j + 1, jj) + minArea(0, n - 1, jj + 1, m - 1)
+                )
+            }
+        }
 
-                selectRec(x1_b + 1, 0) { x0_c, y0_c, x1_c, y1_c ->
-                    // 选定第三个矩形
-                    c = Rect(x0_c, y0_c, x1_c, y1_c)
-                    check(a, b, c)
-                }
-
-                selectRec(0, y1_b + 1) { x0_c, y0_c, x1_c, y1_c ->
-                    // 选定第三个矩形
-                    c = Rect(x0_c, y0_c, x1_c, y1_c)
-                    check(a, b, c)
-                }
+        for (i in 0 until n - 1) {
+            for (j in 0 until m - 1) {
+                // 横竖型
+                ans = minOf(
+                    ans,
+                    minArea(0, i, 0, j) + minArea(0, i, j + 1, m - 1) + minArea(i + 1, n - 1, 0, m - 1)
+                )
+                ans = minOf(
+                    ans,
+                    minArea(0, i, 0, m - 1) + minArea(i + 1, n - 1, 0, j) + minArea(i + 1, n - 1, j + 1, m - 1)
+                )
+                // 竖横型
+                ans = minOf(
+                    ans,
+                    minArea(0, i, 0, j) + minArea(i + 1, n - 1, 0, j) + minArea(0, n - 1, j + 1, m - 1)
+                )
+                ans = minOf(
+                    ans,
+                    minArea(0, n - 1, 0, j) + minArea(0, i, j + 1, m - 1) + minArea(i + 1, n - 1, j + 1, m - 1)
+                )
             }
         }
 
