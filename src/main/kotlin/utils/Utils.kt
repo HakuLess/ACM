@@ -47,6 +47,13 @@ fun Map<Int, Int>.printInt() {
     println()
 }
 
+fun Map<Int, Long>.printLong() {
+    this.forEach {
+        println("${it.key} : ${it.value}")
+    }
+    println()
+}
+
 fun Map<String, Int>.print() {
     this.forEach {
         println("${it.key} : ${it.value}")
