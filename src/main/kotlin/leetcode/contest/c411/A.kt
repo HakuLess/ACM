@@ -9,22 +9,37 @@ fun main() {
 
 class SolutionA {
     fun countKConstraintSubstrings(s: String, k: Int): Int {
-        val n = s.length
         var result = 0
 
-        for (left in 0 until n) {
-            var zeroCount = 0
-            var oneCount = 0
-            for (right in left until n) {
+        var zeroCount = 0
+        var oneCount = 0
+
+        var left = 0
+        var right = left
+
+        var tmp = 1
+        while (left in s.indices) {
+            tmp--
+            while (right in s.indices) {
                 if (s[right] == '0') zeroCount++
                 else oneCount++
 
                 if (zeroCount <= k || oneCount <= k) {
-                    result++
+                    tmp++
+                    right++
                 } else {
+                    if (s[right] == '0') zeroCount--
+                    else oneCount--
                     break
                 }
             }
+//            println("$left with $tmp $zeroCount $oneCount")
+
+            if (s[left] == '0') zeroCount--
+            else oneCount--
+            left++
+
+            result += tmp
         }
 
         return result
