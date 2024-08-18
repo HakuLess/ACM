@@ -1,5 +1,6 @@
 package leetcode.contest.c411
 
+// Not Finished
 class SolutionD {
     fun countKConstraintSubstrings(s: String, k: Int, queries: Array<IntArray>): LongArray {
         val results = LongArray(queries.size)
