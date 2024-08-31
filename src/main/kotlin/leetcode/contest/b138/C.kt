@@ -3,7 +3,6 @@ package leetcode.contest.b138
 import utils.permuteUnique
 import utils.print
 import java.util.*
-import kotlin.collections.HashMap
 import kotlin.math.pow
 
 
@@ -18,6 +17,7 @@ fun main() {
     }
 }
 
+// Not Finish 排列组合
 class SolutionC {
     fun countGoodIntegers(n: Int, k: Int): Long {
 
