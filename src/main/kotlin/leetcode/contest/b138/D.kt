@@ -19,30 +19,22 @@ class SolutionD {
 
         data class Item(val damage: Int, val live: Int)
 
-        fun helper(): Long {
-            var sumDamage = 0L
-            var sumLive = 0L
-            val list = ArrayList<Item>()
-
-            val live = IntArray(damage.size) { 0 }
-            for (i in damage.indices) {
-                sumDamage += damage[i]
-                live[i] = ((health[i] + power - 1) / power)
-                sumLive += live[i]
-                list.add(Item(damage[i], live[i]))
-            }
-            list.sortWith(compareBy({ -it.damage.toDouble() / it.live }, { it.live }))
-
-            var ans = 0L
-            while (list.isNotEmpty()) {
-                val item = list.removeAt(0)
-                ans += sumDamage * item.live
-                sumLive -= item.live
-                sumDamage -= item.damage
-            }
-            return ans
+        var sumDamage = 0L
+        val list = ArrayList<Item>()
+        val live = IntArray(damage.size) { 0 }
+        for (i in damage.indices) {
+            sumDamage += damage[i]
+            live[i] = ((health[i] + power - 1) / power)
+            list.add(Item(damage[i], live[i]))
         }
+        list.sortWith(compareBy({ -it.damage.toDouble() / it.live }, { it.live }))
 
-        return helper()
+        var ans = 0L
+        while (list.isNotEmpty()) {
+            val item = list.removeAt(0)
+            ans += sumDamage * item.live
+            sumDamage -= item.damage
+        }
+        return ans
     }
 }
