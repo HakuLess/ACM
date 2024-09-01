@@ -6,31 +6,30 @@ import utils.toGrid
 fun main() {
     val s = SolutionD()
     s.maximumSubarrayXor(intArrayOf(2, 8, 4, 32, 16, 1), "[[0,2],[1,4],[0,5]]".toGrid()).print()
-    (62 xor 2).print()
 }
 
 class SolutionD {
     fun maximumSubarrayXor(nums: IntArray, queries: Array<IntArray>): IntArray {
-        val prefixXOR = IntArray(nums.size + 1)
-        val result = IntArray(queries.size)
-
-        for (i in nums.indices) {
-            prefixXOR[i + 1] = prefixXOR[i] xor nums[i]
+        val n = nums.size
+        val dp = Array(n) { IntArray(n) }
+        for (i in 0 until n) {
+            dp[i][i] = nums[i]
         }
-        prefixXOR.print()
-        for (i in queries.indices) {
-            val (l, r) = queries[i]
-            var tmp = 1
-            for (i in l..r) {
-                for (j in i..r) {
-                    tmp = maxOf(tmp, prefixXOR[i] xor prefixXOR[j + 1])
-                    println("$tmp with ${prefixXOR[i]} xor ${prefixXOR[j]}")
-                }
+        for (i in n - 1 downTo 0) {
+            for (j in i + 1 until n) {
+                dp[i][j] = dp[i][j - 1] xor dp[i + 1][j]
             }
-            println("set $i with $tmp")
-            result[i] = tmp
         }
-
-        return result
+        for (i in n - 1 downTo 0) {
+            for (j in i + 1 until n) {
+                dp[i][j] = maxOf(dp[i][j], dp[i][j - 1], dp[i + 1][j])
+            }
+        }
+        val ans = IntArray(queries.size)
+        var i = 0
+        for (q in queries) {
+            ans[i++] = dp[q[0]][q[1]]
+        }
+        return ans
     }
 }

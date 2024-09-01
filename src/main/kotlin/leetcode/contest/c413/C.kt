@@ -1,11 +1,8 @@
 package leetcode.contest.c413
 
-import utils.Trie
 import utils.print
 import utils.toGrid
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.collections.HashSet
 
 fun main() {
     val s = SolutionC()
@@ -18,57 +15,81 @@ fun main() {
 }
 
 class SolutionC {
+
     fun maxScore(grid: List<List<Int>>): Int {
-        // 值 & 第二大差值 & 所在行数
-        val list = ArrayList<Pair<Int, Int>>()
-        for (i in grid.indices) {
-            for (j in grid[0].indices) {
-                list.add(Pair(grid[i][j], i))
+        val n = grid.size
+        val m = grid[0].size
+        val mat = Array(n) { IntArray(101) }
+        for (i in 0 until n) {
+            for (v in grid[i]) {
+                mat[i][v] = 1
             }
         }
-        list.sortWith(compareBy({ -it.first }, { it.second }))
-
-
-        fun dfs(curList: ArrayList<Pair<Int, Int>>): Int {
-//            println("enter ${curList.joinToString()}")
-            var ans = 0
-            while (curList.isNotEmpty()) {
-                while (curList.size >= 2) {
-                    // 同行相等，直接移除第一个
-                    if (curList[0].first == curList[1].first && curList[0].second == curList[1].second) {
-                        curList.removeAt(0)
-                    } else {
-                        break
+        val dp = Array(102) { IntArray(1 shl n) }
+        for (i in 100 downTo 1) {
+            for (j in 0 until (1 shl n)) {
+                dp[i][j] = dp[i + 1][j]
+                for (k in 0 until n) {
+                    if (j shr k and 1 == 0 && mat[k][i] == 1) {
+                        dp[i][j] = maxOf(dp[i][j], dp[i + 1][1 shl k or j] + i)
                     }
-                }
-
-                if (curList.size >= 2) {
-                    // 非同行相等，DFS分叉
-                    if (curList[0].first == curList[1].first && curList[0].second != curList[1].second) {
-                        val list0 = curList.clone() as ArrayList<Pair<Int, Int>>
-                        list0.removeAt(0)
-                        val list1 = curList.clone() as ArrayList<Pair<Int, Int>>
-                        list1.removeAt(1)
-//                        println("分选 ${list0.joinToString()} === ${list1.joinToString()}  ${seenV.joinToString()} ${seenRow.joinToString()}")
-                        val ans0 = dfs(list0)
-                        val ans1 = dfs(list1)
-//                        println("分选结果 $ans0 with $ans1")
-                        return ans + maxOf(ans0, ans1)
-                    }
-                }
-
-                // 无相等场景，贪心拿最大值
-                val item = curList.removeAt(0)
-                ans += item.first
-                curList.removeIf {
-                    it.first == item.first || it.second == item.second
                 }
             }
-            return ans
         }
-
-        return dfs(list)
+        return dp[1][0]
     }
+
+//    fun maxScore(grid: List<List<Int>>): Int {
+//        // 值 & 第二大差值 & 所在行数
+//        val list = ArrayList<Pair<Int, Int>>()
+//        for (i in grid.indices) {
+//            for (j in grid[0].indices) {
+//                list.add(Pair(grid[i][j], i))
+//            }
+//        }
+//        list.sortWith(compareBy({ -it.first }, { it.second }))
+//
+//
+//        fun dfs(curList: ArrayList<Pair<Int, Int>>): Int {
+////            println("enter ${curList.joinToString()}")
+//            var ans = 0
+//            while (curList.isNotEmpty()) {
+//                while (curList.size >= 2) {
+//                    // 同行相等，直接移除第一个
+//                    if (curList[0].first == curList[1].first && curList[0].second == curList[1].second) {
+//                        curList.removeAt(0)
+//                    } else {
+//                        break
+//                    }
+//                }
+//
+//                if (curList.size >= 2) {
+//                    // 非同行相等，DFS分叉
+//                    if (curList[0].first == curList[1].first && curList[0].second != curList[1].second) {
+//                        val list0 = curList.clone() as ArrayList<Pair<Int, Int>>
+//                        list0.removeAt(0)
+//                        val list1 = curList.clone() as ArrayList<Pair<Int, Int>>
+//                        list1.removeAt(1)
+////                        println("分选 ${list0.joinToString()} === ${list1.joinToString()}  ${seenV.joinToString()} ${seenRow.joinToString()}")
+//                        val ans0 = dfs(list0)
+//                        val ans1 = dfs(list1)
+////                        println("分选结果 $ans0 with $ans1")
+//                        return ans + maxOf(ans0, ans1)
+//                    }
+//                }
+//
+//                // 无相等场景，贪心拿最大值
+//                val item = curList.removeAt(0)
+//                ans += item.first
+//                curList.removeIf {
+//                    it.first == item.first || it.second == item.second
+//                }
+//            }
+//            return ans
+//        }
+//
+//        return dfs(list)
+//    }
 
 //    fun maxScore(grid: List<List<Int>>): Int {
 //        val n = grid.size
