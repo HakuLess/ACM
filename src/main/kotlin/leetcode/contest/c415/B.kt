@@ -10,7 +10,7 @@ fun main() {
 class SolutionB {
     fun maxScore(a: IntArray, b: IntArray): Long {
         val n = b.size
-        val dp = Array(4) { LongArray(n) { Int.MIN_VALUE.toLong() } }
+        val dp = Array(4) { LongArray(n) { Long.MIN_VALUE } }
 
         // 初始化第一个选择的得分
         for (i in 0 until n) {
@@ -25,10 +25,6 @@ class SolutionB {
                 dp[i][j] = maxPrev + 1L * a[i] * b[j]
             }
         }
-//        dp[0].print()
-//        dp[1].print()
-//        dp[2].print()
-//        dp[3].print()
 
         return dp[3].maxOrNull()!!
     }
