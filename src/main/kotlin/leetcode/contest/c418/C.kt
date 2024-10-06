@@ -54,7 +54,7 @@ class SolutionC {
             val size = queue.size
             for (i in 0 until size) {
                 val item = queue.poll()
-                queue.offer(next)
+//                queue.offer(next)
             }
         }
 
