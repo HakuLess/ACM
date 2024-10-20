@@ -10,6 +10,8 @@ fun main() {
 
 }
 
+// TODO Rolling Hash
+// https://zhwebsite.com/2024/10/20/leetcode-contest-420/
 class SolutionD {
     fun findAnswer(parent: IntArray, s: String): BooleanArray {
         fun buildTree(parent: IntArray): List<MutableList<Int>> {
