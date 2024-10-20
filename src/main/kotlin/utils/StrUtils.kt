@@ -86,10 +86,26 @@ fun CharArray.nextPermutation(): Boolean {
     return false
 }
 
+fun computePrefixHash(s: String, base: Int = 131, mod: Int = 1000000007): Pair<LongArray, LongArray> {
+    val n = s.length
+    val hashValues = LongArray(n + 1)  // 用来存储前缀哈希
+    val powerValues = LongArray(n + 1) // 存储 base 的幂次值
+    hashValues[0] = 0
+    powerValues[0] = 1
+
+    for (i in 1..n) {
+        hashValues[i] = (hashValues[i - 1] * base + (s[i - 1] - 'a' + 1)) % mod
+        powerValues[i] = (powerValues[i - 1] * base) % mod
+    }
+
+    return Pair(hashValues, powerValues)
+}
+
 /**
  * 字符串Hash
  * */
-fun String.hash(): Int {
-    // todo 实现自定义
-    return this.hashCode()
+fun String.hash(l: Int = 0, r: Int = this.length - 1, mod: Int = 1000000007): Long {
+    val (hashValues, powerValues) = computePrefixHash(this)
+    // 计算子串 [l, r] 的哈希值
+    return (hashValues[r + 1] - (hashValues[l] * powerValues[r - l + 1]) % mod + mod) % mod
 }
