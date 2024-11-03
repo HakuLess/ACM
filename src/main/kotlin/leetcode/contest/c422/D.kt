@@ -13,46 +13,65 @@ fun main() {
 }
 
 class SolutionD {
-    fun countBalancedPermutations(num: String): Int {
+    private companion object {
+        const val MOD = 1_000_000_007
+    }
 
-        val mod = 1_000_000_007L
-        val a = num.length / 2
-        val b = num.length - a
+    private class InternalData(num: String) {
+        val dp: Array<Array<Array<Int?>>>
+        val combine: Array<LongArray>
+        val zeroSum: Int
+        val nums: IntArray
 
-        val arr = num.map { it - '0' }.toIntArray()
-
-        val seen = HashMap<String, Long>()
-        fun dfs(index: Int, leftA: Int, leftB: Int, sumA: Int, sumB: Int): Long {
-            if (leftA == 0 && leftB == 0) {
-                return if (sumA == sumB) 1L else 0L
+        init {
+            nums = IntArray(10)
+            for (char in num) {
+                nums[char - '0'] += 1
             }
-
-            val key = "$leftA, $leftB, $sumA, $sumB"
-            if (key in seen) return seen[key]!!
-            var tmp = 0L
-            if (leftA > 0) {
-                tmp += dfs(index + 1, leftA - 1, leftB, sumA + arr[index], sumB)
-                tmp %= mod
-            }
-            if (leftB > 0) {
-                tmp += dfs(index + 1, leftA, leftB - 1, sumA, sumB + arr[index])
-                tmp %= mod
-            }
-            return tmp.also {
-                seen[key] = it
-            }
+            zeroSum = 10 * num.length
+            dp = Array(2 * num.length * 10) { Array(10) { arrayOfNulls<Int>(num.length / 2 + num.length % 2 + 1) } }
+            combine = calculateCombine(num.length / 2 + 1)
         }
 
-        var tmp = dfs(0, a, b, 0, 0)
-//        for (i in 1..a) {
-//            tmp *= i
-//            tmp %= mod
-//        }
-//        for (i in 1..b) {
-//            tmp *= i
-//            tmp %= mod
-//        }
+        private fun calculateCombine(max: Int): Array<LongArray> {
+            val res = Array(max + 1) { LongArray(max + 1) }
+            res[0][0] = 1
+            for (i in 1..max) {
+                for (j in 0..i) {
+                    res[i][j] = when {
+                        j == 0 || j == i -> 1
+                        j == 1 -> i.toLong()
+                        else -> (res[i - 1][j - 1] + res[i - 1][j]) % MOD
+                    }
+                }
+            }
+            return res
+        }
+    }
 
-        return (tmp % mod).toInt()
+    fun countBalancedPermutations(num: String): Int {
+        val data = InternalData(num)
+        return dfs(0, 0, num.length / 2 + num.length % 2, num.length / 2, data)
+    }
+
+    private fun dfs(sum: Int, pos: Int, oddRemain: Int, evenRemain: Int, data: InternalData): Int {
+        if (pos == 10) {
+            return if (oddRemain == 0 && evenRemain == 0 && sum == 0) 1 else 0
+        } else if (data.dp[sum + data.zeroSum][pos][oddRemain] == null) {
+            data.dp[sum + data.zeroSum][pos][oddRemain] = 0
+            for (i in 0..minOf(oddRemain, data.nums[pos])) {
+                if (evenRemain >= data.nums[pos] - i) {
+                    val nextSum = sum + i * pos - (data.nums[pos] - i) * pos
+                    val nextOddRemain = oddRemain - i
+                    val nextEvenRemain = evenRemain - (data.nums[pos] - i)
+                    var result = dfs(nextSum, pos + 1, nextOddRemain, nextEvenRemain, data)
+                    if (result > 0) {
+                        result = (result * data.combine[oddRemain][i] % MOD * data.combine[evenRemain][data.nums[pos] - i] % MOD).toInt()
+                        data.dp[sum + data.zeroSum][pos][oddRemain] = (data.dp[sum + data.zeroSum][pos][oddRemain]!! + result) % MOD
+                    }
+                }
+            }
+        }
+        return data.dp[sum + data.zeroSum][pos][oddRemain] ?: 0
     }
 }
