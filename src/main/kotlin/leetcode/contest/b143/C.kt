@@ -1,53 +1,52 @@
 package leetcode.contest.b143
 
-import utils.SegmentTree
-import utils.SegmentTreeGPT
-import utils.SegmentTreeMax
 import utils.print
+import java.util.*
+
 
 fun main() {
     val s = SolutionC()
-    s.maxFrequency(intArrayOf(14, 67, 36, 118, 4), 62, 3).print()
-
-    val segmentTree = SegmentTreeMax()
-
-    // 示例：对区间 [10^8 ,10^9 ] 增加5
-    segmentTree.updateRange(100000000, 1000000000.toInt(), 5)
-
-    // 查询区间 [10^8 ,10^9 ] 的最大值
-    println(segmentTree.queryMax(100000000.toInt(),1000000000.toInt())) // 输出结果，应该是5
-
-    // 示例：对区间 [5*10^8 ,7*10^8 ] 增加3
-    segmentTree.updateRange(500000000.toInt(),700000000.toInt(),3)
-
-    // 查询区间 [5*10^8 ,7*10^8 ] 的最大值
-    println(segmentTree.queryMax(500000000.toInt(),700000000.toInt())) // 输出结果，应该是8
+//    s.maxFrequency(intArrayOf(14, 67, 36, 118, 4), 62, 3).print()
+    // 3
+//    s.maxFrequency(intArrayOf(58, 80, 5), 58, 2).print()
+    // 1
+//    s.maxFrequency(intArrayOf(1, 90), 76, 1).print()
+    // 2
+    s.maxFrequency(intArrayOf(56, 95, 131, 49, 147), 31, 2).print()
 }
 
 class SolutionC {
     fun maxFrequency(nums: IntArray, k: Int, numOperations: Int): Int {
-//        val n = 1000000000
-        val root = SegmentTreeMax()
 
         nums.sort()
-        var ans = 0
 
-        nums.forEach {
-            root.updateRange(it, it, 1)
+        var ans = 1
+        val n = nums.size
+        val cnt = HashMap<Int, Int>()
+        for (num in nums) {
+            cnt.merge(num, 1) { a: Int, b: Int -> Integer.sum(a, b) }
         }
 
-        for (i in nums.indices) {
-            val it = nums[i]
-            root.updateRange(it, it, -1)
-            root.updateRange(it - k, it + k, 1)
+        // 固定数
+        var l = -1
+        var r = 0
+        for (i in 0 until n) {
+            val target = nums[i]
+            while (l + 1 <= i && nums[l + 1] < target - k) l++
+            while (r < n && nums[r] <= target + k) r++
+            var max = r - l - 1
+            max = minOf(max, numOperations + cnt.getOrDefault(target, 0))
+            ans = maxOf(max, ans)
+        }
 
-            ans = maxOf(ans, root.queryMax(nums.minOrNull()!!, nums.maxOrNull()!!).toInt())
-
-            if (i >= numOperations) {
-                val preIt = nums[i - numOperations]
-                root.updateRange(preIt - k, preIt + k, -1)
-                root.updateRange(preIt, preIt, 1)
-            }
+        // 取中间
+        var i = 0
+        var j = 0
+        while (i < n) {
+            while (j < n && nums[j] <= 0L + nums[i] + k + k) j++
+            val max = minOf(numOperations, j - i)
+            ans = maxOf(ans, max)
+            i++
         }
         return ans
     }
