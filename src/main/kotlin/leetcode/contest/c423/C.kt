@@ -16,60 +16,26 @@ class SolutionC {
     fun sumOfGoodSubsequences(nums: IntArray): Int {
         val mod = 1_000_000_007L
 
-        // 存入 v 对应 index 列表
-        val map = HashMap<Int, ArrayList<Int>>()
-        for (i in nums.indices) {
+        val MAX = 100005
+        val sum = LongArray(MAX)
+        val cnt = LongArray(MAX)
+        for (i in nums.indices.reversed()) {
             val v = nums[i]
-            map[v] = map.getOrDefault(v, arrayListOf())
-            map[v]!!.add(i)
+            cnt[v]++
+
+            val tmp = 1L + cnt[v + 1] + cnt.getOrElse(v - 1) { 0L }
+            cnt[v] += cnt[v + 1]
+            cnt[v] += cnt.getOrElse(v - 1) { 0L }
+
+            sum[v] += v.toLong() * tmp
+
+            sum[v] += sum[v + 1]
+            sum[v] += sum.getOrElse(v - 1) { 0L }
+
+            cnt[v] %= mod
+            sum[v] %= mod
         }
 
-        val seen = HashMap<Int, Pair<Long, Long>>()
-        fun dfs(index: Int): Pair<Long, Long> {
-
-            val key = index
-            if (key in seen) return seen[key]!!
-
-            val v = nums[index]
-            var tmpT: Long = 1L
-            var tmpV: Long = 0L
-
-            map[v + 1]?.forEach {
-                if (it > index) {
-                    val (t, v) = dfs(it)
-                    tmpT += t
-                    tmpT %= mod
-                    tmpV += v
-                    tmpV %= mod
-                }
-            }
-            map[v - 1]?.forEach {
-                if (it > index) {
-                    val (t, v) = dfs(it)
-                    tmpT += t
-                    tmpT %= mod
-                    tmpV += v
-                    tmpV %= mod
-                }
-            }
-
-            tmpV += tmpT * v
-            tmpV %= mod
-
-//            println("$index: $tmpT $tmpV")
-
-
-            return Pair(tmpT, tmpV).also {
-                seen[key] = it
-            }
-        }
-
-        var ans = 0L
-        for (i in nums.indices) {
-//            println("$i: ${dfs(i)}")
-            ans += dfs(i).second
-            ans %= mod
-        }
-        return (ans % mod).toInt()
+        return (sum.sum() % mod).toInt()
     }
 }
