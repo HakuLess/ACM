@@ -9,7 +9,7 @@ class SolutionD {
             pre[i] = pre[i.countOneBits()] + 1
         }
 
-        val nums = s.map { it.toString().toInt() }
+        val nums = s.map { it - '0' }
         val n = nums.size
         val dp = LongArray(n + 1)
 
