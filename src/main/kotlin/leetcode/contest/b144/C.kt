@@ -1,9 +1,9 @@
 package leetcode.contest.b144
 
-import utils.SegmentTree
 import utils.print
-import utils.segment.SegmentTreeGPTMinus
 import utils.toGrid
+import java.util.*
+
 
 fun main() {
     val s = SolutionC()
@@ -19,45 +19,35 @@ fun main() {
 class SolutionC {
     fun maxRemoval(nums: IntArray, queries: Array<IntArray>): Int {
 
-        val n = nums.size
+        // 按到li排序，我是从左到右遍历，所以将能够生效的位置计算出来
+        queries.sortWith(compareBy({ it[0] }, { it[1] }))
 
-        val root = SegmentTree<Int>(start = 0, end = nums.size + 1, value = 0) { a, b -> a + b }
+        // 模拟加油站的思路
+        val effective = PriorityQueue<Int>(compareBy { queries[it][1] })
+
+        val potential = PriorityQueue<Int>(compareBy { -queries[it][1] })
+
+        var pos = 0
+        var used = 0
         for (i in nums.indices) {
-            if (nums[i] > 0) {
-                root.update(root, i, i, 1)
+            // 把可能生效的范围加入
+            while (pos < queries.size && queries[pos][0] <= i) {
+                potential.add(pos++)
+            }
+            // 把已经失效的剔除
+            while (!effective.isEmpty() && queries[effective.peek()][1] < i) {
+                effective.poll()
+            }
+            // 当前数字没有被清零，就尽量把范围大的代入进入
+            while (effective.size < nums[i] && !potential.isEmpty() && queries[potential.peek()][1] >= i) {
+                used += 1
+                effective.add(potential.poll())
+            }
+            // 不符合要求，返回-1
+            if (effective.size < nums[i]) {
+                return -1
             }
         }
-        queries.sortWith(compareBy { root.query(root, it[0], it[1]) })
-
-        val segmentTreeGPTMinus = SegmentTreeGPTMinus(n)
-
-        for (i in nums.indices) {
-            segmentTreeGPTMinus.rangeAdd(i, i, nums[i])
-        }
-        for (i in queries.indices) {
-            val (l, r) = queries[i]
-            segmentTreeGPTMinus.rangeAdd(l, r, -1)
-        }
-
-        for (i in nums.indices) {
-            val v = segmentTreeGPTMinus.query(i, i)
-            segmentTreeGPTMinus.rangeAdd(i, i, -v * 2)
-        }
-
-        if (segmentTreeGPTMinus.query(0, n) < 0) return -1
-
-        var ans = 0
-        for (i in queries.indices) {
-            val (l, r) = queries[i]
-            segmentTreeGPTMinus.rangeAdd(l, r, -1)
-
-            if (segmentTreeGPTMinus.query(0, n - 1) >= 0) {
-                ans++
-            } else {
-                segmentTreeGPTMinus.rangeAdd(l, r, 1)
-            }
-        }
-
-        return ans
+        return queries.size - used
     }
 }
