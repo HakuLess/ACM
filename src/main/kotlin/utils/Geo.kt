@@ -204,6 +204,10 @@ class Interval(val left: Int, val right: Int) : Comparable<Interval> {
         return this.left - other.left
     }
 
+    override fun toString(): String {
+        return "$left..$right"
+    }
+
 }
 
 infix fun Interval.and(other: Interval): Interval? {
