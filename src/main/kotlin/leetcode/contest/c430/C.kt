@@ -2,32 +2,26 @@ package leetcode.contest.c430
 
 class SolutionC {
     fun numberOfSubsequences(nums: IntArray): Long {
-        val productMap = mutableMapOf<Int, MutableList<Pair<Int, Int>>>()
-        val n = nums.size
+        val map = HashMap<Double, Int>()
+        var res: Long = 0L
 
-        // 存储所有 (q, s) 的乘积
-        for (q in 1 until n - 2) {
-            for (s in q + 2 until n) {
-                val product = nums[q] * nums[s]
-                productMap.computeIfAbsent(product) { mutableListOf() }.add(Pair(q, s))
+        for (i in 4 until nums.size - 2) {
+            val q = nums[i - 2].toDouble()
+
+            // 作为 nums[r]
+            val cur = nums[i].toDouble()
+
+            // 不断在 Map 中补充 nums[p] / nums[q] 的值
+            for (p in 0 until i - 3) {
+                val div = nums[p] / q
+                map[div] = map.getOrDefault(div, 0) + 1
+            }
+
+            // 保证 nums[p] / nums[q] = nums[s] / nums[r]
+            for (s in i + 2 until nums.size) {
+                res += map.getOrDefault(nums[s] / cur, 0)
             }
         }
-
-        var count = 0L
-
-        // 查找满足条件的 (p, r)
-        for (p in 0 until n - 3) {
-            for (r in p + 2 until n - 1) {
-                val product = nums[p] * nums[r]
-                // 如果有相同乘积，检查间隔条件
-                productMap[product]?.forEach { (q, s) ->
-                    if (p < q && r < s) {
-                        count++
-                    }
-                }
-            }
-        }
-
-        return count
+        return res
     }
 }
