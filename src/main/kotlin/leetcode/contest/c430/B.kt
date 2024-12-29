@@ -18,16 +18,8 @@ class SolutionB {
         val maxLen = word.length - (numFriends - 1)
 
         var ans = ""
-        for (i in 0 until word.length - maxLen + 1) {
-            val item = word.substring(i, i + maxLen)
-            if (item > ans) {
-                ans = item
-            }
-        }
-
-        for (i in word.length - maxLen until word.length) {
-            val item = word.substring(i, word.length)
-//            println("$i: $item")
+        for (i in word.indices) {
+            val item = word.substring(i, minOf(i + maxLen, word.length))
             if (item > ans) {
                 ans = item
             }
