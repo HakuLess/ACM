@@ -1,6 +1,8 @@
 package leetcode.contest.b147
 
 class SolutionD {
+
+    // TODO 最大子序列和的线段树
     fun maxSubarraySum(nums: IntArray): Long {
         val longArray = nums.map { it.toLong() }.toLongArray()
         var maxResult = Long.MIN_VALUE
