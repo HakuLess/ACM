@@ -15,58 +15,50 @@ fun main() {
 class SolutionC {
     fun maximumCoins(coins: Array<IntArray>, k: Int): Long {
         coins.sortBy { it[0] }
-        val n = coins.size
-        val pos = mutableListOf<Int>()
+        var res = 0L
 
-        // Collect positions based on boundaries
-        for (i in coins.indices) {
-            if (coins[i][0] + k - 1 < coins[n - 1][1]) {
-                pos.add(coins[i][0])
+        // Left segment
+        var left = 0
+        var right = 0
+        var cur = 0L
+        while (left < coins.size) {
+            while (right < coins.size && coins[right][1] - coins[left][0] < k) {
+                cur += (coins[right][1] - coins[right][0] + 1L) * coins[right][2]
+                right++
             }
-            if (coins[i][1] - k + 1 > coins[0][0]) {
-                pos.add(coins[i][1] - k + 1)
+            if (right < coins.size && coins[right][1] - coins[left][0] >= k && coins[right][0] - coins[left][0] < k) {
+                res = maxOf(res, cur + (coins[left][0] + k - coins[right][0]) * coins[right][2])
+            } else {
+                res = maxOf(res, cur)
             }
+            if (coins[left][1] - coins[left][0] < k) {
+                cur -= (coins[left][1] - coins[left][0] + 1L) * coins[left][2]
+            }
+            left++
+            right = maxOf(right, left)
         }
 
-        pos.add(coins[0][0])
-        pos.add(coins[n - 1][1])
-        pos.sort()
-        pos.distinct()
-
-        var p = 0
-        var q = 0
-        var v = 0L
-        var head = 0L
-        var tail = 0L
-        var ans = 0L
-
-        for (x in pos) {
-            v -= head
-            while (q < n && coins[q][1] < x + k) {
-                v += (coins[q][1] - coins[q][0] + 1L) * coins[q][2]
-                q++
+        // Right segment
+        left = coins.size - 1
+        right = coins.size - 1
+        cur = 0L
+        while (right >= 0) {
+            while (left >= 0 && coins[right][1] - coins[left][0] < k) {
+                cur += (coins[left][1] - coins[left][0] + 1L) * coins[left][2]
+                left--
             }
-            head = if (q < n && coins[q][0] < x + k) {
-                (x + k - coins[q][0]).toLong() * coins[q][2]
+            if (left >= 0 && coins[right][1] - coins[left][0] >= k && coins[right][1] - coins[left][1] < k) {
+                res = maxOf(res, cur + (coins[left][1] - coins[right][1] + k) * coins[left][2])
             } else {
-                0L
+                res = maxOf(res, cur)
             }
-            v += head
-            v += tail
-            while (x > coins[p][1]) {
-                v -= (coins[p][1] - coins[p][0] + 1L) * coins[p][2]
-                p++
+            if (coins[right][1] - coins[right][0] < k) {
+                cur -= (coins[right][1] - coins[right][0] + 1L) * coins[right][2]
             }
-            tail = if (x > coins[p][0]) {
-                (x - coins[p][0]).toLong() * coins[p][2]
-            } else {
-                0L
-            }
-            v -= tail
-
-            ans = maxOf(ans, v)
+            right--
+            left = minOf(left, right)
         }
 
-        return ans
+        return res
     }
 }
