@@ -12,71 +12,59 @@ fun main() {
     s.maximumCoins("[[8,12,13],[29,32,2],[13,15,2],[40,41,18],[42,48,18],[33,36,11],[37,38,6]]".toGrid(), 28).print()
 }
 
-// TODO Not Finish
 class SolutionC {
     fun maximumCoins(coins: Array<IntArray>, k: Int): Long {
-
-        // 排序区间
         coins.sortBy { it[0] }
+        val n = coins.size
+        val pos = mutableListOf<Int>()
 
-        val tm = TreeMap<Int, Long>()
-        var curCoins = 0L
-        coins.forEach {
-            val (start, end, cnt) = it
-            tm[start - 1] = curCoins
-            curCoins += (end - start + 1L) * cnt
-            tm[end] = curCoins
+        // Collect positions based on boundaries
+        for (i in coins.indices) {
+            if (coins[i][0] + k - 1 < coins[n - 1][1]) {
+                pos.add(coins[i][0])
+            }
+            if (coins[i][1] - k + 1 > coins[0][0]) {
+                pos.add(coins[i][1] - k + 1)
+            }
         }
-        tm[Int.MIN_VALUE] = 0
-        tm[Int.MAX_VALUE] = curCoins
 
-//        tm.printLong()
+        pos.add(coins[0][0])
+        pos.add(coins[n - 1][1])
+        pos.sort()
+        pos.distinct()
 
+        var p = 0
+        var q = 0
+        var v = 0L
+        var head = 0L
+        var tail = 0L
         var ans = 0L
-        for (i in coins.indices) {
-            // 以 start 为起点
-            val start = coins[i][0]
-            val end = start + k - 1
 
-            // start - 1之前拥有的硬币
-            val lst = tm.floorEntry(start - 1)?.value ?: 0L
-
-            val endLeft = tm.floorKey(end)
-            val endRight = tm.ceilingKey(end)
-
-//            println("check $end for $endLeft $endRight")
-//            println("check ${tm[endLeft]!!}..${tm[endRight]!!}")
-            val sum = if (endLeft == endRight) {
-                tm[endLeft]!!
-            } else {
-                tm[endLeft]!! + (tm[endRight]!! - tm[endLeft]!!) / (endLeft - endRight + 1) * (end - endLeft)
+        for (x in pos) {
+            v -= head
+            while (q < n && coins[q][1] < x + k) {
+                v += (coins[q][1] - coins[q][0] + 1L) * coins[q][2]
+                q++
             }
-
-//            println("以 $start 为起点  $end 为终点 当前 sum is $sum  lst is $lst")
-            ans = maxOf(ans, sum - lst)
-        }
-
-        for (i in coins.indices) {
-            // 以 end 为终点
-            val end = coins[i][1]
-            val start = end - k + 1
-
-            // start - 1之前拥有的硬币
-            val sum = tm[end]!!
-
-            val startLeft = tm.floorKey(start)
-            val startRight = tm.ceilingKey(start)
-
-//            println("check $end for $endLeft $endRight")
-//            println("check ${tm[endLeft]!!}..${tm[endRight]!!}")
-            val lst = if (startLeft == startRight) {
-                tm[startLeft]!!
+            head = if (q < n && coins[q][0] < x + k) {
+                (x + k - coins[q][0]).toLong() * coins[q][2]
             } else {
-                tm[startLeft]!! + (tm[startRight]!! - tm[startLeft]!!) / (startRight - startLeft + 1) * (start - startLeft)
+                0L
             }
+            v += head
+            v += tail
+            while (x > coins[p][1]) {
+                v -= (coins[p][1] - coins[p][0] + 1L) * coins[p][2]
+                p++
+            }
+            tail = if (x > coins[p][0]) {
+                (x - coins[p][0]).toLong() * coins[p][2]
+            } else {
+                0L
+            }
+            v -= tail
 
-//            println("以 $start 为起点  $end 为终点 当前 sum is $sum  lst is $lst")
-            ans = maxOf(ans, sum - lst)
+            ans = maxOf(ans, v)
         }
 
         return ans
