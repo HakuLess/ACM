@@ -165,6 +165,32 @@ fun Graph.dijkstra(source: Int): LongArray {
     return ans
 }
 
+/**
+ * 是否可以从 source 达到其他所有点
+ * */
+fun Graph.canReachAll(source: Int): Boolean {
+    val ans = BooleanArray(n) { false }
+    ans[source] = true
+    val queue: Queue<Int> = LinkedList<Int>()
+    queue.offer(source)
+    while (queue.isNotEmpty()) {
+        val size = queue.size
+        for (i in 0 until size) {
+            val item = queue.poll()
+            ans[item] = true
+
+            adj[item].forEach { next ->
+                if (!ans[next]) {
+                    ans[next] = true
+                    queue.offer(next)
+                }
+            }
+        }
+    }
+
+    return ans.all { it }
+}
+
 // prints a Topological Sort of the complete graph
 fun Graph.topologicalSort(): ArrayList<Int> {
     // Create a array to store indegrees of all
