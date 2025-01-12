@@ -168,7 +168,7 @@ fun Graph.dijkstra(source: Int): LongArray {
 /**
  * 是否可以从 source 达到其他所有点
  * */
-fun Graph.canReachAll(source: Int): Boolean {
+fun Graph.canReachAll(source: Int, maxWeight: Int): Boolean {
     val ans = BooleanArray(n) { false }
     ans[source] = true
     val queue: Queue<Int> = LinkedList<Int>()
@@ -180,7 +180,7 @@ fun Graph.canReachAll(source: Int): Boolean {
             ans[item] = true
 
             adj[item].forEach { next ->
-                if (!ans[next]) {
+                if (!ans[next] && weight[item]!![next]!! <= maxWeight) {
                     ans[next] = true
                     queue.offer(next)
                 }

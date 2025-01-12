@@ -19,49 +19,20 @@ fun main() {
 
 class SolutionC {
     fun minMaxWeight(n: Int, edges: Array<IntArray>, threshold: Int): Int {
-        val maxWeight = edges.maxOf { it[2] }.toLong()
-        var ans = biMin(1L, maxWeight) { max ->
-//            println("enter $max")
-            // 过滤后保留的边
-            val filters = edges.filter { it[2] <= max }.toTypedArray()
-            val g = Graph(n)
-            filters.forEach {
-                g.addEdgeOri(it[0], it[1], it[2])
-            }
+        val list = edges.map { it[2] }.toList().sorted()
 
-            var result: Boolean = true
-//            // 节点出去数量不满足
-//            if (g.adj.any { it.size > threshold }) {
-//                result = false
-//            }
+        val reverseG = Graph(n)
+        edges.sortedBy { -it[2] }.forEach {
+            reverseG.addEdgeOri(it[1], it[0], it[2])
+        }
 
-//            println("enter $max with threshold $result ${g.adj.joinToString()}")
-
-            val reverseG = Graph(n)
-            filters.forEach {
-                reverseG.addEdgeOri(it[1], it[0], it[2])
-            }
-
-            result = reverseG.canReachAll(0)
-//            val arr = reverseG.dijkstra(0)
-//            if (arr.any { it == Long.MAX_VALUE / 2 }) {
-//                result = false
-//            }
-//            println("enter $max with arr $result ${arr.joinToString()}")
-
-            result
+        var ans = biMin(0L, list.lastIndex.toLong()) { index ->
+            val i = index.toInt()
+            val max = list[i]
+            reverseG.canReachAll(0, maxWeight = max)
         }.toInt()
 
-//        val filters = edges.filter { it[2] <= ans }.toTypedArray()
-//        val g = Graph(n)
-//        filters.forEach {
-//            g.addEdgeOri(it[0], it[1], it[2])
-//        }
-//        g.adj.joinToString().print()
-//        if (g.adj.any { it.size > threshold }) {
-//            ans = -1
-//        }
-
-        return ans
+        if (ans == -1) return ans
+        return list[ans]
     }
 }
