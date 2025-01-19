@@ -1,5 +1,7 @@
 package leetcode.contest.c433
 
+
+// TODO Not Finished
 class SolutionC {
     fun minCost(n: Int, cost: Array<IntArray>): Long {
         // 初始化一个 dp 数组，dp[i][j] 表示第 i 个房屋涂成颜色 j+1 的最小成本

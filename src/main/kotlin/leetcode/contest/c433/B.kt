@@ -1,7 +1,8 @@
 package leetcode.contest.c433
 
-import utils.originC
 import utils.print
+import java.util.*
+
 
 fun main() {
     val s = SolutionB()
@@ -19,31 +20,33 @@ class SolutionB {
         var ans = 0L
         nums.sort()
 
-        var left = 0
-        var right = nums.size
-
+        var dp = LongArray(k)
+        dp[0] = 1
         for (i in nums.indices) {
-
-            right--
-
-            for (limit in 1..minOf(left + 1, k)) {
-                ans += originC(left, limit - 1) * nums[i]
-                ans %= mod
-
-//                println("${nums[i]} 最大值贡献 ${originC(left, limit - 1)} 次")
+            var sum: Long = 1
+            // 前i - 1个数中挑选0 到 k - 1个数字
+            for (j in minOf(i, k - 1) downTo 1) {
+                dp[j] = (dp[j] + dp[j - 1]) % mod
+                sum += dp[j]
+                sum %= mod
             }
-
-            for (limit in 1..minOf(right + 1, k)) {
-                ans += originC(right, limit - 1) * nums[i]
-                ans %= mod
-
-//                println("${nums[i]} 最小值贡献 ${originC(right, limit - 1)} 次")
-            }
-
-            left++
+            ans += sum * nums[i] % mod
+            ans %= mod
         }
 
-        return (ans % mod).toInt()
+        dp = LongArray(k + 1)
+        dp[0] = 1
+        for (i in nums.indices.reversed()) {
+            var sum: Long = 1
+            for (j in minOf(nums.size - i - 1, k - 1) downTo 1) {
+                dp[j] = (dp[j] + dp[j - 1]) % mod
+                sum += dp[j]
+                sum %= mod
+            }
+            ans += sum * nums[i] % mod
+            ans %= mod
+        }
+        return ans.toInt()
     }
 
 //    fun minMaxSums(nums: IntArray, k: Int): Int {

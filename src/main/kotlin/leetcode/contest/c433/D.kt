@@ -3,7 +3,8 @@ package leetcode.contest.c433
 import utils.originC
 import java.util.*
 
-class Solution {
+// TODO Not Finished
+class SolutionD {
     fun minMaxSubarraySum(nums: IntArray, k: Int): Long {
         var ans = 0L
         val n = nums.size
