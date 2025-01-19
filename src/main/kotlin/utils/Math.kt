@@ -3,6 +3,7 @@ package utils
 import java.math.BigInteger
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 import kotlin.math.exp
 import kotlin.math.sqrt
 
@@ -82,7 +83,11 @@ fun C(n: Int, m: Int, mod: Long = 1000000007L): Long {
     }
 }
 
+val seen = HashMap<String, Long>()
+
 fun originC(n: Int, m: Int, mod: Long = 1000000007L): Long {
+    val key = "${n}_${m}"
+    if (key in seen) return seen[key]!!
     var ans = BigInteger.valueOf(1L)
     var cur = n.toLong()
     repeat(minOf(m, n - m)) {
@@ -94,7 +99,9 @@ fun originC(n: Int, m: Int, mod: Long = 1000000007L): Long {
         ans /= c.toBigInteger()
         c++
     }
-    return ans.mod(mod.toBigInteger()).toLong()
+    return ans.mod(mod.toBigInteger()).toLong().also {
+        seen[key] = it
+    }
 }
 
 fun isPrime(num: Int): Boolean {
