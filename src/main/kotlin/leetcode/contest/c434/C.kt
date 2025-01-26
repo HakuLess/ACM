@@ -2,6 +2,7 @@ package leetcode.contest.c434
 
 import utils.print
 
+
 fun main() {
     val s = SolutionC()
     // 2
@@ -19,51 +20,30 @@ fun main() {
 class SolutionC {
     fun maxFrequency(nums: IntArray, k: Int): Int {
         var ans = 0
-        val dpk = IntArray(nums.size)
-        for (i in nums.indices) {
-            if (nums[i] == k) {
-                dpk[i] = if (i == 0) {
-                    1
-                } else {
-                    dpk[i - 1] + 1
-                }
-            } else {
-                dpk[i] = if (i == 0) {
-                    0
-                } else {
-                    dpk[i - 1]
-                }
+        for (num in nums) {
+            if (num == k) {
+                ans++
             }
         }
 
-        for (fake in 1..50) {
-            val dp = IntArray(nums.size)
-
-            for (i in nums.indices) {
-                if (nums[i] == fake) {
-                    dp[i] = if (i == 0) {
-                        1
-                    } else {
-                        dp[i - 1] + 1
-                    }
-                } else if (nums[i] == k) {
-                    if (i != 0) {
-//                        println("$i: ans ${dp[i - 1]} + ${dpk.last()} - ${dpk[i - 1]}")
-                        // 右侧更换为原始K
-                        ans = maxOf(ans, dp[i - 1] + dpk.last() - dpk[i - 1])
-                    }
-                } else {
-                    dp[i] = if (i == 0) 0 else dp[i - 1]
-                }
-                // 左侧更换为原始K
-                dp[i] = maxOf(dp[i], dpk[i])
-                ans = maxOf(ans, dp[i])
-            }
-
-//            dpk.print()
-//            dp.print()
+        val xSet = HashSet<Int>()
+        for (num in nums) {
+            xSet.add(k - num)
         }
 
-        return ans
+        var maxOffset = 0
+        for (x in xSet) {
+            var currentSum = 0
+            var currentMax = 0
+            for (num in nums) {
+                val contribution = (if (num == k - x) 1 else 0) - if (num == k) 1 else 0
+                currentSum = maxOf(contribution, currentSum + contribution)
+                currentMax = maxOf(currentMax, currentSum)
+            }
+            maxOffset = maxOf(maxOffset, currentMax)
+        }
+
+        return ans + maxOf(maxOffset, 0)
     }
+
 }
