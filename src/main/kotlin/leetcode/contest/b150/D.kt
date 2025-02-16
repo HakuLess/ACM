@@ -87,7 +87,7 @@ class SolutionD {
                 target.add(it)
             }
         }
-        
+
 //        a.print()
 //        b.print()
 //        c.print()
