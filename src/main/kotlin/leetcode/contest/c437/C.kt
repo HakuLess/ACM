@@ -1,6 +1,5 @@
 package leetcode.contest.c437
 
-import jdk.internal.org.jline.utils.Colors.s
 import utils.print
 import java.util.*
 
