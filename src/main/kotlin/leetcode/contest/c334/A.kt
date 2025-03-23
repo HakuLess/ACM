@@ -6,11 +6,11 @@ import kotlin.math.abs
 
 fun main() {
     val s = SolutionA()
-    s.leftRigthDifference(intArrayOf(10, 4, 8, 3)).print()
+    s.leftRightDifference(intArrayOf(10, 4, 8, 3)).print()
 }
 
 class SolutionA {
-    fun leftRigthDifference(nums: IntArray): IntArray {
+    fun leftRightDifference(nums: IntArray): IntArray {
         val sum = nums.sum()
         val pre = nums.preSumArray(false)
         val ans = ArrayList<Int>()
