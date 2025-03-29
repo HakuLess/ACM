@@ -1,5 +1,13 @@
 package leetcode.contest.c153
 
+import utils.ConvexHullTrick
+import utils.print
+
+fun main() {
+    val s = SolutionC()
+    s.minimumCost(intArrayOf(4, 8, 5, 1, 14, 2, 2, 12, 1), intArrayOf(7, 2, 8, 4, 2, 2, 1, 1, 2), 7).print()
+}
+
 class SolutionC {
     fun minimumCost(nums: IntArray, cost: IntArray, k: Int): Long {
         val n = nums.size
@@ -17,14 +25,15 @@ class SolutionC {
         dp[0][0] = 0L
 
         for (j in 1..n) {
+            // 单调凸包优化
             val cht = ConvexHullTrick()
             for (l in (j - 1) until n) {
                 if (dp[l][j - 1] < inf) {
-                    cht.addLine(-preCost[l], dp[l][j - 1])
+                    cht.addLine(-preCost[l].toDouble(), dp[l][j - 1].toDouble())
                 }
             }
             for (i in j..n) {
-                val query = cht.query(preNum[i] + k.toLong() * j)
+                val query = cht.query(preNum[i] + k.toLong() * j).toLong()
                 dp[i][j] = (preNum[i] + k.toLong() * j) * preCost[i] + query
             }
         }
@@ -34,44 +43,5 @@ class SolutionC {
             ans = minOf(ans, dp[n][j])
         }
         return ans
-    }
-}
-
-
-data class Line(val m: Long, val b: Long, var xLeft: Double = Double.NEGATIVE_INFINITY) {
-    fun intersect(other: Line): Double {
-        return (other.b - b).toDouble() / (m - other.m)
-    }
-}
-
-class ConvexHullTrick {
-    private val lines = ArrayList<Line>()
-    private var pointer = 0
-
-    fun addLine(m: Long, b: Long) {
-        val newLine = Line(m, b)
-        while (lines.isNotEmpty()) {
-            val last = lines.last()
-            val x = newLine.intersect(last)
-            if (x <= last.xLeft) {
-                lines.removeAt(lines.size - 1)
-            } else {
-                break
-            }
-        }
-        if (lines.isEmpty()) {
-            newLine.xLeft = Double.NEGATIVE_INFINITY
-        } else {
-            newLine.xLeft = newLine.intersect(lines.last())
-        }
-        lines.add(newLine)
-    }
-
-    fun query(x: Long): Long {
-        if (pointer >= lines.size) pointer = lines.size - 1
-        while (pointer < lines.size - 1 && lines[pointer + 1].xLeft <= x.toDouble()) {
-            pointer++
-        }
-        return lines[pointer].m * x + lines[pointer].b
     }
 }

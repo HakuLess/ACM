@@ -32,7 +32,14 @@ fun Point.distance(p: Point): Double {
 // y = ax + b
 // vertical true
 // x = c
-class Line(val a: Double, val b: Double, val c: Double, val vertical: Boolean = false) {
+class Line(
+    val a: Double,
+    val b: Double,
+    // 常规用不到c 和 vertical
+    val c: Double = 0.0,
+    val vertical: Boolean = false,
+    var xLeft: Double = Double.NEGATIVE_INFINITY
+) {
 
     operator fun contains(p: Point): Boolean {
         return if (vertical) {
@@ -55,6 +62,43 @@ class Line(val a: Double, val b: Double, val c: Double, val vertical: Boolean = 
                 abs(a - other.a) < EPS && abs(b - other.b) < EPS
             }
         }
+    }
+
+    fun intersect(other: Line): Double {
+        return (other.b - b) / (a - other.a)
+    }
+}
+
+// 凸包优化，单调查询x时可使用
+class ConvexHullTrick {
+    private val lines = ArrayList<Line>()
+    private var pointer = 0
+
+    fun addLine(m: Double, b: Double) {
+        val newLine = Line(m, b)
+        while (lines.isNotEmpty()) {
+            val last = lines.last()
+            val x = newLine.intersect(last)
+            if (x <= last.xLeft) {
+                lines.removeAt(lines.size - 1)
+            } else {
+                break
+            }
+        }
+        if (lines.isEmpty()) {
+            newLine.xLeft = Double.NEGATIVE_INFINITY
+        } else {
+            newLine.xLeft = newLine.intersect(lines.last())
+        }
+        lines.add(newLine)
+    }
+
+    fun query(x: Long): Double {
+        if (pointer >= lines.size) pointer = lines.size - 1
+        while (pointer < lines.size - 1 && lines[pointer + 1].xLeft <= x.toDouble()) {
+            pointer++
+        }
+        return lines[pointer].a * x + lines[pointer].b
     }
 }
 
