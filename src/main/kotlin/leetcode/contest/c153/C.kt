@@ -11,20 +11,25 @@ class SolutionC {
             preCost[i + 1] = preCost[i] + cost[i]
         }
 
-        // dp[i][j] 前i个元素 分割为j个子数组 的最小总代价
-        val dp = Array(n + 1) { LongArray(n + 1) { Long.MAX_VALUE / 2 } }
+        val inf = Long.MAX_VALUE / 2
+        // dp[i][j]：将前 i 个元素分割为 j 个子数组的最小总代价
+        val dp = Array(n + 1) { LongArray(n + 1) { inf } }
         dp[0][0] = 0L
 
-        for (i in 1..n) {
-            for (j in 1..i) {
-                for (l in (j - 1) until i) {
-                    val diff = (preNum[i] + 1L * k * j) * (preCost[i] - preCost[l])
-                    dp[i][j] = minOf(dp[i][j], dp[l][j - 1] + diff)
+        for (j in 1..n) {
+            val cht = ConvexHullTrick()
+            for (l in (j - 1) until n) {
+                if (dp[l][j - 1] < inf) {
+                    cht.addLine(-preCost[l], dp[l][j - 1])
                 }
+            }
+            for (i in j..n) {
+                val query = cht.query(preNum[i] + k.toLong() * j)
+                dp[i][j] = (preNum[i] + k.toLong() * j) * preCost[i] + query
             }
         }
 
-        var ans = Long.MAX_VALUE / 2
+        var ans = inf
         for (j in 1..n) {
             ans = minOf(ans, dp[n][j])
         }
@@ -32,3 +37,41 @@ class SolutionC {
     }
 }
 
+
+data class Line(val m: Long, val b: Long, var xLeft: Double = Double.NEGATIVE_INFINITY) {
+    fun intersect(other: Line): Double {
+        return (other.b - b).toDouble() / (m - other.m)
+    }
+}
+
+class ConvexHullTrick {
+    private val lines = ArrayList<Line>()
+    private var pointer = 0
+
+    fun addLine(m: Long, b: Long) {
+        val newLine = Line(m, b)
+        while (lines.isNotEmpty()) {
+            val last = lines.last()
+            val x = newLine.intersect(last)
+            if (x <= last.xLeft) {
+                lines.removeAt(lines.size - 1)
+            } else {
+                break
+            }
+        }
+        if (lines.isEmpty()) {
+            newLine.xLeft = Double.NEGATIVE_INFINITY
+        } else {
+            newLine.xLeft = newLine.intersect(lines.last())
+        }
+        lines.add(newLine)
+    }
+
+    fun query(x: Long): Long {
+        if (pointer >= lines.size) pointer = lines.size - 1
+        while (pointer < lines.size - 1 && lines[pointer + 1].xLeft <= x.toDouble()) {
+            pointer++
+        }
+        return lines[pointer].m * x + lines[pointer].b
+    }
+}
