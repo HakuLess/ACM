@@ -1,5 +1,6 @@
 package leetcode.contest.c446
 
+import utils.SegmentTree
 import utils.print
 import utils.toGrid
 
@@ -11,34 +12,49 @@ fun main() {
 class SolutionD {
     fun resultArray(nums: IntArray, k: Int, queries: Array<IntArray>): IntArray {
 
-        fun getSimpleResult(nums: IntArray, k: Int): LongArray {
-            val dp = LongArray(k) { 0L }
+        val n = nums.size
 
-            var mod = 1L
-            for (num in nums) {
-                mod = (mod * num) % k
-                dp[mod.toInt()]++
+        // 节点 区间%k值 & 前缀总计数
+        val root = SegmentTree<Pair<Int, IntArray>>(
+            start = 0,
+            end = n,
+            merge = { a, b ->
+                val p = (a.first * b.first) % k
+                val c = IntArray(k)
+                for (r in 0 until k) {
+                    c[r] += a.second[r]
+                }
+                for (r in 0 until k) {
+                    val ways = b.second[r]
+                    if (ways > 0) {
+                        val mod = (a.first * r) % k
+                        c[mod] += ways
+                    }
+                }
+                Pair(p, c)
             }
+        )
 
-            return dp
+        for (i in nums.indices) {
+            val v = nums[i] % k
+            val mod = IntArray(k)
+            mod[v] = 1
+            root.update(root, i, Pair(v, mod))
         }
 
-        val ans = ArrayList<Int>()
-        for (query in queries) {
-            val (index, value, start, x) = query
+        val result = IntArray(queries.size)
+        for ((i, q) in queries.withIndex()) {
+            val (idx, value, start, x) = q
 
-            nums[index] = value
-            val arr = if (start >= 0) {
-                nums.slice(IntRange(start = start, endInclusive = nums.lastIndex)).toIntArray()
-            } else {
-                nums
-            }
-            val cur = getSimpleResult(arr, k)
+            val v = value % k
+            val mod = IntArray(k)
+            mod[v] = 1
+            root.update(root, idx, Pair(v, mod))
 
-//            println("get Cur %${k} = ${cur.joinToString()}")
-            ans.add(cur[x].toInt())
+            val ans = root.query(root, start, n - 1)
+            result[i] = ans.second[x]
         }
 
-        return ans.toIntArray()
+        return result
     }
 }
