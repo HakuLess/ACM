@@ -206,8 +206,7 @@ fun Graph.topologicalSort(): ArrayList<Int> {
         }
     }
 
-    // Create a queue and enqueue all vertices with
-    // indegree 0
+    // Create a queue and enqueue all vertices with indegree 0
     val q: Queue<Int> = PriorityQueue<Int>() { a, b ->
         indegree[b] - indegree[a]
     }
@@ -219,8 +218,7 @@ fun Graph.topologicalSort(): ArrayList<Int> {
     // Initialize count of visited vertices
     var cnt = 0
 
-    // Create a vector to store result (A topological
-    // ordering of the vertices)
+    // Create a vector to store result (A topological ordering of the vertices)
     val topOrder = ArrayList<Int>()
     while (!q.isEmpty()) {
         // Extract front of queue (or perform dequeue)
@@ -228,9 +226,7 @@ fun Graph.topologicalSort(): ArrayList<Int> {
         val u = q.poll()
         topOrder.add(u)
 
-        // Iterate through all its neighbouring nodes
-        // of dequeued node u and decrease their in-degree
-        // by 1
+        // Iterate through all its neighbouring nodes of dequeued node u and decrease their in-degree by 1
         for (node in adj[u]) {
             // If in-degree becomes zero, add it to queue
             if (--indegree[node] == 0)
