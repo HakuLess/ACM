@@ -19,17 +19,18 @@ class SolutionD {
             start = 0,
             end = n,
             merge = { a, b ->
+                // 区间整体余数计算
                 val p = (a.first * b.first) % k
                 val c = IntArray(k)
+                // 左侧计数先保留
                 for (r in 0 until k) {
                     c[r] += a.second[r]
                 }
+                // 右侧计数前缀 余数与左侧相乘 计算整体前缀计数
                 for (r in 0 until k) {
                     val ways = b.second[r]
-                    if (ways > 0) {
-                        val mod = (a.first * r) % k
-                        c[mod] += ways
-                    }
+                    val mod = (a.first * r) % k
+                    c[mod] += ways
                 }
                 Pair(p, c)
             }
