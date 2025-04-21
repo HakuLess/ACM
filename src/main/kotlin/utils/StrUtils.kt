@@ -86,7 +86,7 @@ fun CharArray.nextPermutation(): Boolean {
     return false
 }
 
-fun computePrefixHash(s: String, base: Int = 131, mod: Int = 1000000007): Pair<LongArray, LongArray> {
+fun computePrefixHash(s: String, base: Int, mod: Int): Pair<LongArray, LongArray> {
     val n = s.length
     val hashValues = LongArray(n + 1)  // 用来存储前缀哈希
     val powerValues = LongArray(n + 1) // 存储 base 的幂次值
@@ -104,22 +104,22 @@ fun computePrefixHash(s: String, base: Int = 131, mod: Int = 1000000007): Pair<L
 /**
  * 字符串Hash
  * */
-fun String.hash(l: Int = 0, r: Int = this.length - 1, mod: Int = 1000000007): StringHash {
-    val (hashValues1, powerValues1) = computePrefixHash(this)
+fun String.hash(l: Int = 0, r: Int = this.length - 1, base: Int = 131, mod: Int = 1000000007): StringHash {
+    val (hashValues1, powerValues1) = computePrefixHash(this, base, mod)
 
-    return StringHash(this.length).apply {
+    return StringHash(this.length, mod = mod).apply {
         hashValues = hashValues1
         powerValues = powerValues1
     }
 }
 
 
-class StringHash(n: Int) {
+class StringHash(n: Int, val mod: Int) {
     val length = n
     var hashValues = LongArray(n + 1)  // 用来存储前缀哈希
     var powerValues = LongArray(n + 1) // 存储 base 的幂次值
 
-    fun hash(l: Int = 0, r: Int = this.length - 1, mod: Int = 1000000007): Long {
+    fun hash(l: Int = 0, r: Int = this.length - 1): Long {
         // 计算子串 [l, r] 的哈希值
         return (hashValues[r + 1] - (hashValues[l] * powerValues[r - l + 1]) % mod + mod) % mod
     }
