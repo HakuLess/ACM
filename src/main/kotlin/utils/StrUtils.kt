@@ -13,13 +13,11 @@ fun kmpSearch(pat: String, txt: String, func: (Int) -> Unit) {
     val m = pat.length
     val n = txt.length
 
-    // create lps[] that will hold the longest
-    // prefix suffix values for pattern
+    // create lps[] that will hold the longest prefix suffix values for pattern
     val lps = IntArray(m)
     var j = 0 // index for pat[]
 
-    // Preprocess the pattern (calculate lps[]
-    // array)
+    // Preprocess the pattern (calculate lps[] array)
     computeLPSArray(pat, m, lps)
 
     var i = 0 // index for txt[]
@@ -33,8 +31,7 @@ fun kmpSearch(pat: String, txt: String, func: (Int) -> Unit) {
             func(i - j)
             j = lps[j - 1]
         } else if (i < n && pat[j] != txt[i]) {
-            // Do not match lps[0..lps[j-1]] characters,
-            // they will match anyway
+            // Do not match lps[0..lps[j-1]] characters, they will match anyway
             if (j != 0)
                 j = lps[j - 1]
             else
