@@ -9,33 +9,18 @@ fun main() {
 
 class SolutionC {
     fun countSubarrays(nums: IntArray, k: Int): Long {
+        val maxItem = nums.maxOrNull()!!
         var ans = 0L
-        val max = nums.maxOrNull()!!
-        val n = nums.size
-        var preLeft = -1
-        var left = 0
         var c = 0
-        for (right in nums.indices) {
-            if (nums[right] == max) {
+        var l = 0
+        for (item in nums) {
+            if (item == maxItem) {
                 c++
             }
-            while (left in nums.indices && nums[left] != max) {
-                left++
+            while (c >= k) {
+                if (nums[l++] == maxItem) c--
             }
-            while (left in nums.indices && c > k) {
-                if (nums[left] == max) {
-                    c--
-                }
-                left++
-            }
-            if (c == k) {
-//                println("$left - $preLeft to $right with ${(left - preLeft) * (n - right)}")
-                ans += (left - preLeft).toLong() * (n - right)
-
-                preLeft = left
-                left++
-                c--
-            }
+            ans += l
         }
         return ans
     }

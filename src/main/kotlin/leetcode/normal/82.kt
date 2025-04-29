@@ -16,7 +16,7 @@ class Solution82 {
             // 若两个值相等，则持续找到下一个不想等的为止
             if (cur.next?.`val` == cur.next?.next?.`val`) {
                 val x = cur.next?.`val`
-                while (cur.next != null && cur.next?.`val` == x) {
+                while (cur.next?.`val` == x) {
                     cur.next = cur.next?.next
                 }
             } else {
