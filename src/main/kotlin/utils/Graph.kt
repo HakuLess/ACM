@@ -340,3 +340,21 @@ fun Array<IntArray>.toGraph(n: Int, offset: Int = 0): Graph {
     }
     return g
 }
+
+/**
+ * 将Grid转换为图
+ *
+ * @param n 总点数
+ * @param offset 偏移（点从1开始，offset写1）
+ */
+fun Array<IntArray>.toGraphOri(n: Int, offset: Int = 0): Graph {
+    if (this.isEmpty()) return Graph(0)
+
+    val g = Graph(n)
+    // 边有无权重，无权重默认按0处理
+    val hasWeight = this[0].size == 3
+    this.forEach {
+        g.addEdgeOri(it[0] - offset, it[1] - offset, if (hasWeight) it[2] else 1)
+    }
+    return g
+}

@@ -1,9 +1,11 @@
 package leetcode.contest.c422
 
+import utils.biMax
 import utils.dir4
 import utils.print
 import utils.toGrid
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 import kotlin.collections.HashSet
 
@@ -11,6 +13,27 @@ fun main() {
     val s = SolutionC()
     s.minTimeToReach("[[21,77],[22,11]]".toGrid()).print()
 
+}
+
+fun query(): Int {
+    val list = ArrayList<Int>()
+    list.add(10)
+    list.add(100)
+    list.add(50)
+    val target = 55
+    var left = 1
+    var right = list.lastIndex
+    while (left < right) {
+        val mid = (left + right) / 2
+        if (list[mid] < target) {
+            left = mid
+        } else if (list[mid] > target) {
+            right = mid
+        } else {
+            return list[mid]
+        }
+    }
+    return list[left]
 }
 
 class SolutionC {
