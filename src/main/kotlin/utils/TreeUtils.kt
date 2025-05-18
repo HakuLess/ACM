@@ -237,25 +237,37 @@ class Tree(n: Int, edges: Array<IntArray>) {
     private val LOG_N = log2(n.toDouble()).toInt() + 1
     private val parent = Array(n) { IntArray(LOG_N) }
     private val depth = IntArray(n)
-    private val adj = Array(n) { mutableListOf<Int>() }
+    private val adj = Array(n) { mutableListOf<Pair<Int, Int>>() }
+
+    // 单一树距离0点距离
+    val dist = IntArray(n)
 
     init {
-        for ((u, v) in edges) {
-            adj[u].add(v)
-            adj[v].add(u)
+        if (edges[0].size == 2) {
+            for ((u, v) in edges) {
+                adj[u].add(Pair(v, 1))
+                adj[v].add(Pair(u, 1))
+            }
+        } else {
+            for ((u, v, w) in edges) {
+                adj[u].add(Pair(v, w))
+                adj[v].add(Pair(u, w))
+            }
         }
 
+
         // 使用 DFS 预处理父节点和深度
-        fun dfs(u: Int, p: Int, d: Int) {
+        fun dfs(u: Int, p: Int) {
             parent[u][0] = p
-            depth[u] = d
-            for (v in adj[u]) {
+            for ((v, w) in adj[u]) {
                 if (v != p) {
-                    dfs(v, u, d + 1)
+                    depth[v] = depth[u] + 1
+                    dist[v] = dist[u] + w
+                    dfs(v, u)
                 }
             }
         }
-        dfs(0, -1, 0)
+        dfs(0, -1)
 
         // 使用倍增算法预处理父节点
         for (j in 1 until LOG_N) {
@@ -275,7 +287,7 @@ class Tree(n: Int, edges: Array<IntArray>) {
     }
 
     // 计算节点 u 和节点 v 的最近公共祖先
-    private fun findLca(u: Int, v: Int): Int {
+    fun findLca(u: Int, v: Int): Int {
         // 将节点 u 和节点 v 向上跳到同一深度
         var u = u
         var v = v
