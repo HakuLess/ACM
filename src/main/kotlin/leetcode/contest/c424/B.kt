@@ -22,7 +22,7 @@ class SolutionB {
             }
         }
 
-        delta.print()
+//        delta.print()
 
         var curDiff = 0
         for (i in 0 until n) {

@@ -1,36 +1,41 @@
 package leetcode.contest.c424
 
+import utils.print
+import utils.toGrid
+
+fun main() {
+    val s = SolutionC()
+    s.minZeroArray(
+        intArrayOf(0, 8),
+        "[[0,1,4],[0,1,1],[0,1,4],[0,1,1],[1,1,5],[0,1,2],[1,1,4],[0,1,1],[1,1,3],[0,0,2],[1,1,3],[1,1,2],[0,1,5],[1,1,2],[1,1,5]]".toGrid()
+    ).print()
+}
+
 class SolutionC {
     fun minZeroArray(nums: IntArray, queries: Array<IntArray>): Int {
-        if (nums.all { it == 0 }) return 0
         val n = nums.size
         val delta = IntArray(n + 1)
 
-        for ((index, query) in queries.withIndex()) {
-            val l = query[0]
-            val r = query[1]
-            val diff = query[2]
+        var k = 0
+        var cur = 0
+        for (i in nums.indices) {
+            val num = nums[i]
+            cur += delta[i]
 
-            delta[l] += diff
-            if (r + 1 < n) {
+            while (k in queries.indices && cur < num) {
+                val (l, r, diff) = queries[k]
+                delta[l] += diff
                 delta[r + 1] -= diff
-            }
 
-            var curDiff = 0
-            var success = true
-            for (i in 0 until n) {
-                curDiff += delta[i]
-                if (nums[i] > curDiff) {
-                    success = false
-                    break
+                if (i in l..r) {
+                    cur += diff
                 }
+                k++
             }
 
-            if (!success) continue
-
-            return index + 1
+            if (cur < num) return -1
         }
 
-        return -1
+        return k
     }
 }
