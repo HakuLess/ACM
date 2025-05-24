@@ -19,7 +19,7 @@ fun main() {
 class SolutionC {
     fun maxRemoval(nums: IntArray, queries: Array<IntArray>): Int {
 
-        // 按到li排序，我是从左到右遍历，所以将能够生效的位置计算出来
+        // 按到li排序，从左到右遍历，所以将能够生效的位置计算出来
         queries.sortWith(compareBy({ it[0] }, { it[1] }))
 
         // 模拟加油站的思路

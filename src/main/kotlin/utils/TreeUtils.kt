@@ -94,7 +94,7 @@ fun IntArray.toTree(): TreeNode {
     return root
 }
 
-fun Array<IntArray>.toNTree(): NTreeNode {
+fun Array<IntArray>.toNTree(firstVal: Int = 0): NTreeNode {
     val map = HashMap<Int, ArrayList<Int>>()
     for (i in this.indices) {
         val (parent, child) = this[i]
@@ -105,10 +105,9 @@ fun Array<IntArray>.toNTree(): NTreeNode {
     }
 
     // 根节点对应的index
-    val first = 0
-    val root = NTreeNode(first)
+    val root = NTreeNode(firstVal)
     val queue: Queue<Pair<Int, NTreeNode>> = LinkedList<Pair<Int, NTreeNode>>()
-    queue.add(Pair(first, root))
+    queue.add(Pair(firstVal, root))
 
     val seen = HashSet<Int>()
     seen.add(root.`val`)
@@ -142,6 +141,16 @@ fun TreeNode?.depth(): Int = if (this == null) {
     0
 } else {
     1 + maxOf(left.depth(), right.depth())
+}
+
+fun NTreeNode?.depth(): Int = if (this == null) {
+    0
+} else {
+    var tmp = 0
+    this.children.forEach {
+        tmp = maxOf(tmp, it.depth())
+    }
+    1 + tmp
 }
 
 /**
@@ -233,7 +242,7 @@ fun TreeNode?.isBST(): Boolean {
     return dfs(this.left, this.`val`, Int.MIN_VALUE) && dfs(this.right, Int.MAX_VALUE, this.`val`)
 }
 
-class Tree(n: Int, edges: Array<IntArray>) {
+class Tree(n: Int, edges: Array<IntArray>, root: Int = 0) {
     private val LOG_N = log2(n.toDouble()).toInt() + 1
     private val parent = Array(n) { IntArray(LOG_N) }
     private val depth = IntArray(n)
@@ -267,7 +276,7 @@ class Tree(n: Int, edges: Array<IntArray>) {
                 }
             }
         }
-        dfs(0, -1)
+        dfs(root, -1)
 
         // 使用倍增算法预处理父节点
         for (j in 1 until LOG_N) {
