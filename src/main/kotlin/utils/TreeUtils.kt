@@ -242,11 +242,11 @@ fun TreeNode?.isBST(): Boolean {
     return dfs(this.left, this.`val`, Int.MIN_VALUE) && dfs(this.right, Int.MAX_VALUE, this.`val`)
 }
 
-class Tree(n: Int, edges: Array<IntArray>, root: Int = 0) {
+class Tree(val n: Int, val edges: Array<IntArray>, root: Int = 0) {
     private val LOG_N = log2(n.toDouble()).toInt() + 1
     private val parent = Array(n) { IntArray(LOG_N) }
     private val depth = IntArray(n)
-    private val adj = Array(n) { mutableListOf<Pair<Int, Int>>() }
+    val adj = Array(n) { mutableListOf<Pair<Int, Int>>() }
 
     // 单一树距离0点距离
     val dist = IntArray(n)
@@ -325,4 +325,37 @@ class Tree(n: Int, edges: Array<IntArray>, root: Int = 0) {
         // 返回 u 和 v 的公共父节点
         return parent[u][0]
     }
+}
+
+/**
+ * 树的单点 距离 其他所有点的路径
+ * */
+fun Tree.distance(start: Int): IntArray {
+    val dist = IntArray(n) { Int.MAX_VALUE }
+    val queue = ArrayDeque<Int>()
+    dist[start] = 0
+    queue.add(start)
+    while (queue.isNotEmpty()) {
+        val u = queue.removeFirst()
+        for ((v, w) in adj[u]) {
+            if (dist[v] == Int.MAX_VALUE) {
+                dist[v] = dist[u] + 1
+                queue.add(v)
+            }
+        }
+    }
+    return dist
+}
+
+/**
+ * 限制最大距离，与当前节点可联接的节点数
+ * */
+fun Tree.distanceMax(cur: Int, parent: Int, k: Int): Int {
+    if (k < 0) return 0
+    var ans = 1
+    for ((v, w) in adj[cur]) {
+        if (v == parent) continue
+        ans += distanceMax(v, cur, k - 1)
+    }
+    return ans
 }

@@ -12,21 +12,15 @@ class SolutionC {
     fun maxTargetNodes(edges1: Array<IntArray>, edges2: Array<IntArray>, k: Int): IntArray {
         val n = edges1.size + 1
         val m = edges2.size + 1
-        val g1 = Graph(n)
-        val g2 = Graph(m)
 
-        edges1.forEach { (a, b) -> g1.addEdge(a, b, 1) }
-        edges2.forEach { (a, b) -> g2.addEdge(a, b, 1) }
+        val tree1 = Tree(n, edges1)
+        val tree2 = Tree(m, edges2)
 
-        // 计算两棵树的距离矩阵
-        val dist1 = Array(n) { g1.dijkstra(it) }
-        val dist2 = Array(m) { g2.dijkstra(it) }
+        val max = (0 until m).maxOf { tree2.distanceMax(it, -1, k - 1) }
 
         val ans = ArrayList<Int>()
         for (i in 0 until n) {
-            var tmp = dist1[i].count { it <= k }
-            tmp += dist2.maxOf { it.count { it <= k - 1 } }
-            ans.add(tmp)
+            ans.add(tree1.distanceMax(i, -1, k) + max)
         }
         return ans.toIntArray()
     }
