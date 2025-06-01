@@ -17,7 +17,7 @@ class SolutionB {
             if (left > limit * 2) continue
 
             ans += minOf(left + 1, limit * 2 - left + 1)
-            println("a: $i with $left dis ${left + 1} ${limit * 2 - left + 1}")
+//            println("a: $i with $left dis ${left + 1} ${limit * 2 - left + 1}")
         }
         return ans
     }
