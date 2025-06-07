@@ -33,22 +33,16 @@ class Solution1298 {
 
             // 拿到钥匙
             for (key in keys[box]) {
-                if (!hasKey[key]) {
-                    hasKey[key] = true
-                    if (hasBox[key] && !opened[key]) {
-                        queue.add(key)
-                    }
+                hasKey[key] = true
+                if (hasBox[key] && !opened[key]) {
+                    queue.add(key)
                 }
             }
 
             // 拿到盒子
             for (contained in containedBoxes[box]) {
-                if (!hasBox[contained]) {
-                    hasBox[contained] = true
-                    if (status[contained] == 1 || hasKey[contained]) {
-                        queue.add(contained)
-                    }
-                } else if (hasKey[contained] && !opened[contained]) {
+                hasBox[contained] = true
+                if (status[contained] == 1 || hasKey[contained]) {
                     queue.add(contained)
                 }
             }
