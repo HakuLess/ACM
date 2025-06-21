@@ -12,9 +12,11 @@ class SolutionC {
             var tmp = 0
             val min = l[i]
             for (j in l.indices) {
+                // 比最小值小的需要全删除
                 if (l[j] < min) {
                     tmp += l[j]
                 } else {
+                    // 比最小值大的，需要删除到差值K范围内
                     tmp += maxOf(l[j] - min - k, 0)
                 }
             }

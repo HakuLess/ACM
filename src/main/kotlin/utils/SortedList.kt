@@ -4,6 +4,17 @@ class SortedList<T : Comparable<T>> {
 
     val valueList = ArrayList<T>()
 
+    val size: Int
+        get() = valueList.size
+
+    fun maxOrNull(): T? {
+        return valueList.lastOrNull()
+    }
+
+    fun minOrNull(): T? {
+        return valueList.firstOrNull()
+    }
+
     fun insert(value: T) {
         val index = valueList.binarySearch(value)
         if (index < 0) {
