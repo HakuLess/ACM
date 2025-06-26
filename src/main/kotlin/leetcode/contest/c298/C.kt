@@ -15,6 +15,7 @@ class SolutionC {
         val ans = StringBuilder()
         for (i in s.indices.reversed()) {
             if (s[i] == '1') {
+                // 默认插入位次，看后续能否用1遍历替换
                 arr.add(s.length - i - 1)
             } else {
                 ans.append('0')

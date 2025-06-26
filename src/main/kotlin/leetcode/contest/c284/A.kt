@@ -11,14 +11,18 @@ fun main() {
 
 class SolutionA {
     fun findKDistantIndices(nums: IntArray, key: Int, k: Int): List<Int> {
-        val ans = arrayListOf<Int>()
-        for (i in nums.indices) {
-            for (j in nums.indices) {
-                if (nums[i] == key && abs(i - j) <= k) {
-                    ans.add(j)
+        val ans = ArrayList<Int>()
+        var r = 0
+        val n = nums.size
+        for (j in nums.indices) {
+            if (nums[j] == key) {
+                val l = maxOf(r, j - k)
+                r = minOf(n - 1, j + k) + 1
+                for (i in l until r) {
+                    ans.add(i)
                 }
             }
         }
-        return ans.distinct()
+        return ans
     }
 }
