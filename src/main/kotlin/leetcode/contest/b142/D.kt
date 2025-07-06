@@ -10,7 +10,7 @@ fun main() {
 class SolutionD {
     fun possibleStringCount(word: String, k: Int): Int {
         val n = word.length
-        val mod = 1_000_000_007
+        val mod = 1_000_000_007L
 
         // 分段统计每个连续字符的数量
         val vec = mutableListOf<Int>()
@@ -23,7 +23,7 @@ class SolutionD {
         }
 
         val m = vec.size
-        var ans: Long = 1
+        var ans = 1L
         for (x in vec) ans = ans * x % mod
         if (m >= k) return ans.toInt()
 
@@ -37,7 +37,7 @@ class SolutionD {
         // TODO 逻辑都看不懂 容斥
         for (i in 1..m) {
             for (j in 1 until k) {
-                var v: Long = 0
+                var v = 0L
                 val t = j - vec[i - 1] - 1
                 if (t >= 0) v = g[i - 1][t]
                 f[i][j] = (g[i - 1][j - 1] - v + mod) % mod
