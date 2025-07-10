@@ -1,9 +1,6 @@
 package leetcode.contest.b149
 
-import utils.SortedList
 import utils.print
-import utils.printInt
-import utils.toSortedList
 import java.util.*
 import kotlin.collections.ArrayList
 
