@@ -103,6 +103,10 @@ fun <T> ArrayList<T>.swap(a: Int, b: Int) {
     this[a] = tmpB
 }
 
+fun Char.print() {
+    println("Char is $this")
+}
+
 fun String.print() {
     println("String is $this")
 }
@@ -441,6 +445,17 @@ fun IntArray.toAllSubSet(): HashSet<Int> {
 }
 
 fun String.isPalindrome(): Boolean {
+    var l = 0
+    var r = this.lastIndex
+    while (l < r) {
+        if (this[l] != this[r]) return false
+        l++
+        r--
+    }
+    return true
+}
+
+fun MutableList<Char>.isPalindrome(): Boolean {
     var l = 0
     var r = this.lastIndex
     while (l < r) {
