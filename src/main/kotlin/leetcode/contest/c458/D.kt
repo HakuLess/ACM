@@ -25,54 +25,57 @@ class SolutionD {
 
     fun maxLen(n: Int, edges: Array<IntArray>, label: String): Int {
 
-        if (edges.isEmpty()) return 1
+        val graph = Array(n) { mutableListOf<Int>() }
+        for ((u, v) in edges) {
+            graph[u].add(v)
+            graph[v].add(u)
+        }
 
-        val graph = edges.toGraph(n)
-
+        val totalMasks = 1 shl n
+        val dp = Array(n) { Array(n) { IntArray(totalMasks) } }
+        val queue = ArrayDeque<Triple<Int, Int, Int>>()
         var ans = 1
 
-        // 对每个中心点做双向 DFS
-        for (center in 0 until n) {
-            val visited = 1 shl center
-            val leftMap = ArrayList<Pair<String, Int>>()
-            val rightMap = ArrayList<Pair<String, Int>>()
+        // 初始化单点中心（奇数长度回文）
+        for (i in 0 until n) {
+            val mask = 1 shl i
+            dp[i][i][mask] = 1
+            queue.add(Triple(i, i, mask))
+        }
 
-            // DFS 左右路径（分别记录前缀和后缀）
-            fun dfs(node: Int, path: String, mask: Int, map: ArrayList<Pair<String, Int>>, depth: Int) {
-                map.add(Pair(path, mask))
-                if (depth == 6) return
-                for (next in graph.adj[node]) {
-                    if ((mask shr next) and 1 == 0) {
-                        dfs(next, path + label[next], mask or (1 shl next), map, depth + 1)
-                    }
+        // 初始化边中心（偶数长度回文）
+        for ((u, v) in edges) {
+            if (label[u] == label[v]) {
+                val mask = (1 shl u) or (1 shl v)
+                val min = minOf(u, v)
+                val max = maxOf(u, v)
+                if (dp[min][max][mask] == 0) {
+                    dp[min][max][mask] = 2
+                    ans = maxOf(ans, 2)
+                    queue.add(Triple(min, max, mask))
                 }
             }
+        }
 
-            dfs(center, "", visited, leftMap, 0)
-            dfs(center, "", visited, rightMap, 0)
+        // BFS 扩展
+        while (queue.isNotEmpty()) {
+            val (u, v, mask) = queue.removeFirst()
+            for (x in graph[u]) {
+                for (y in graph[v]) {
+                    if (x == y) continue
+                    if ((mask and (1 shl x)) != 0) continue
+                    if ((mask and (1 shl y)) != 0) continue
+                    if (label[x] != label[y]) continue
 
-//            leftMap.forEach {
-//                println(it)
-//            }
-//            println()
-//            rightMap.forEach {
-//                println(it)
-//            }
-//            println()
-//            println("=============")
+                    val newMask = mask or (1 shl x) or (1 shl y)
+                    val newU = minOf(x, y)
+                    val newV = maxOf(x, y)
+                    val newLen = dp[u][v][mask] + 2
 
-            for (i in leftMap.indices) {
-                for (j in rightMap.indices) {
-                    val (strL, a) = leftMap[i]
-                    val (strR, b) = rightMap[j]
-
-                    if (a and b xor (1 shl center) == 0) {
-//                        println("left is $strL right is $strR")
-                        val str = "${strL.reversed()}${label[center]}${strR}"
-                        if (str.isPalindrome()) {
-//                            println("$str is Pail")
-                            ans = maxOf(ans, str.length)
-                        }
+                    if (newLen > dp[newU][newV][newMask]) {
+                        dp[newU][newV][newMask] = newLen
+                        ans = maxOf(ans, newLen)
+                        queue.add(Triple(newU, newV, newMask))
                     }
                 }
             }
