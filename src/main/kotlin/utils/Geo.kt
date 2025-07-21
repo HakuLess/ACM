@@ -41,6 +41,14 @@ class Line(
     var xLeft: Double = Double.NEGATIVE_INFINITY
 ) {
 
+    override fun toString(): String {
+        return if (vertical) {
+            "Line is x = $c"
+        } else {
+            "Line is y = ${a}x + $b"
+        }
+    }
+
     operator fun contains(p: Point): Boolean {
         return if (vertical) {
             abs(c - p.x) < EPS
@@ -67,6 +75,12 @@ class Line(
     fun intersect(other: Line): Double {
         return (other.b - b) / (a - other.a)
     }
+}
+
+// 是否含有相同斜率
+fun Line.isSameVector(other: Line): Boolean {
+    if (this.vertical && other.vertical) return true
+    return abs(this.a - other.a) <= EPS
 }
 
 // 凸包优化，单调查询x时可使用
@@ -108,7 +122,10 @@ class ConvexHullTrick {
 fun getLine(a: Point, b: Point): Line {
     if (a == b) throw Exception("Point Same, Cannot get a Line")
     if (a.x == b.x) return Line(0.0, 0.0, a.x, true)
-    val o = (b.y - a.y) / (b.x - a.x)
+    var o = (b.y - a.y) / (b.x - a.x)
+    if (o == -0.0) {
+        o = 0.0
+    }
     return Line(o, a.y - a.x * o, 0.0, false)
 }
 
