@@ -22,7 +22,7 @@ class Solution5904 {
             }
             if (cur > high) {
                 high = cur
-                ans = 0
+                ans = 1
             } else if (cur == high) {
                 ans++
             }

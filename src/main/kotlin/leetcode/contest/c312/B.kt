@@ -9,26 +9,20 @@ fun main() {
 
 class SolutionB {
     fun longestSubarray(nums: IntArray): Int {
-        val max = nums.maxOrNull()!!
-//        val max = nums.max()!!
+        var maxValue = nums[0]
         var ans = 1
-        val seen = HashSet<Int>()
-        for (i in nums.indices) {
-            if (i in seen) continue
-            if (nums[i] == max) {
-                var l = i
-                var r = i
-                while (l in nums.indices && (max and nums[l] == max)) {
-                    seen.add(l)
-                    l--
-                }
-                while (r in nums.indices && (max and nums[r] == max)) {
-                    seen.add(r)
-                    r++
-                }
-                println("$l to $r")
-                ans = maxOf(ans, r - l - 1)
+        var cnt = 1
+        for (i in 1 until nums.size) {
+            if (nums[i] > maxValue) {
+                ans = 1
+                cnt = 1
+                maxValue = nums[i]
+            } else if (nums[i] < maxValue) {
+                cnt = 0
+            } else if (nums[i] == maxValue) {
+                cnt++
             }
+            ans = maxOf(cnt, ans)
         }
         return ans
     }
