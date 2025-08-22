@@ -32,7 +32,6 @@ class SolutionD {
                     }
                 }
             }
-            if (u > d || l > r) return Int.MAX_VALUE
             return (d - u + 1) * (r - l + 1)
         }
 
