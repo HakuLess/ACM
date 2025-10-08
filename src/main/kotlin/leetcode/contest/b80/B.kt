@@ -23,7 +23,7 @@ fun main() {
 class SolutionB {
     fun successfulPairs(spells: IntArray, potions: IntArray, success: Long): IntArray {
         potions.sort()
-        potions.print()
+//        potions.print()
         val ans = IntArray(spells.size)
         for (i in spells.indices) {
             ans[i] = potions.size - biMin(l = 0L, r = potions.lastIndex.toLong()) {
