@@ -26,7 +26,7 @@ class SolutionB {
             }
         }
         l.add(cur)
-        l.joinToString().print()
+//        l.joinToString().print()
 
         var ans = 0
         for (i in l.indices) {
