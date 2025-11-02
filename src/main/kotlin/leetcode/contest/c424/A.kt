@@ -2,39 +2,27 @@ package leetcode.contest.c424
 
 class SolutionA {
     fun countValidSelections(nums: IntArray): Int {
-        val n = nums.size
-
-        fun isAllZero(arr: IntArray): Boolean {
-            return arr.all { it == 0 }
-        }
-
-        fun simulate(nums: IntArray, start: Int, direction: Int): Boolean {
-            val numsCopy = nums.clone()
-            var curr = start
-            var dir = direction
-
-            while (curr in 0 until n) {
-                if (numsCopy[curr] == 0) {
-                    curr += dir
-                } else if (numsCopy[curr] > 0) {
-                    numsCopy[curr]--
-                    dir = -dir
-                    curr += dir
-                }
-            }
-
-            return isAllZero(numsCopy)
-        }
+        val lSum = IntArray(nums.size)
+        val rSum = IntArray(nums.size)
 
         var ans = 0
-        for (i in nums.indices) {
+
+        var ls = 0
+        var rs = 0
+
+        for (i in 0 until nums.size) {
+            ls += nums[i]
+            lSum[i] = ls
+
+            rs += nums[nums.size - i - 1]
+            rSum[nums.size - i - 1] = rs
+        }
+
+        for (i in 0 until nums.size) {
             if (nums[i] == 0) {
-                if (simulate(nums, i, 1)) {
-                    ans++
-                }
-                if (simulate(nums, i, -1)) {
-                    ans++
-                }
+                if (rSum[i] == lSum[i]) ans += 2
+                else if (rSum[i] - lSum[i] == 1) ans += 1
+                else if (lSum[i] - rSum[i] == 1) ans += 1
             }
         }
 
