@@ -1,6 +1,13 @@
 package leetcode.contest.c453
 
+import utils.print
 import java.util.*
+
+fun main() {
+    val s = SolutionC()
+    // 6
+    s.countPartitions(intArrayOf(9, 4, 1, 3, 7), 4).print()
+}
 
 class SolutionC {
     fun countPartitions(nums: IntArray, k: Int): Int {
