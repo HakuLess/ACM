@@ -26,11 +26,7 @@ class SolutionD {
         val charArray = s.toCharArray()
         val n = charArray.size
 
-        val init = Array(n) { i ->
-            RunNode(1, charArray[i], charArray[i])
-        }
-
-        val merge: (RunNode, RunNode) -> RunNode = { a, b ->
+        val root = SegmentTree<RunNode>(start = 0, end = n - 1, value = null) { a, b ->
             RunNode(
                 runs = a.runs + b.runs - if (a.right == b.left) 1 else 0,
                 left = a.left,
@@ -38,28 +34,20 @@ class SolutionD {
             )
         }
 
-        val seg = SegmentTree(
-            start = 0,
-            end = n - 1,
-            value = null,
-            merge = merge
-        ).build(init)!!
+        for (i in 0 until n) {
+            root.update(root, i, RunNode(1, charArray[i], charArray[i]))
+        }
 
         val ans = ArrayList<Int>()
-
         for (q in queries) {
             if (q[0] == 1) {
                 val idx = q[1]
                 charArray[idx] = if (charArray[idx] == 'A') 'B' else 'A'
-                seg.update(
-                    seg,
-                    idx,
-                    RunNode(1, charArray[idx], charArray[idx])
-                )
+                root.update(root, idx, RunNode(1, charArray[idx], charArray[idx]))
             } else {
                 val l = q[1]
                 val r = q[2]
-                val node = seg.query(seg, l, r)
+                val node = root.query(root, l, r)
                 val len = r - l + 1
                 ans.add(len - node.runs)
             }
